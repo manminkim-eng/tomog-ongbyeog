@@ -2873,7 +2873,7 @@ document.addEventListener('DOMContentLoaded', function(){
                 var b = document.createElement('div');
                 b.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:9999;background:#0f4c81;color:#fff;padding:10px 20px;border-radius:12px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:10px;box-shadow:0 4px 20px rgba(15,76,129,.5);white-space:nowrap;font-family:inherit;';
                 b.innerHTML = '<span>🔄 새 버전 준비됨</span>'
-                  + '<button onclick="navigator.serviceWorker.ready.then(function(r){if(r.waiting)r.waiting.postMessage({type:'SKIP_WAITING'});});this.parentNode.remove();location.reload();" '
+                  + '<button onclick="navigator.serviceWorker.ready.then(function(r){if(r.waiting)r.waiting.postMessage({type:&#39;SKIP_WAITING&#39;});});this.parentNode.remove();location.reload();" '
                   + 'style="background:rgba(255,255,255,.2);border:none;color:#fff;padding:5px 12px;border-radius:7px;cursor:pointer;font-weight:800;font-family:inherit;">지금 적용</button>'
                   + '<button onclick="this.parentNode.remove()" style="background:none;border:none;color:rgba(255,255,255,.7);cursor:pointer;font-size:16px;padding:0 4px;">✕</button>';
                 document.body.appendChild(b);
@@ -2891,10 +2891,14 @@ document.addEventListener('DOMContentLoaded', function(){
   /* ── 2. beforeinstallprompt (Android/PC) ── */
   window.addEventListener('beforeinstallprompt', function(e){
     e.preventDefault();
+    /* standalone 모드에서는 무시 */
+    var isSA_now = window.matchMedia('(display-mode:standalone)').matches
+                   || (window.navigator.standalone === true);
+    if(isSA_now){ return; }
     deferred = e;
     var btn = document.getElementById('pwa-install-btn');
     if(btn) btn.classList.add('visible');
-    if(!sessionStorage.getItem('pwa-dismissed') && !_isSA){
+    if(!sessionStorage.getItem('pwa-dismissed')){
       setTimeout(function(){
         var b = document.getElementById('pwa-banner');
         if(b) b.classList.add('visible');
@@ -2902,9 +2906,14 @@ document.addEventListener('DOMContentLoaded', function(){
     }
   });
 
-  /* ── 3. iOS: 헤더 버튼 표시 + 2초 후 안내 모달 ── */
-  document.addEventListener('DOMContentLoaded', function(){
-    if(_isIOS && !_isSA){
+  /* ── 3. iOS 헤더 버튼 + standalone 숨김
+     ※ </body> 직전 <script>이므로 DOMContentLoaded는 이미 완료 상태.
+        readyState === 'loading' 일 때만 addEventListener, 아니면 즉시 실행. ── */
+  function _rwPwaInit(){
+    /* _isSA 재계산 — 일부 브라우저에서 초기 평가 오류 방지 */
+    var isSA2 = window.matchMedia('(display-mode:standalone)').matches
+                || (window.navigator.standalone === true);
+    if(_isIOS && !isSA2){
       var btn = document.getElementById('pwa-install-btn');
       if(btn) btn.classList.add('visible');
       if(!sessionStorage.getItem('pwa-dismissed')){
@@ -2914,23 +2923,31 @@ document.addEventListener('DOMContentLoaded', function(){
         }, 2000);
       }
     }
-    if(_isSA){
+    if(isSA2){
       var btn = document.getElementById('pwa-install-btn');
       if(btn) btn.style.display = 'none';
     }
-  });
+  }
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', _rwPwaInit);
+  } else {
+    _rwPwaInit(); /* 이미 로딩 완료 → 즉시 실행 */
+  }
 
   /* ── 4. 설치 실행 ── */
   window.pwaTriggerInstall = function(){
     var b = document.getElementById('pwa-banner');
     if(b) b.classList.remove('visible');
-    if(_isIOS && !_isSA){
+    /* 실행 시점의 standalone 상태 재계산 */
+    var isSA_now = window.matchMedia('(display-mode:standalone)').matches
+                   || (window.navigator.standalone === true);
+    if(_isIOS && !isSA_now){
       var m = document.getElementById('ios-modal-rw');
       if(m) m.classList.add('show');
       return;
     }
     if(!deferred){
-      if(_isSA){ alert('✅ 이미 앱으로 설치되어 있습니다.'); return; }
+      if(isSA_now){ alert('✅ 이미 설치된 앱입니다.'); return; }
       alert('📱 브라우저 메뉴 → 앱 설치 / 홈 화면에 추가를 선택하세요.');
       return;
     }
@@ -2939,8 +2956,10 @@ document.addEventListener('DOMContentLoaded', function(){
       if(r.outcome === 'accepted'){
         var btn = document.getElementById('pwa-install-btn');
         if(btn) btn.classList.remove('visible');
+        deferred = null;
+      } else {
+        deferred = null;
       }
-      deferred = null;
     });
   };
 
