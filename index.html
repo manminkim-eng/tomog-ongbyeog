@@ -1,0 +1,2971 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+<title>토목옹벽 — 옹벽 구조물 안전성 검토 시스템 [MANMIN Ver2.0]</title>
+<meta name="description" content="KDS 11 80 10 / KDS 11 10 05 / 구조물기초설계기준 기반 옹벽 안전성 자동 검토 — CIVIL ENGINEER KIM MANMIN"/>
+<meta name="theme-color" content="#0f4c81"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="토목옹벽"/>
+<link rel="manifest" href="./manifest.json"/>
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png"/>
+<link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152x152.png"/>
+<link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192x192.png"/>
+<link rel="icon" type="image/x-icon" href="./favicon.ico"/>
+<link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16x16.png"/>
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png"/>
+<meta name="msapplication-TileColor" content="#0f4c81"/>
+<meta name="msapplication-TileImage" content="icons/icon-144x144.png"/>
+
+<link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+/*══════════════════════════════════════
+  BASE RESET & TOKENS
+══════════════════════════════════════*/
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif!important;}
+html,body{min-height:100vh;background:#f0f5fb;color:#0d1f3c;}
+:root{
+  --blue-dark:#0f4c81;
+  --blue:#1565c0;
+  --blue-mid:#1976d2;
+  --blue-light:#e3f2fd;
+  --blue-border:#bbdefb;
+  --teal-dark:#00695c;
+  --teal:#00897b;
+  --teal-light:#e0f2f1;
+  --teal-border:#80cbc4;
+  --amber:#f57c00;
+  --amber-light:#fff8e1;
+  --amber-border:#ffe082;
+  --red:#c62828;
+  --red-light:#ffebee;
+  --green:#2e7d32;
+  --green-light:#e8f5e9;
+  --gray-50:#f8fafd;
+  --gray-100:#f0f5fb;
+  --gray-200:#e2e8f0;
+  --gray-300:#cbd5e1;
+  --gray-500:#64748b;
+  --gray-700:#334155;
+  --gray-900:#0d1f3c;
+  --shadow-sm:0 1px 4px rgba(15,23,42,.06);
+  --shadow-md:0 4px 16px rgba(15,23,42,.1);
+  --shadow-lg:0 8px 32px rgba(15,23,42,.15);
+  --radius-sm:6px;
+  --radius-md:10px;
+  --radius-lg:14px;
+}
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:var(--gray-100);}
+::-webkit-scrollbar-thumb{background:#bbdefb;border-radius:10px;}
+input[type="number"]::-webkit-outer-spin-button,input[type="number"]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
+input[type="number"]{-moz-appearance:textfield;}
+.mono{font-family:'JetBrains Mono','Courier New',monospace!important;}
+
+/*══════════════════════════════════════
+  HEADER
+══════════════════════════════════════*/
+.app-header{
+  background:linear-gradient(135deg,#0f3460,#0f4c81);
+  position:sticky;top:0;z-index:50;
+  box-shadow:0 3px 20px rgba(15,76,129,.45);
+}
+.header-inner{max-width:1400px;margin:0 auto;padding:0 14px;min-height:60px;height:auto;display:flex;align-items:center;gap:10px;}
+.brand-logo{display:flex;align-items:center;gap:10px;flex:1;min-width:0;}
+.brand-icon{
+  width:38px;height:38px;
+  background:linear-gradient(135deg,#1976d2,#42a5f5);
+  border-radius:10px;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 2px 12px rgba(66,165,245,.4);flex-shrink:0;font-size:18px;
+}
+.brand-texts{min-width:0;}
+.brand-title{font-size:13px;font-weight:900;color:#fff;letter-spacing:-.02em;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.brand-sub{font-size:9px;color:#90caf9;margin-top:2px;font-weight:700;white-space:nowrap;line-height:1.4;}
+.hdr-btns{display:flex;gap:5px;flex-shrink:0;}
+.btn-hdr{background:rgba(255,255,255,.12);color:#fff;border:1.5px solid rgba(255,255,255,.2);padding:6px 10px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px;font-family:inherit;transition:all .15s;white-space:nowrap;}
+.btn-hdr:hover{background:rgba(255,255,255,.22);border-color:rgba(255,255,255,.4);}
+.btn-hdr-acc{background:linear-gradient(135deg,#00897b,#26a69a);color:#fff;border:none;padding:6px 12px;border-radius:8px;font-size:11px;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:4px;font-family:inherit;transition:all .15s;white-space:nowrap;box-shadow:0 2px 8px rgba(0,137,123,.35);}
+.btn-hdr-acc:hover{background:linear-gradient(135deg,#00796b,#00897b);}
+@media(max-width:760px){
+  .header-inner{padding:8px 12px;min-height:56px;}
+  .brand-sub{white-space:normal;word-break:keep-all;font-size:8.5px;line-height:1.5;}
+  .brand-title{font-size:11.5px;}
+  .hdr-btns{gap:3px;}
+  .btn-hdr .btn-txt,.btn-hdr-acc .btn-txt{display:none;}
+  .btn-hdr,.btn-hdr-acc{padding:6px 8px;}
+}
+@media(max-width:480px){
+  .brand-icon{width:32px;height:32px;font-size:15px;}
+  .brand-title{font-size:10.5px;}
+  .brand-sub{font-size:8px;}
+  .header-inner{gap:7px;}
+}
+
+/*══════════════════════════════════════
+  TAB BAR
+══════════════════════════════════════*/
+.tab-bar{
+  background:rgba(15,52,96,.95);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid rgba(255,255,255,.08);
+  overflow-x:auto;scrollbar-width:none;
+}
+.tab-bar::-webkit-scrollbar{display:none;}
+.tab-bar-inner{max-width:1400px;margin:0 auto;padding:0 6px;display:flex;}
+.tb{
+  background:none;border:none;cursor:pointer;
+  color:rgba(255,255,255,.55);
+  font-family:inherit;padding:10px 14px;font-size:11px;font-weight:700;
+  position:relative;transition:color .15s,background .15s;
+  display:flex;align-items:center;gap:5px;white-space:nowrap;flex-shrink:0;
+  -webkit-tap-highlight-color:transparent;
+}
+.tb-lbl{display:inline;}
+@media(max-width:480px){.tb{padding:10px 8px;font-size:10.5px;gap:3px;}}
+@media(max-width:400px){
+  .tb{padding:9px 7px;font-size:10px;}
+  .tb-lbl{display:none;}
+}
+.tb:hover{color:rgba(255,255,255,.85);background:rgba(255,255,255,.06);}
+.tb.active{color:#fff;}
+.tb.active::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#42a5f5,#26c6da);border-radius:2px 2px 0 0;}
+.tb-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.tb-dot.blue{background:#42a5f5;}
+.tb-dot.teal{background:#26c6da;}
+.tb-dot.green{background:#66bb6a;}
+.tb-dot.amber{background:#ffa726;}
+.tb-dot.red{background:#ef5350;}
+
+/*══════════════════════════════════════
+  LAYOUT
+══════════════════════════════════════*/
+.main-wrap{max-width:1400px;margin:0 auto;padding:14px 14px 110px;}
+@media(max-width:600px){.main-wrap{padding:10px 10px 110px;}}
+.tab-panel{display:none;}.tab-panel.active{display:block;}
+.two-col{display:grid;grid-template-columns:440px 1fr;gap:14px;align-items:start;}
+@media(max-width:1100px) and (min-width:769px){.two-col{grid-template-columns:380px 1fr;}}
+@media(max-width:768px){.two-col{grid-template-columns:1fr;}}
+
+/*══════════════════════════════════════
+  CARD
+══════════════════════════════════════*/
+.card{background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);overflow:hidden;margin-bottom:14px;}
+.card-head{display:flex;align-items:center;gap:9px;padding:11px 14px;border-bottom:1px solid #f0f5fb;}
+.card-ico{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;}
+.card-ico.blue{background:#e3f2fd;}.card-ico.teal{background:#e0f2f1;}.card-ico.amber{background:#fff8e1;}.card-ico.red{background:#ffebee;}
+.card-tit{font-size:11.5px;font-weight:800;color:#0d1f3c;letter-spacing:.03em;flex:1;}
+.cbadge{font-size:9px;font-weight:800;padding:2px 8px;border-radius:20px;white-space:nowrap;flex-shrink:0;}
+.cbadge.blue{background:#e3f2fd;color:#1565c0;border:1px solid var(--blue-border);}
+.cbadge.teal{background:#e0f2f1;color:#00695c;border:1px solid var(--teal-border);}
+.cbadge.amber{background:#fff8e1;color:#f57c00;border:1px solid var(--amber-border);}
+.cbadge.red{background:var(--red-light);color:#c62828;border:1px solid #ef9a9a;}
+.cbadge.grn{background:var(--green-light);color:#2e7d32;border:1px solid #a5d6a7;}
+.card-body{padding:13px 14px;}
+@media(max-width:480px){.card-body{padding:11px 12px;}}
+
+/*══════════════════════════════════════
+  FORM
+══════════════════════════════════════*/
+.flbl{font-size:9.5px;font-weight:700;color:#546e7a;letter-spacing:.07em;text-transform:uppercase;margin-bottom:4px;display:block;}
+.finput{width:100%;padding:8px 11px;background:#f8fafd;border:1.5px solid #dde3ed;border-radius:8px;color:#0d1f3c;font-size:12.5px;font-weight:600;font-family:inherit;outline:none;transition:border-color .15s,box-shadow .15s;}
+.finput:focus{border-color:#1976d2;box-shadow:0 0 0 3px rgba(25,118,210,.1);background:#fff;}
+@media(max-width:760px){.finput{font-size:16px;padding:9px 11px;}.fselect{font-size:16px;padding:9px 26px 9px 10px;}}
+.fselect{width:100%;padding:8px 26px 8px 10px;background:#f8fafd;border:1.5px solid #dde3ed;border-radius:8px;color:#0d1f3c;font-size:11.5px;font-weight:700;font-family:inherit;outline:none;cursor:pointer;transition:border-color .15s;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%231565c0' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 9px center;}
+.fselect:focus{border-color:#1976d2;box-shadow:0 0 0 3px rgba(25,118,210,.1);}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:9px;}
+@media(max-width:600px){.frow{grid-template-columns:1fr;}}
+.frow3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:9px;}
+@media(max-width:760px){.frow3{grid-template-columns:1fr 1fr;}}
+@media(max-width:480px){.frow3{grid-template-columns:1fr;}}
+.fgrp{display:flex;flex-direction:column;gap:3px;}
+.fgrp.full{grid-column:1/-1;}
+.input-sfx{display:flex;}
+.input-sfx .finput{border-radius:8px 0 0 8px;}
+.sfx{padding:8px 10px;background:#e3f2fd;border:1.5px solid #dde3ed;border-left:none;border-radius:0 8px 8px 0;font-size:11.5px;font-weight:700;color:#1565c0;white-space:nowrap;display:flex;align-items:center;}
+.fdivider{height:1px;background:linear-gradient(90deg,transparent,var(--gray-200),transparent);margin:12px 0;}
+
+/*══════════════════════════════════════
+  SECTION TITLE
+══════════════════════════════════════*/
+.sec-title{font-size:10.5px;font-weight:800;color:#1565c0;padding:5px 10px;background:#e3f2fd;border-radius:6px;margin-bottom:9px;display:flex;align-items:center;gap:5px;border-left:3px solid #1976d2;}
+.sec-title.teal{color:#00695c;background:#e0f2f1;border-left-color:#00897b;}
+.sec-title.amber{color:#f57c00;background:#fff8e1;border-left-color:#ffa726;}
+.sec-title.red{color:#c62828;background:#ffebee;border-left-color:#ef5350;}
+
+/*══════════════════════════════════════
+  NOTICE BOXES
+══════════════════════════════════════*/
+.nb{border-radius:9px;padding:9px 12px;margin-bottom:9px;}
+.nb.blue{background:#e3f2fd;border:1.5px solid var(--blue-border);}
+.nb.teal{background:#e0f2f1;border:1.5px solid var(--teal-border);}
+.nb.amber{background:#fff8e1;border:1.5px solid var(--amber-border);}
+.nb.red{background:var(--red-light);border:1.5px solid #ef9a9a;}
+.nb.grn{background:var(--green-light);border:1.5px solid #a5d6a7;}
+.nb-tit{font-size:10.5px;font-weight:800;margin-bottom:4px;display:flex;align-items:center;gap:4px;}
+.nb.blue .nb-tit{color:#1565c0;}.nb.teal .nb-tit{color:#00695c;}.nb.amber .nb-tit{color:#f57c00;}.nb.red .nb-tit{color:#c62828;}.nb.grn .nb-tit{color:#2e7d32;}
+.nb-txt{font-size:10.5px;line-height:1.8;word-break:keep-all;overflow-wrap:break-word;}
+.nb.blue .nb-txt{color:#1a3a6b;}.nb.teal .nb-txt{color:#004d40;}.nb.amber .nb-txt{color:#4a2c00;}.nb.red .nb-txt{color:#7f0000;}.nb.grn .nb-txt{color:#1b5e20;}
+
+/*══════════════════════════════════════
+  RESULT HERO
+══════════════════════════════════════*/
+.result-hero{padding:18px;border-radius:12px;color:#fff;text-align:center;margin-bottom:13px;position:relative;overflow:hidden;}
+.result-hero.blue{background:linear-gradient(135deg,#0d47a1,#1565c0);}
+.result-hero.teal{background:linear-gradient(135deg,#004d40,#00695c);}
+.result-hero.red{background:linear-gradient(135deg,#b71c1c,#c62828);}
+.result-hero.grn{background:linear-gradient(135deg,#1b5e20,#2e7d32);}
+.result-hero::before{content:'';position:absolute;top:-20px;right:-20px;width:100px;height:100px;background:rgba(255,255,255,.05);border-radius:50%;}
+.rh-label{font-size:9.5px;opacity:.65;margin-bottom:2px;font-weight:700;letter-spacing:.05em;}
+.rh-num{font-size:44px;font-weight:900;color:#fff176;line-height:1;font-family:'JetBrains Mono',monospace!important;}
+@media(max-width:380px){.rh-num{font-size:32px;}}
+.rh-unit{font-size:13px;font-weight:700;opacity:.8;margin-top:3px;}
+.rh-note{font-size:9.5px;opacity:.65;margin-top:7px;line-height:1.5;}
+.rh-badge{display:inline-block;margin-top:8px;padding:4px 14px;border-radius:20px;font-size:11px;font-weight:900;background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.3);}
+
+/*══════════════════════════════════════
+  STAT GRID
+══════════════════════════════════════*/
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:13px;}
+@media(max-width:480px){.stat-grid{grid-template-columns:repeat(2,1fr);}}
+.sbox{background:#fff;border:1px solid var(--gray-200);border-radius:10px;padding:10px;text-align:center;box-shadow:var(--shadow-sm);}
+.sbox.pass{border-color:#a5d6a7;background:#f1f8e9;}
+.sbox.fail{border-color:#ef9a9a;background:#ffebee;}
+.sico{font-size:15px;margin-bottom:3px;}
+.sval{font-size:16px;font-weight:900;color:#1565c0;font-family:'JetBrains Mono',monospace!important;line-height:1.1;word-break:break-all;}
+.sval.teal{color:#00897b;}
+.sval.red{color:#c62828;}
+.sval.grn{color:#2e7d32;}
+.slbl{font-size:9px;color:#64748b;font-weight:700;margin-top:2px;}
+.spass{font-size:9px;font-weight:800;margin-top:2px;}
+.spass.ok{color:#2e7d32;}.spass.ng{color:#c62828;}
+
+/*══════════════════════════════════════
+  TABLE
+══════════════════════════════════════*/
+.tbl-wrap{overflow-x:auto;border-radius:9px;border:1px solid var(--gray-200);margin-bottom:13px;}
+table{width:100%;border-collapse:collapse;font-size:10.5px;}
+table th{background:#e3f2fd;padding:8px 10px;text-align:center;font-weight:800;color:#1565c0;border-bottom:1.5px solid var(--blue-border);white-space:nowrap;}
+table.teal th{background:#e0f2f1;color:#00695c;border-bottom-color:#80cbc4;}
+table td{padding:7px 10px;border-bottom:1px solid var(--gray-200);font-weight:600;white-space:nowrap;}
+table tr:last-child td{border-bottom:none;}
+table tr:nth-child(even) td{background:#f8fafd;}
+.td-pass{color:#2e7d32;font-weight:900;}
+.td-fail{color:#c62828;font-weight:900;}
+
+/*══════════════════════════════════════
+  STEP BAR
+══════════════════════════════════════*/
+.step-bar{display:flex;align-items:center;margin-bottom:13px;background:#fff;border:1px solid var(--gray-200);border-radius:10px;padding:8px 12px;overflow-x:auto;gap:0;scrollbar-width:none;}
+.step-bar::-webkit-scrollbar{display:none;}
+.step-item{display:flex;align-items:center;gap:5px;flex-shrink:0;}
+.sc{width:22px;height:22px;border-radius:50%;background:#e2e8f0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#94a3b8;flex-shrink:0;transition:all .2s;}
+.sc.done{background:#43a047;color:#fff;}
+.sc.active{background:#1976d2;color:#fff;box-shadow:0 0 0 3px rgba(25,118,210,.22);}
+.sl{font-size:10.5px;font-weight:700;color:#94a3b8;white-space:nowrap;}
+@media(max-width:400px){.sl{display:none;}}
+.sl.active{color:#1565c0;}.sl.done{color:#2e7d32;}
+.sdiv{width:16px;height:2px;background:#e2e8f0;margin:0 3px;flex-shrink:0;transition:background .2s;}
+.sdiv.done{background:#43a047;}
+
+/*══════════════════════════════════════
+  MODAL
+══════════════════════════════════════*/
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal-box{background:#fff;border-radius:16px;width:min(520px,calc(100vw - 24px));max-height:80vh;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.3);display:flex;flex-direction:column;}
+.modal-head{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--gray-200);}
+.modal-tit{font-size:13px;font-weight:900;color:#0d1f3c;flex:1;}
+.modal-cls{width:28px;height:28px;border:none;background:#f1f5f9;border-radius:8px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;color:#64748b;}
+.modal-cls:hover{background:#e2e8f0;}
+.modal-body{padding:16px 18px;overflow-y:auto;}
+
+/*══════════════════════════════════════
+  TOAST
+══════════════════════════════════════*/
+.toast{position:fixed;bottom:calc(90px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%) translateY(14px);background:#0d1f3c;color:#fff;padding:9px 18px;border-radius:16px;font-size:12px;font-weight:700;opacity:0;transition:all .28s;z-index:999;pointer-events:none;white-space:nowrap;max-width:calc(100vw - 32px);text-align:center;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/*══════════════════════════════════════
+  BOTTOM ACTION BAR
+══════════════════════════════════════*/
+.bottom-bar{position:fixed;bottom:0;left:0;right:0;background:linear-gradient(135deg,#0d47a1,#0f4c81);border-top:1px solid rgba(255,255,255,.1);padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px));z-index:100;box-shadow:0 -4px 20px rgba(13,31,60,.3);}
+.bottom-bar-inner{max-width:1400px;margin:0 auto;display:flex;gap:8px;align-items:center;}
+.btn-calc{flex:1;background:linear-gradient(135deg,#1976d2,#42a5f5);color:#fff;border:none;padding:12px;border-radius:10px;font-size:13px;font-weight:900;cursor:pointer;font-family:inherit;transition:all .2s;box-shadow:0 3px 12px rgba(25,118,210,.4);display:flex;align-items:center;justify-content:center;gap:6px;}
+.btn-calc:hover{background:linear-gradient(135deg,#1565c0,#1976d2);transform:translateY(-1px);}
+.btn-calc:active{transform:translateY(0);}
+.btn-secondary{background:rgba(255,255,255,.15);color:#fff;border:1.5px solid rgba(255,255,255,.25);padding:12px 14px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s;display:flex;align-items:center;gap:5px;white-space:nowrap;}
+.btn-secondary:hover{background:rgba(255,255,255,.25);}
+@media(max-width:480px){
+  .btn-calc{font-size:12px;padding:11px;}
+  .btn-secondary .btn-stxt{display:none;}
+}
+
+/*══════════════════════════════════════
+  A4 REPORT (모바일 프리뷰)
+══════════════════════════════════════*/
+.a4-wrap{background:#78909c;padding:20px;min-height:calc(100vh - 130px);overflow-x:hidden;overflow-y:auto;position:relative;display:flex;justify-content:center;align-items:flex-start;}
+.a4-scale-wrap{display:block;transform-origin:top center;width:432px;flex-shrink:0;}
+@media(max-width:860px){
+  .a4-wrap{padding:8px;justify-content:flex-start;align-items:flex-start;}
+  .a4-scale-wrap{transform-origin:top left;}
+}
+/* 갤럭시 S24 Ultra: 432×932 dp (논리해상도 기준) */
+.a4-page{
+  background:#fff;width:432px;min-height:932px;
+  margin:0 auto;padding:16px 14px 20px;
+  box-shadow:0 8px 40px rgba(0,0,0,.28);
+  font-size:10px;color:#0d1f3c;
+  border-radius:8px;
+  position:relative;
+}
+/* 스마트폰 프레임 효과 */
+.phone-frame{
+  background:#1a1a2e;
+  border-radius:20px;
+  padding:12px;
+  width:456px;
+  margin:0 auto;
+  box-shadow:0 12px 48px rgba(0,0,0,.5);
+}
+.phone-notch{
+  width:80px;height:10px;background:#1a1a2e;
+  border-radius:0 0 8px 8px;
+  margin:0 auto 8px;
+  position:relative;z-index:1;
+}
+.a4-page *{font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif!important;}
+.a4-title-wrap{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;border-bottom:2.5px solid var(--blue-mid);padding-bottom:8px;}
+.a4-title-main{font-size:14px;font-weight:900;color:#0d47a1;letter-spacing:-.02em;}
+.a4-title-sub{font-size:8px;color:#90a4ae;font-weight:700;text-align:right;line-height:1.7;}
+.a4-sec{font-size:10px;font-weight:800;color:#1565c0;margin-bottom:4px;margin-top:8px;padding-left:7px;border-left:3px solid var(--blue-mid);text-align:left;}
+.a4-sec.teal{color:#00695c;border-left-color:#00897b;}
+.a4-sec.red{color:#c62828;border-left-color:#ef5350;}
+.a4-sec.grn{color:#2e7d32;border-left-color:#43a047;}
+.a4-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:7px;}
+.a4-grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:7px;}
+.a4-ic{background:#f8fafd;border:1px solid var(--gray-200);border-radius:4px;padding:4px 6px;text-align:left;}
+.a4-ik{font-size:7px;font-weight:700;color:#78909c;text-transform:uppercase;letter-spacing:.05em;display:block;}
+.a4-iv{font-size:9.5px;font-weight:900;color:#0d1f3c;margin-top:1px;font-family:'JetBrains Mono',monospace!important;display:block;}
+.a4-tbl{width:100%;border-collapse:collapse;font-size:8.5px;margin-bottom:6px;}
+.a4-tbl th{background:#e3f2fd;padding:3px 5px;text-align:center;font-weight:800;color:#1565c0;border:1px solid var(--blue-border);}
+.a4-tbl.teal th{background:#e0f2f1;color:#00695c;border-color:#80cbc4;}
+.a4-tbl td{padding:3px 5px;text-align:center;border:1px solid var(--gray-200);font-weight:600;}
+.a4-tbl tr:nth-child(even) td{background:#f8fafd;}
+.a4-tbl .td-pass{color:#2e7d32;font-weight:900;}
+.a4-tbl .td-fail{color:#c62828;font-weight:900;}
+.a4-rbox{border-radius:7px;padding:8px 10px 6px;text-align:center;margin-bottom:6px;}
+.a4-rbox.blue{background:linear-gradient(135deg,#0d47a1,#1565c0);color:#fff;}
+.a4-rbox.grn{background:linear-gradient(135deg,#1b5e20,#2e7d32);color:#fff;}
+.a4-rbox.red{background:linear-gradient(135deg,#b71c1c,#c62828);color:#fff;}
+.a4-rnum{font-size:28px;font-weight:900;color:#fff176;font-family:'JetBrains Mono',monospace!important;line-height:1;}
+.a4-footer{margin-top:10px;border-top:1px solid var(--gray-200);padding-top:5px;display:table;width:100%;font-size:7px;color:#90a4ae;font-weight:600;}
+.a4-footer span{display:table-cell;width:33.33%;}
+.a4-footer span:first-child{text-align:left;}
+.a4-footer span:nth-child(2){text-align:center;}
+.a4-footer span:last-child{text-align:right;}
+
+/* 판정 배지 */
+.judge-badge{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:2px 7px;border-radius:12px;font-size:8px;font-weight:900;
+  margin-top:2px;
+}
+.judge-badge.ok{background:#e8f5e9;color:#2e7d32;border:1px solid #a5d6a7;}
+.judge-badge.ng{background:#ffebee;color:#c62828;border:1px solid #ef9a9a;}
+
+/*══════════════════════════════════════
+  △ 삼각자 도움말 버튼 (우측 하단 FAB)
+══════════════════════════════════════*/
+.help-fab{
+  position:fixed;
+  right:18px;
+  bottom:calc(85px + env(safe-area-inset-bottom,0px));
+  z-index:150;
+  width:52px;height:52px;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+  filter:drop-shadow(0 4px 12px rgba(15,76,129,.4));
+  transition:transform .2s, filter .2s;
+}
+.help-fab:hover{transform:scale(1.08);filter:drop-shadow(0 6px 18px rgba(15,76,129,.55));}
+.help-fab:active{transform:scale(.96);}
+
+/* ══ 도움말 모달 오버레이 (화면 중앙) ══ */
+.help-overlay{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.52);
+  z-index:300;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+}
+.help-overlay.open{display:flex;}
+
+/* 모달 박스 */
+.help-panel{
+  background:#fff;
+  border-radius:18px;
+  width:min(480px,calc(100vw - 32px));
+  max-height:min(680px,calc(100vh - 80px));
+  overflow:hidden;
+  box-shadow:0 24px 64px rgba(13,31,60,.35);
+  border:1px solid var(--blue-border);
+  display:flex;
+  flex-direction:column;
+  transform:scale(.94) translateY(10px);
+  opacity:0;
+  transition:transform .25s cubic-bezier(.34,1.56,.64,1), opacity .2s;
+}
+.help-overlay.open .help-panel{
+  transform:scale(1) translateY(0);
+  opacity:1;
+}
+.help-panel-head{
+  background:linear-gradient(135deg,#0f3460,#0f4c81);
+  padding:14px 18px;
+  display:flex;align-items:center;gap:10px;
+  flex-shrink:0;
+}
+.help-panel-tit{color:#fff;font-size:13px;font-weight:900;flex:1;}
+.help-panel-cls{width:28px;height:28px;background:rgba(255,255,255,.15);border:none;border-radius:8px;color:#fff;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;transition:background .15s;}
+.help-panel-cls:hover{background:rgba(255,255,255,.28);}
+.help-tabs{display:flex;border-bottom:1px solid var(--gray-200);flex-shrink:0;}
+.help-tab{flex:1;padding:9px 6px;background:none;border:none;font-size:11px;font-weight:700;color:#94a3b8;cursor:pointer;font-family:inherit;transition:all .15s;border-bottom:2.5px solid transparent;}
+.help-tab.active{color:#1565c0;border-bottom-color:#1976d2;background:#f0f8ff;}
+.help-tab-body{padding:14px 16px;overflow-y:auto;flex:1;}
+.help-tab-panel{display:none;}
+.help-tab-panel.active{display:block;}
+.help-item{margin-bottom:11px;padding-bottom:11px;border-bottom:1px solid #f0f5fb;}
+.help-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+.help-step{display:flex;gap:9px;align-items:flex-start;}
+.help-num{width:22px;height:22px;background:#1976d2;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9.5px;font-weight:900;flex-shrink:0;margin-top:1px;}
+.help-txt{font-size:11px;line-height:1.75;color:#334155;word-break:keep-all;}
+.help-txt b{color:#0f4c81;font-weight:800;}
+.law-item{margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #f0f5fb;}
+.law-item:last-child{border-bottom:none;}
+.law-code{font-size:10.5px;font-weight:900;color:#1565c0;font-family:'JetBrains Mono',monospace!important;margin-bottom:3px;}
+.law-desc{font-size:10.5px;line-height:1.65;color:#334155;}
+.law-limit{font-size:10px;color:#c62828;font-weight:700;background:#ffebee;padding:3px 8px;border-radius:5px;display:inline-block;margin-top:3px;}
+
+/*══════════════════════════════════════
+  PREVIEW 옹벽 선택 탭 바
+══════════════════════════════════════*/
+.preview-sel-bar{
+  display:flex;gap:6px;justify-content:center;
+  padding:10px 12px 8px;
+  flex-wrap:wrap;
+}
+.prev-sel-btn{
+  background:#fff;
+  border:1.5px solid var(--gray-200);
+  border-radius:20px;
+  padding:6px 16px;
+  font-size:11.5px;font-weight:800;
+  color:#64748b;
+  cursor:pointer;font-family:inherit;
+  transition:all .18s;
+  display:flex;align-items:center;gap:5px;
+  white-space:nowrap;
+  -webkit-tap-highlight-color:transparent;
+}
+.prev-sel-btn:hover{border-color:#1976d2;color:#1565c0;background:#e3f2fd;}
+.prev-sel-btn.active{
+  background:linear-gradient(135deg,#1565c0,#1976d2);
+  border-color:#1565c0;color:#fff;
+  box-shadow:0 2px 8px rgba(25,118,210,.35);
+}
+.prev-sel-btn.disabled{opacity:.4;cursor:not-allowed;}
+.prev-sel-badge{
+  font-size:9px;font-weight:900;
+  padding:1px 6px;border-radius:10px;
+  background:rgba(255,255,255,.25);
+}
+.prev-sel-btn:not(.active) .prev-sel-badge{background:#e2e8f0;color:#94a3b8;}
+
+/*══════════════════════════════════════
+  SHARE MODAL
+══════════════════════════════════════*/
+.share-modal-box{
+  background:#fff;border-radius:16px;
+  width:min(360px,calc(100vw - 24px));
+  max-height:80vh;overflow:hidden;
+  box-shadow:0 20px 60px rgba(0,0,0,.3);
+  display:flex;flex-direction:column;
+}
+.share-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:14px;}
+.share-btn{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 8px;border-radius:10px;border:1.5px solid var(--gray-200);background:#f8fafd;cursor:pointer;transition:all .15s;font-family:inherit;}
+.share-btn:hover{border-color:#1976d2;background:#e3f2fd;}
+.share-btn-ico{font-size:22px;}
+.share-btn-lbl{font-size:10.5px;font-weight:800;color:#334155;}
+
+/*══════════════════════════════════════
+  ISO A4 PREVIEW TAB
+══════════════════════════════════════*/
+.a4iso-wrap{
+  background:#607d8b;
+  padding:24px 20px;
+  min-height:calc(100vh - 130px);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+@media(max-width:900px){
+  .a4iso-wrap{padding:12px 8px;}
+  .a4iso-scale-wrap{transform-origin:top center!important;}
+}
+@media(max-width:600px){
+  .a4iso-wrap{padding:8px 4px;}
+  .a4iso-scale-wrap{transform-origin:top left!important;}
+}
+.a4iso-toolbar{
+  display:flex;gap:8px;align-items:center;justify-content:center;
+  flex-wrap:wrap;margin-bottom:16px;padding:0 8px;
+}
+@media(max-width:600px){
+  .a4iso-toolbar{gap:6px;}
+  .a4iso-toolbar .btn-secondary{padding:8px 10px;font-size:11px;}
+  .a4iso-toolbar .btn-secondary span{display:none;}
+}
+.a4iso-scale-wrap{
+  transform-origin:top center;
+  width:794px;
+  flex-shrink:0;
+}
+/* ISO A4 용지: 794 × 1123 px (96dpi 기준) */
+.a4iso-page{
+  background:#fff;
+  width:794px;min-height:1123px;
+  margin:0 auto;
+  padding:28px 36px 36px;
+  box-shadow:0 8px 48px rgba(0,0,0,.35);
+  font-size:11.5px;color:#0d1f3c;
+  position:relative;
+  font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+}
+.a4iso-page *{font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif!important;}
+
+/* A4 헤더 */
+.a4iso-hd{
+  display:flex;align-items:flex-start;justify-content:space-between;
+  border-bottom:3px solid #0d47a1;
+  padding-bottom:12px;margin-bottom:16px;
+}
+.a4iso-hd-left{display:flex;align-items:center;gap:10px;}
+.a4iso-hd-logo{
+  width:44px;height:44px;
+  background:linear-gradient(135deg,#1976d2,#0d47a1);
+  border-radius:8px;display:flex;align-items:center;justify-content:center;
+  font-size:22px;flex-shrink:0;
+}
+.a4iso-hd-tit{font-size:18px;font-weight:900;color:#0d47a1;letter-spacing:-.02em;}
+.a4iso-hd-sub{font-size:9px;color:#546e7a;font-weight:700;margin-top:2px;}
+.a4iso-hd-info{text-align:right;}
+.a4iso-hd-info table{font-size:9px;border-collapse:collapse;}
+.a4iso-hd-info td{padding:2px 6px;border:1px solid #e2e8f0;}
+.a4iso-hd-info td:first-child{background:#e3f2fd;color:#1565c0;font-weight:800;}
+.a4iso-hd-info td:last-child{font-weight:700;min-width:100px;}
+
+/* A4 섹션 */
+.a4iso-sec{
+  font-size:12px;font-weight:900;color:#1565c0;
+  padding:5px 10px;background:#e3f2fd;
+  border-left:4px solid #1976d2;border-radius:0 5px 5px 0;
+  margin:14px 0 8px;display:flex;align-items:center;gap:6px;
+}
+.a4iso-sec.grn{color:#2e7d32;background:#e8f5e9;border-left-color:#43a047;}
+.a4iso-sec.amber{color:#f57c00;background:#fff8e1;border-left-color:#ffa726;}
+.a4iso-sec.red{color:#c62828;background:#ffebee;border-left-color:#ef5350;}
+
+/* A4 판정 박스 */
+.a4iso-judge{
+  border-radius:10px;padding:14px 18px;
+  color:#fff;margin-bottom:14px;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:12px;
+}
+.a4iso-judge.pass{background:linear-gradient(135deg,#1b5e20,#2e7d32);}
+.a4iso-judge.fail{background:linear-gradient(135deg,#b71c1c,#c62828);}
+.a4iso-judge-main{font-size:20px;font-weight:900;}
+.a4iso-judge-sub{font-size:10px;opacity:.8;margin-top:3px;}
+.a4iso-judge-fs{font-size:36px;font-weight:900;color:#fff176;font-family:'JetBrains Mono',monospace!important;line-height:1;}
+
+/* A4 격자 */
+.a4iso-grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.a4iso-grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:12px;}
+.a4iso-grid4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;margin-bottom:12px;}
+.a4iso-cell{background:#f8fafd;border:1px solid #e2e8f0;border-radius:5px;padding:6px 9px;}
+.a4iso-cell-k{font-size:8px;font-weight:700;color:#78909c;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:2px;}
+.a4iso-cell-v{font-size:12px;font-weight:900;color:#0d1f3c;font-family:'JetBrains Mono',monospace!important;display:block;}
+
+/* A4 표 */
+.a4iso-tbl{width:100%;border-collapse:collapse;font-size:10.5px;margin-bottom:10px;}
+.a4iso-tbl thead th{background:#0d47a1;color:#fff;padding:7px 10px;text-align:center;font-weight:800;border:1px solid #1565c0;}
+.a4iso-tbl tbody td{padding:6px 10px;border:1px solid #e2e8f0;text-align:center;font-weight:600;}
+.a4iso-tbl tbody tr:nth-child(even) td{background:#f8fafd;}
+.a4iso-tbl .pass-cell{color:#2e7d32;font-weight:900;background:#e8f5e9!important;}
+.a4iso-tbl .fail-cell{color:#c62828;font-weight:900;background:#ffebee!important;}
+.a4iso-tbl tfoot td{background:#e3f2fd!important;font-weight:900;color:#0d47a1;border-color:#bbdefb;}
+
+/* A4 푸터 */
+.a4iso-footer{
+  position:absolute;bottom:18px;left:36px;right:36px;
+  border-top:1px solid #e2e8f0;padding-top:7px;
+  display:flex;align-items:center;justify-content:space-between;
+  font-size:8px;color:#90a4ae;font-weight:600;
+}
+/* 워터마크 */
+.a4iso-watermark{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%) rotate(-30deg);
+  font-size:80px;font-weight:900;color:rgba(25,118,210,.04);
+  pointer-events:none;white-space:nowrap;letter-spacing:.1em;
+  font-family:'JetBrains Mono',monospace!important;
+}
+
+/*══════════════════════════════════════
+  PRINT (ISO A4)
+══════════════════════════════════════*/
+@page{size:A4 portrait;margin:10mm 12mm 14mm;}
+@media print{
+  *,*::before,*::after{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important;}
+  *{font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif!important;}
+  .no-print{display:none!important;}
+  html,body{margin:0!important;padding:0!important;background:#fff!important;}
+  #root-app{display:none!important;}
+  #print-target{display:block!important;}
+  #print-target .a4iso-page{
+    width:100%!important;box-shadow:none!important;
+    min-height:auto!important;box-sizing:border-box!important;
+    padding:0!important;font-size:10px!important;
+  }
+}
+#print-target{display:none;}
+
+/* ══ PWA 설치 버튼 (토목옹벽 Edition) ══ */
+#pwa-install-btn{
+  display:none;align-items:center;gap:5px;
+  background:linear-gradient(135deg,#f97316,#0f4c81);
+  color:#fff;border:none;padding:7px 13px;border-radius:8px;
+  font-size:11px;font-weight:800;cursor:pointer;
+  font-family:inherit;white-space:nowrap;flex-shrink:0;
+  transition:all .2s;
+  box-shadow:0 2px 12px rgba(249,115,22,.45);
+  animation:rw-pwa-glow 2.5s ease-in-out infinite;
+}
+#pwa-install-btn.visible{display:flex;}
+#pwa-install-btn:hover{
+  background:linear-gradient(135deg,#ea580c,#0a3d6b);
+  transform:translateY(-1px);
+  box-shadow:0 4px 18px rgba(249,115,22,.65);
+  animation:none;
+}
+@keyframes rw-pwa-glow{
+  0%,100%{box-shadow:0 2px 12px rgba(249,115,22,.45);}
+  50%{box-shadow:0 2px 22px rgba(249,115,22,.75),0 0 10px rgba(15,76,129,.25);}
+}
+@media(max-width:520px){#pwa-install-btn .pwa-txt{display:none;}}
+
+/* ══ PWA 설치 배너 ══ */
+#pwa-banner{
+  display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;
+  background:linear-gradient(135deg,#0a2a4a 0%,#0f4c81 60%,#0a3d6b 100%);
+  border-top:2px solid rgba(66,165,245,.4);
+  border-radius:20px 20px 0 0;
+  padding:14px 18px calc(14px + env(safe-area-inset-bottom,0px));
+  box-shadow:0 -6px 32px rgba(15,76,129,.55);
+  animation:rw-banner-up .35s cubic-bezier(.22,.61,.36,1);
+}
+#pwa-banner.visible{display:block;}
+@keyframes rw-banner-up{from{transform:translateY(110%);opacity:0}to{transform:translateY(0);opacity:1}}
+.rw-pwa-inner{max-width:540px;margin:0 auto;display:flex;align-items:center;gap:13px;}
+.rw-pwa-icon{
+  width:52px;height:52px;border-radius:13px;overflow:hidden;flex-shrink:0;
+  border:1.5px solid rgba(66,165,245,.4);
+  box-shadow:0 2px 12px rgba(15,76,129,.35);
+}
+.rw-pwa-icon img{width:100%;height:100%;object-fit:cover;display:block;}
+.rw-pwa-texts{flex:1;min-width:0;}
+.rw-pwa-title{font-size:14px;font-weight:800;color:#fff;margin-bottom:2px;}
+.rw-pwa-desc{font-size:11px;color:#90caf9;line-height:1.5;}
+.rw-pwa-btns{display:flex;gap:7px;flex-shrink:0;}
+.rw-pwa-ok{
+  background:linear-gradient(135deg,#f97316,#ea580c);
+  color:#fff;border:none;padding:10px 18px;border-radius:10px;
+  font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;
+  white-space:nowrap;box-shadow:0 2px 10px rgba(249,115,22,.4);
+  transition:all .2s;
+}
+.rw-pwa-ok:hover{transform:translateY(-1px);}
+.rw-pwa-no{
+  background:rgba(255,255,255,.12);color:#90caf9;
+  border:1px solid rgba(66,165,245,.3);
+  padding:10px 13px;border-radius:10px;font-size:13px;font-weight:700;
+  cursor:pointer;font-family:inherit;white-space:nowrap;
+  transition:all .15s;flex-shrink:0;
+}
+.rw-pwa-no:hover{color:#e3f2fd;}
+@media(max-width:480px){
+  .rw-pwa-icon{width:42px;height:42px;}
+  .rw-pwa-desc{display:none;}
+}
+
+/* ══ iOS 안내 모달 ══ */
+#ios-modal-rw{
+  position:fixed;bottom:0;left:0;right:0;z-index:10000;
+  background:linear-gradient(135deg,#0a2a4a,#0f4c81);
+  border-top:2px solid rgba(66,165,245,.5);
+  border-radius:20px 20px 0 0;
+  padding:22px 20px calc(18px + env(safe-area-inset-bottom,0px));
+  display:none;
+  box-shadow:0 -8px 40px rgba(15,76,129,.55);
+  animation:rw-banner-up .35s cubic-bezier(.22,.61,.36,1);
+}
+#ios-modal-rw.show{display:block;}
+.rw-ios-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.rw-ios-title{font-size:15px;font-weight:800;color:#fff;}
+.rw-ios-cls{background:rgba(255,255,255,.12);border:none;color:#fff;
+  width:28px;height:28px;border-radius:50%;font-size:13px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;}
+.rw-ios-step{display:flex;align-items:flex-start;gap:12px;
+  background:rgba(255,255,255,.07);border-radius:10px;padding:12px;margin-bottom:8px;}
+.rw-ios-num{min-width:26px;height:26px;border-radius:50%;
+  background:rgba(249,115,22,.35);border:1px solid rgba(249,115,22,.6);
+  color:#fed7aa;font-size:11px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.rw-ios-txt{font-size:13px;color:#90caf9;line-height:1.5;}
+.rw-ios-txt strong{color:#fff;}
+.rw-ios-foot{text-align:center;font-size:11px;color:#64b5f6;margin-top:12px;}
+</style>
+</head>
+<body>
+<div id="root-app">
+
+<!-- ══════ HEADER ══════ -->
+<header class="app-header no-print">
+  <div class="header-inner">
+    <div class="brand-logo">
+      <div class="brand-icon" style="background:none;padding:0;overflow:hidden;width:40px;height:40px;border-radius:10px;flex-shrink:0;box-shadow:0 2px 12px rgba(66,165,245,.4);"><img src="./icons/brand-icon.jpg" alt="토목옹벽 MANMIN" style="width:40px;height:40px;object-fit:cover;border-radius:10px;display:block;"/></div>
+      <div class="brand-texts">
+        <div class="brand-title">토목옹벽 — 옹벽 구조물 안전성 검토 시스템</div>
+        <div class="brand-sub">KDS 11 80 10 / KDS 11 10 05 / 구조물기초설계기준 · MANMIN Ver2.0</div>
+      </div>
+    </div>
+    <div class="hdr-btns">
+      <button id="pwa-install-btn" onclick="window.pwaTriggerInstall&&window.pwaTriggerInstall()" title="토목옹벽 앱 설치">
+        📲 <span class="pwa-txt">설치</span>
+      </button>
+      <button class="btn-hdr" onclick="resetAll()">🔄 <span class="btn-txt">초기화</span></button>
+      <button class="btn-hdr-acc" onclick="openShareModal()">📤 <span class="btn-txt">공유</span></button>
+    </div>
+  </div>
+</header>
+
+<!-- ══════ TAB BAR ══════ -->
+<nav class="tab-bar no-print">
+  <div class="tab-bar-inner">
+    <button class="tb active" onclick="switchTab('gravity')" id="tab-gravity">
+      <span class="tb-dot blue"></span><span class="tb-lbl">중력식</span>
+    </button>
+    <button class="tb" onclick="switchTab('cantilever')" id="tab-cantilever">
+      <span class="tb-dot teal"></span><span class="tb-lbl">캔틸레버</span>
+    </button>
+    <button class="tb" onclick="switchTab('anchored')" id="tab-anchored">
+      <span class="tb-dot amber"></span><span class="tb-lbl">앵커</span>
+    </button>
+    <button class="tb" onclick="switchTab('a4preview')" id="tab-a4preview">
+      <span class="tb-dot red"></span><span class="tb-lbl">📄A4미리보기</span>
+    </button>
+    <button class="tb" onclick="switchTab('preview')" id="tab-preview">
+      <span class="tb-dot green"></span><span class="tb-lbl">📱모바일</span>
+    </button>
+  </div>
+</nav>
+
+<!-- ══════ MAIN ══════ -->
+<main class="main-wrap no-print">
+
+<!-- ─── 중력식 옹벽 탭 ─── -->
+<div class="tab-panel active" id="panel-gravity">
+  <div class="step-bar" id="step-gravity">
+    <div class="step-item"><div class="sc active" id="gs1">1</div><span class="sl active" id="gsl1">기본정보</span></div>
+    <div class="sdiv" id="gsd1"></div>
+    <div class="step-item"><div class="sc" id="gs2">2</div><span class="sl" id="gsl2">단면제원</span></div>
+    <div class="sdiv" id="gsd2"></div>
+    <div class="step-item"><div class="sc" id="gs3">3</div><span class="sl" id="gsl3">토압계산</span></div>
+    <div class="sdiv" id="gsd3"></div>
+    <div class="step-item"><div class="sc" id="gs4">4</div><span class="sl" id="gsl4">안전성검토</span></div>
+  </div>
+
+  <div class="two-col">
+    <!-- 입력 -->
+    <div>
+      <!-- 기본정보 -->
+      <div class="card">
+        <div class="card-head"><div class="card-ico blue">📋</div><span class="card-tit">기본 정보</span><span class="cbadge blue">STEP 1</span></div>
+        <div class="card-body">
+          <div class="frow">
+            <div class="fgrp"><label class="flbl">현장명</label><input class="finput" id="g-projname" value="만민 아파트 신축공사" oninput="gUpdateSteps()"/></div>
+            <div class="fgrp"><label class="flbl">작성자</label><input class="finput" id="g-author" value="김만민" oninput="gUpdateSteps()"/></div>
+          </div>
+          <div class="frow">
+            <div class="fgrp"><label class="flbl">작성일</label><input class="finput" type="date" id="g-date"/></div>
+            <div class="fgrp">
+              <label class="flbl">옹벽 형식</label>
+              <select class="fselect" id="g-type" onchange="gUpdateSteps()">
+                <option value="gravity">중력식 옹벽</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 단면 제원 -->
+      <div class="card">
+        <div class="card-head"><div class="card-ico blue">📐</div><span class="card-tit">단면 제원</span><span class="cbadge blue">STEP 2</span></div>
+        <div class="card-body">
+          <div class="sec-title">🏛️ 옹벽 형상</div>
+          <div class="frow">
+            <div class="fgrp">
+              <label class="flbl">옹벽 높이 H (m)</label>
+              <div class="input-sfx"><input class="finput" type="number" id="g-H" value="4.0" step="0.1" min="0.5" oninput="gUpdateSteps()"/><span class="sfx">m</span></div>
+            </div>
+            <div class="fgrp">
+              <label class="flbl">저면폭 B (m)</label>
+              <div class="input-sfx"><input class="finput" type="number" id="g-B" value="2.8" step="0.1" min="0.5" oninput="gUpdateSteps()"/><span class="sfx">m</span></div>
+            </div>
+          </div>
+          <div class="frow">
+            <div class="fgrp">
+              <label class="flbl">상단폭 a (m)</label>
+              <div class="input-sfx"><input class="finput" type="number" id="g-a" value="0.5" step="0.05" min="0.3" oninput="gUpdateSteps()"/><span class="sfx">m</span></div>
+            </div>
+            <div class="fgrp">
+              <label class="flbl">배면경사 α (°)</label>
+              <div class="input-sfx"><input class="finput" type="number" id="g-alpha" value="0" step="1" min="0" max="20" oninput="gUpdateSteps()"/><span class="sfx">°</span></div>
+            </div>
+          </div>
+          <div class="fdivider"></div>
+          <div class="sec-title teal">🪨 콘크리트 물성</div>
+          <div class="frow">
+            <div class="fgrp">
+              <label class="flbl">단위중량 γc (kN/m³)</label>
+              <div class="input-sfx"><input class="finput" type="number" id="g-gc" value="23.0" step="0.5" min="20" oninput="gUpdateSteps()"/><span class="sfx">kN/m³</span></div>
+            </div>
+            <div class="fgrp">
+              <label class="flbl">fck (MPa)</label>
+              <div class="input-sfx"><input class="finput" type="number" id="g-fck" value="21" step="1" min="18" oninput="gUpdateSteps()"/><span class="sfx">MPa</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 토압 조건 -->
+      <div class="card">
+        <div class="card-head"><div class="card-ico amber">⛰️</div><span class="card-tit">토압 조건</span><span class="cbadge amber">STEP 3</span></div>
+        <div class="card-body">
+          <div class="sec-title amber">🌍 뒷채움 토질</div>
+          <div class="frow">
+            <div class="fgrp">
+              <label class="flbl">단위중량 γs (kN/m³)</label>
+              <div class="input-sfx"><input class="finput" type="number" id="g-gs" value="18.0" step="0.5" min="15" oninput="gUpdateSteps()"/><span class="sfx">kN/m³</span></div>
+            </div>
+            <div class="fgrp">
+              <label class="flbl">내부마찰각 φ (°)</label>
+              <div class="input-sfx"><input class="finput" type="number" id="g-phi" value="30" step="1" min="15" max="45" oninput="gUpdateSteps()"/><span class="sfx">°</span></div>
+            </div>
+          </div>
+          <div class="frow">
+            <div class="fgrp">
+              <label class="flbl">점착력 c (kN/m²)</label>
+              <div class="input-sfx"><input class="finput" type="number" id="g-c" value="0" step="1" min="0" oninput="gUpdateSteps()"/><span class="sfx">kPa</span></div>
+            </div>
+            <div class="fgrp">
+              <label class="flbl">배면경사각 β (°)</label>
+              <div class="input-sfx"><input class="finput" type="number" id="g-beta" value="0" step="1" min="0" max="30" oninput="gUpdateSteps()"/><span class="sfx">°</span></div>
+            </div>
+          </div>
+          <div class="fdivider"></div>
+          <div class="sec-title teal">🏗️ 기초 조건</div>
+          <div class="frow">
+            <div class="fgrp">
+              <label class="flbl">기초 마찰계수 μ</label>
+              <input class="finput" type="number" id="g-mu" value="0.5" step="0.05" min="0.3" max="0.8" oninput="gUpdateSteps()"/>
+            </div>
+            <div class="fgrp">
+              <label class="flbl">허용지지력 qa (kN/m²)</label>
+              <div class="input-sfx"><input class="finput" type="number" id="g-qa" value="200" step="10" min="50" oninput="gUpdateSteps()"/><span class="sfx">kPa</span></div>
+            </div>
+          </div>
+          <div class="frow">
+            <div class="fgrp">
+              <label class="flbl">상재하중 q (kN/m²)</label>
+              <div class="input-sfx"><input class="finput" type="number" id="g-q" value="10" step="1" min="0" oninput="gUpdateSteps()"/><span class="sfx">kPa</span></div>
+            </div>
+            <div class="fgrp">
+              <label class="flbl">근입깊이 Df (m)</label>
+              <div class="input-sfx"><input class="finput" type="number" id="g-Df" value="0.5" step="0.1" min="0" oninput="gUpdateSteps()"/><span class="sfx">m</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 결과 -->
+    <div>
+      <div id="g-result-panel">
+        <div class="nb blue">
+          <div class="nb-tit">💡 사용 방법</div>
+          <div class="nb-txt">좌측 조건을 입력하고 <b>안전성 검토</b> 버튼을 눌러주세요.<br/>KDS 11 80 10 기준에 따라 전도·활동·지지력·편심 안전율을 자동 계산합니다.</div>
+        </div>
+        <!-- 옹벽 단면 SVG 다이어그램 -->
+        <div class="card">
+          <div class="card-head"><div class="card-ico blue">📐</div><span class="card-tit">단면 다이어그램</span></div>
+          <div class="card-body" style="padding:10px;">
+            <svg id="g-diagram" viewBox="0 0 320 240" width="100%" style="max-width:320px;display:block;margin:0 auto;border:1px solid #e2e8f0;border-radius:8px;background:#f8fafd;"></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── 캔틸레버식 옹벽 탭 ─── -->
+<div class="tab-panel" id="panel-cantilever">
+  <div class="step-bar">
+    <div class="step-item"><div class="sc active">1</div><span class="sl active">기본정보</span></div>
+    <div class="sdiv"></div>
+    <div class="step-item"><div class="sc">2</div><span class="sl">단면제원</span></div>
+    <div class="sdiv"></div>
+    <div class="step-item"><div class="sc">3</div><span class="sl">토압계산</span></div>
+    <div class="sdiv"></div>
+    <div class="step-item"><div class="sc">4</div><span class="sl">안전성검토</span></div>
+  </div>
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <div class="card-head"><div class="card-ico teal">📋</div><span class="card-tit">기본 정보</span><span class="cbadge teal">캔틸레버식</span></div>
+        <div class="card-body">
+          <div class="frow">
+            <div class="fgrp"><label class="flbl">현장명</label><input class="finput" id="c-projname" value="만민 아파트 신축공사"/></div>
+            <div class="fgrp"><label class="flbl">작성자</label><input class="finput" id="c-author" value="김만민"/></div>
+          </div>
+          <div class="frow">
+            <div class="fgrp"><label class="flbl">작성일</label><input class="finput" type="date" id="c-date"/></div>
+            <div class="fgrp"><label class="flbl">위험등급</label>
+              <select class="fselect" id="c-risk">
+                <option value="1">1등급 (일반)</option>
+                <option value="2">2등급 (중요)</option>
+                <option value="3">3등급 (핵심)</option>
+              </select>
+            </div>
+          </div>
+          <div class="fdivider"></div>
+          <div class="sec-title teal">🏗️ 단면 제원</div>
+          <div class="frow">
+            <div class="fgrp"><label class="flbl">옹벽 높이 H (m)</label><div class="input-sfx"><input class="finput" type="number" id="c-H" value="5.0" step="0.1" min="1" oninput="drawCantileverDiagram()"/><span class="sfx">m</span></div></div>
+            <div class="fgrp"><label class="flbl">기초저면폭 B (m)</label><div class="input-sfx"><input class="finput" type="number" id="c-B" value="3.5" step="0.1" min="1" oninput="drawCantileverDiagram()"/><span class="sfx">m</span></div></div>
+          </div>
+          <div class="frow">
+            <div class="fgrp"><label class="flbl">전면 돌출 bt (m)</label><div class="input-sfx"><input class="finput" type="number" id="c-bt" value="0.8" step="0.05" min="0.3" oninput="drawCantileverDiagram()"/><span class="sfx">m</span></div></div>
+            <div class="fgrp"><label class="flbl">기초 두께 tf (m)</label><div class="input-sfx"><input class="finput" type="number" id="c-tf" value="0.5" step="0.05" min="0.3" oninput="drawCantileverDiagram()"/><span class="sfx">m</span></div></div>
+          </div>
+          <div class="frow">
+            <div class="fgrp"><label class="flbl">벽체 두께 tw (m)</label><div class="input-sfx"><input class="finput" type="number" id="c-tw" value="0.35" step="0.05" min="0.2" oninput="drawCantileverDiagram()"/><span class="sfx">m</span></div></div>
+            <div class="fgrp"><label class="flbl">뒤채움 단위중량 (kN/m³)</label><div class="input-sfx"><input class="finput" type="number" id="c-gs" value="18.0" step="0.5"/><span class="sfx">kN/m³</span></div></div>
+          </div>
+          <div class="frow">
+            <div class="fgrp"><label class="flbl">내부마찰각 φ (°)</label><div class="input-sfx"><input class="finput" type="number" id="c-phi" value="30" step="1" oninput="drawCantileverDiagram()"/><span class="sfx">°</span></div></div>
+            <div class="fgrp"><label class="flbl">마찰계수 μ</label><input class="finput" type="number" id="c-mu" value="0.5" step="0.05"/></div>
+          </div>
+          <div class="frow">
+            <div class="fgrp"><label class="flbl">허용지지력 (kN/m²)</label><div class="input-sfx"><input class="finput" type="number" id="c-qa" value="200" step="10"/><span class="sfx">kPa</span></div></div>
+            <div class="fgrp"><label class="flbl">상재하중 q (kN/m²)</label><div class="input-sfx"><input class="finput" type="number" id="c-q" value="10" step="1"/><span class="sfx">kPa</span></div></div>
+          </div>
+        </div>
+      </div>
+      <!-- 토압 조건 카드 (캔틸레버) -->
+      <div class="card">
+        <div class="card-head"><div class="card-ico amber">⛰️</div><span class="card-tit">토압 조건</span><span class="cbadge amber">STEP 3</span></div>
+        <div class="card-body">
+          <div class="sec-title amber">🌍 뒷채움 토질</div>
+          <div class="frow">
+            <div class="fgrp"><label class="flbl">점착력 c (kN/m²)</label><div class="input-sfx"><input class="finput" type="number" id="c-c" value="0" step="1" min="0" oninput="drawCantileverDiagram()"/><span class="sfx">kPa</span></div></div>
+            <div class="fgrp"><label class="flbl">배면경사각 β (°)</label><div class="input-sfx"><input class="finput" type="number" id="c-beta" value="0" step="1" min="0" max="30" oninput="drawCantileverDiagram()"/><span class="sfx">°</span></div></div>
+          </div>
+          <div class="fdivider"></div>
+          <div class="sec-title teal">🏗️ 기초 조건</div>
+          <div class="frow">
+            <div class="fgrp"><label class="flbl">근입깊이 Df (m)</label><div class="input-sfx"><input class="finput" type="number" id="c-Df" value="0.5" step="0.1" min="0" oninput="drawCantileverDiagram()"/><span class="sfx">m</span></div></div>
+            <div class="fgrp"><label class="flbl">콘크리트 γc (kN/m³)</label><div class="input-sfx"><input class="finput" type="number" id="c-gc" value="23.0" step="0.5" min="20"/><span class="sfx">kN/m³</span></div></div>
+          </div>
+          <div class="frow">
+            <div class="fgrp"><label class="flbl">fck (MPa)</label><div class="input-sfx"><input class="finput" type="number" id="c-fck" value="24" step="1" min="21"/><span class="sfx">MPa</span></div></div>
+            <div class="fgrp"><label class="flbl">주철근 fy (MPa)</label><div class="input-sfx"><input class="finput" type="number" id="c-fy" value="400" step="50" min="300"/><span class="sfx">MPa</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div id="c-result-panel">
+        <div class="nb teal"><div class="nb-tit">💡 캔틸레버식 옹벽</div><div class="nb-txt">역T형 단면으로 배면 뒷채움 토사의 중량을 이용하여 안정을 확보합니다.<br/>KDS 14 20 54 기준에 따라 철근 배근 및 안전성을 검토합니다.</div></div>
+        <!-- 캔틸레버 단면 SVG 다이어그램 -->
+        <div class="card">
+          <div class="card-head"><div class="card-ico teal">📐</div><span class="card-tit">단면 다이어그램 (역T형)</span></div>
+          <div class="card-body" style="padding:10px;">
+            <svg id="c-diagram" viewBox="0 0 320 260" width="100%" style="max-width:320px;display:block;margin:0 auto;border:1px solid #e2e8f0;border-radius:8px;background:#f8fafd;"></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── 앵커식 옹벽 탭 ─── -->
+<div class="tab-panel" id="panel-anchored">
+  <div class="step-bar">
+    <div class="step-item"><div class="sc active">1</div><span class="sl active">기본정보</span></div>
+    <div class="sdiv"></div>
+    <div class="step-item"><div class="sc">2</div><span class="sl">앵커설계</span></div>
+    <div class="sdiv"></div>
+    <div class="step-item"><div class="sc">3</div><span class="sl">토압계산</span></div>
+    <div class="sdiv"></div>
+    <div class="step-item"><div class="sc">4</div><span class="sl">안전성검토</span></div>
+  </div>
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <div class="card-head"><div class="card-ico amber">📋</div><span class="card-tit">기본 정보</span><span class="cbadge amber">앵커식</span></div>
+        <div class="card-body">
+          <div class="frow">
+            <div class="fgrp"><label class="flbl">현장명</label><input class="finput" id="an-projname" value="만민 아파트 신축공사"/></div>
+            <div class="fgrp"><label class="flbl">작성자</label><input class="finput" id="an-author" value="김만민"/></div>
+          </div>
+          <div class="frow">
+            <div class="fgrp"><label class="flbl">작성일</label><input class="finput" type="date" id="an-date"/></div>
+            <div class="fgrp"><label class="flbl">앵커 형식</label>
+              <select class="fselect" id="an-type">
+                <option>어스앵커</option>
+                <option>소일네일</option>
+                <option>록볼트</option>
+              </select>
+            </div>
+          </div>
+          <div class="fdivider"></div>
+          <div class="sec-title amber">⚓ 앵커 제원</div>
+          <div class="frow">
+            <div class="fgrp"><label class="flbl">옹벽 높이 H (m)</label><div class="input-sfx"><input class="finput" type="number" id="an-H" value="6.0" step="0.1" min="2" oninput="drawAnchoredDiagram()"/><span class="sfx">m</span></div></div>
+            <div class="fgrp"><label class="flbl">앵커 설치각도 (°)</label><div class="input-sfx"><input class="finput" type="number" id="an-ang" value="15" step="1" min="5" max="45" oninput="drawAnchoredDiagram()"/><span class="sfx">°</span></div></div>
+          </div>
+          <div class="frow">
+            <div class="fgrp"><label class="flbl">앵커 수평간격 (m)</label><div class="input-sfx"><input class="finput" type="number" id="an-sh" value="2.0" step="0.1" min="1"/><span class="sfx">m</span></div></div>
+            <div class="fgrp"><label class="flbl">앵커 수직간격 (m)</label><div class="input-sfx"><input class="finput" type="number" id="an-sv" value="2.0" step="0.1" min="1" oninput="drawAnchoredDiagram()"/><span class="sfx">m</span></div></div>
+          </div>
+          <div class="frow">
+            <div class="fgrp"><label class="flbl">앵커 설계하중 (kN)</label><div class="input-sfx"><input class="finput" type="number" id="an-T" value="200" step="10" min="50"/><span class="sfx">kN</span></div></div>
+            <div class="fgrp"><label class="flbl">앵커 정착장 (m)</label><div class="input-sfx"><input class="finput" type="number" id="an-La" value="5.0" step="0.5" min="2" oninput="drawAnchoredDiagram()"/><span class="sfx">m</span></div></div>
+          </div>
+          <div class="frow">
+            <div class="fgrp"><label class="flbl">내부마찰각 φ (°)</label><div class="input-sfx"><input class="finput" type="number" id="an-phi" value="30" step="1"/><span class="sfx">°</span></div></div>
+            <div class="fgrp"><label class="flbl">단위중량 γs (kN/m³)</label><div class="input-sfx"><input class="finput" type="number" id="an-gs" value="18.0" step="0.5"/><span class="sfx">kN/m³</span></div></div>
+          </div>
+        </div>
+      </div>
+      <!-- 토압 조건 카드 (앵커식) -->
+      <div class="card">
+        <div class="card-head"><div class="card-ico amber">⛰️</div><span class="card-tit">토압 조건</span><span class="cbadge amber">STEP 3</span></div>
+        <div class="card-body">
+          <div class="sec-title amber">🌍 뒷채움 토질</div>
+          <div class="frow">
+            <div class="fgrp"><label class="flbl">점착력 c (kN/m²)</label><div class="input-sfx"><input class="finput" type="number" id="an-c" value="0" step="1" min="0" oninput="drawAnchoredDiagram()"/><span class="sfx">kPa</span></div></div>
+            <div class="fgrp"><label class="flbl">배면경사각 β (°)</label><div class="input-sfx"><input class="finput" type="number" id="an-beta" value="0" step="1" min="0" max="30" oninput="drawAnchoredDiagram()"/><span class="sfx">°</span></div></div>
+          </div>
+          <div class="frow">
+            <div class="fgrp"><label class="flbl">상재하중 q (kN/m²)</label><div class="input-sfx"><input class="finput" type="number" id="an-q" value="10" step="1" min="0" oninput="drawAnchoredDiagram()"/><span class="sfx">kPa</span></div></div>
+            <div class="fgrp"><label class="flbl">지반 허용지지력 (kPa)</label><div class="input-sfx"><input class="finput" type="number" id="an-qa" value="150" step="10" min="50"/><span class="sfx">kPa</span></div></div>
+          </div>
+          <div class="fdivider"></div>
+          <div class="sec-title teal">🔩 앵커체 조건</div>
+          <div class="frow">
+            <div class="fgrp"><label class="flbl">앵커 직경 D (mm)</label><div class="input-sfx"><input class="finput" type="number" id="an-D" value="150" step="10" min="100" oninput="drawAnchoredDiagram()"/><span class="sfx">mm</span></div></div>
+            <div class="fgrp"><label class="flbl">앵커 자유장 Lf (m)</label><div class="input-sfx"><input class="finput" type="number" id="an-Lf" value="3.0" step="0.5" min="1" oninput="drawAnchoredDiagram()"/><span class="sfx">m</span></div></div>
+          </div>
+          <div class="frow">
+            <div class="fgrp"><label class="flbl">극한주면마찰력 τu (kPa)</label><div class="input-sfx"><input class="finput" type="number" id="an-tau" value="100" step="10" min="50"/><span class="sfx">kPa</span></div></div>
+            <div class="fgrp"><label class="flbl">앵커재 탄성계수 (GPa)</label><div class="input-sfx"><input class="finput" type="number" id="an-E" value="200" step="10" min="100"/><span class="sfx">GPa</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div id="an-result-panel">
+        <div class="nb amber"><div class="nb-tit">💡 앵커식 옹벽</div><div class="nb-txt">어스앵커 또는 소일네일을 이용하여 토압에 저항합니다.<br/>KDS 11 50 15 기준에 따라 앵커 내력 및 전체 안정성을 검토합니다.</div></div>
+        <!-- 앵커식 단면 SVG 다이어그램 -->
+        <div class="card">
+          <div class="card-head"><div class="card-ico amber">📐</div><span class="card-tit">단면 다이어그램 (앵커식)</span></div>
+          <div class="card-body" style="padding:10px;">
+            <svg id="an-diagram" viewBox="0 0 320 260" width="100%" style="max-width:320px;display:block;margin:0 auto;border:1px solid #e2e8f0;border-radius:8px;background:#f8fafd;"></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── ISO A4 미리보기 / PDF 출력 탭 ─── -->
+<div class="tab-panel" id="panel-a4preview">
+  <div class="a4iso-wrap">
+    <!-- 옹벽 선택 탭 -->
+    <div class="preview-sel-bar">
+      <button class="prev-sel-btn active" id="a4sel-gravity"   onclick="selectPreviewWall('gravity','a4')">🏛️ 중력식</button>
+      <button class="prev-sel-btn"        id="a4sel-cantilever" onclick="selectPreviewWall('cantilever','a4')">🔲 캔틸레버</button>
+      <button class="prev-sel-btn"        id="a4sel-anchored"   onclick="selectPreviewWall('anchored','a4')">⚓ 앵커식</button>
+    </div>
+    <!-- 툴바 (저장/출력/공유만) -->
+    <div class="a4iso-toolbar">
+      <button class="btn-secondary" style="background:#1976d2;border-color:#1976d2;color:#fff;padding:10px 16px;" onclick="printA4()">
+        🖨️ <span>PDF 출력</span>
+      </button>
+      <button class="btn-secondary" style="background:#00897b;border-color:#00897b;color:#fff;padding:10px 16px;" onclick="saveA4Jpg()">
+        💾 <span>JPG 저장</span>
+      </button>
+      <button class="btn-secondary" style="background:#f57c00;border-color:#f57c00;color:#fff;padding:10px 16px;" onclick="openShareModal()">
+        📤 <span>공유</span>
+      </button>
+    </div>
+    <!-- A4 스케일 래퍼 -->
+    <div id="a4iso-scale-wrap" class="a4iso-scale-wrap">
+      <div class="a4iso-page" id="a4iso-content">
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:600px;color:#90a4ae;">
+          <div style="font-size:56px;margin-bottom:16px;">📄</div>
+          <div style="font-size:16px;font-weight:800;color:#546e7a;">A4 검토 보고서</div>
+          <div style="font-size:12px;margin-top:8px;line-height:1.8;text-align:center;color:#90a4ae;">
+            검토를 먼저 실행한 후<br/>위 탭에서 옹벽 형식을 선택해주세요.<br/>
+            <span style="font-size:10px;color:#b0bec5;">ISO A4 (210×297mm) 기준</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── 모바일 미리보기 탭 ─── -->
+<div class="tab-panel" id="panel-preview">
+  <!-- 옹벽 선택 탭 -->
+  <div class="preview-sel-bar">
+    <button class="prev-sel-btn active" id="mobsel-gravity"    onclick="selectPreviewWall('gravity','mob')">🏛️ 중력식</button>
+    <button class="prev-sel-btn"        id="mobsel-cantilever"  onclick="selectPreviewWall('cantilever','mob')">🔲 캔틸레버</button>
+    <button class="prev-sel-btn"        id="mobsel-anchored"    onclick="selectPreviewWall('anchored','mob')">⚓ 앵커식</button>
+  </div>
+  <div style="text-align:center;margin-bottom:10px;">
+    <div style="font-size:10px;font-weight:700;color:#90a4ae;margin-bottom:8px;">📱 갤럭시 S24 Ultra (432 × 932 dp)</div>
+    <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+      <button class="btn-secondary" style="background:#1976d2;border-color:#1976d2;color:#fff;" onclick="saveJpg()">💾 JPG 저장</button>
+      <button class="btn-secondary" style="background:#00897b;border-color:#00897b;color:#fff;" onclick="openShareModal()">📤 공유</button>
+    </div>
+  </div>
+  <div class="a4-wrap">
+    <div class="a4-scale-wrap" id="a4-scale-wrap">
+      <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="a4-page" id="a4-content">
+          <div style="text-align:center;padding:40px 20px;color:#90a4ae;">
+            <div style="font-size:28px;margin-bottom:10px;">🏗️</div>
+            <div style="font-size:13px;font-weight:800;color:#546e7a;">검토 결과가 없습니다</div>
+            <div style="font-size:11px;margin-top:6px;line-height:1.6;">각 탭에서 검토 후<br/>위 탭으로 옹벽을 선택하세요.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main><!-- /main-wrap -->
+
+<!-- ══════ BOTTOM ACTION BAR ══════ -->
+<div class="bottom-bar no-print">
+  <div class="bottom-bar-inner">
+    <button class="btn-secondary" onclick="resetCurrent()">🔄 <span class="btn-stxt">초기화</span></button>
+    <button class="btn-calc" id="btn-calc" onclick="calcCurrent()">🔍 안전성 검토 실행</button>
+    <button class="btn-secondary" onclick="switchTab('preview')">📱 <span class="btn-stxt">미리보기</span></button>
+  </div>
+</div>
+
+<!-- ══════ 삼각자 도움말 FAB ══════ -->
+<div class="no-print">
+  <svg class="help-fab" onclick="toggleHelp()" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+    <polygon points="4,48 48,48 4,4" fill="url(#tGrad)" rx="4"/>
+    <defs>
+      <linearGradient id="tGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style="stop-color:#1976d2;stop-opacity:1"/>
+        <stop offset="100%" style="stop-color:#0d47a1;stop-opacity:1"/>
+      </linearGradient>
+    </defs>
+    <rect x="4" y="40" width="8" height="8" fill="none" stroke="#90caf9" stroke-width="1.5"/>
+    <text x="26" y="46" font-family="sans-serif" font-size="14" font-weight="900" fill="white" text-anchor="middle">?</text>
+    <line x1="8" y1="44" x2="8" y2="38" stroke="#90caf9" stroke-width="1"/>
+    <line x1="8" y1="44" x2="14" y2="44" stroke="#90caf9" stroke-width="1"/>
+  </svg>
+</div>
+
+<!-- ══════ 도움말 오버레이 (화면 중앙 모달) ══════ -->
+<div class="help-overlay no-print" id="help-overlay" onclick="handleHelpOverlayClick(event)">
+  <div class="help-panel" id="help-panel">
+    <div class="help-panel-head">
+      <span style="font-size:20px;">📐</span>
+      <span class="help-panel-tit">옹벽 안전성 검토 도움말</span>
+      <button class="help-panel-cls" onclick="toggleHelp()">✕</button>
+    </div>
+    <div class="help-tabs">
+      <button class="help-tab active" onclick="switchHelpTab('usage')">사용방법</button>
+      <button class="help-tab" onclick="switchHelpTab('law')">관련 법규</button>
+      <button class="help-tab" onclick="switchHelpTab('formula')">계산식</button>
+    </div>
+    <div class="help-tab-body">
+      <!-- 사용방법 -->
+      <div class="help-tab-panel active" id="help-usage">
+        <div class="help-item">
+          <div class="help-step"><div class="help-num">1</div><div class="help-txt"><b>옹벽 형식 선택</b>: 상단 탭에서 중력식, 캔틸레버식, 앵커식 중 해당 형식을 선택합니다.</div></div>
+        </div>
+        <div class="help-item">
+          <div class="help-step"><div class="help-num">2</div><div class="help-txt"><b>기본정보 입력</b>: 현장명, 작성자, 작성일을 입력합니다.</div></div>
+        </div>
+        <div class="help-item">
+          <div class="help-step"><div class="help-num">3</div><div class="help-txt"><b>단면 제원 입력</b>: 옹벽 높이, 저면폭, 단면 치수를 입력합니다. <b>H/B ≥ 0.5~0.7</b> 범위로 설계하는 것이 일반적입니다.</div></div>
+        </div>
+        <div class="help-item">
+          <div class="help-step"><div class="help-num">4</div><div class="help-txt"><b>토압 조건 입력</b>: 뒷채움 단위중량, 내부마찰각(φ), 점착력(c), 상재하중을 입력합니다.</div></div>
+        </div>
+        <div class="help-item">
+          <div class="help-step"><div class="help-num">5</div><div class="help-txt"><b>안전성 검토 실행</b>: 하단 <b>안전성 검토 실행</b> 버튼을 클릭하면 전도·활동·지지력·편심 안전율을 자동 계산합니다.</div></div>
+        </div>
+        <div class="help-item">
+          <div class="help-step"><div class="help-num">6</div><div class="help-txt"><b>📄 A4 보고서</b>: A4미리보기 탭에서 ISO A4 규격 검토보고서를 확인하고 <b>PDF 출력 / JPG 저장</b>합니다.</div></div>
+        </div>
+        <div class="help-item">
+          <div class="help-step"><div class="help-num">7</div><div class="help-txt"><b>📱 모바일 공유</b>: 모바일 탭에서 갤럭시 S24 Ultra(432×932dp) 규격 미리보기 후 JPG로 저장·공유합니다.</div></div>
+        </div>
+      </div>
+      <!-- 관련 법규 -->
+      <div class="help-tab-panel" id="help-law">
+        <div class="law-item">
+          <div class="law-code">KDS 11 80 10</div>
+          <div class="law-desc">옹벽 설계기준 (한국토목설계기준). 전도·활동·지지력 안전율 규정.</div>
+          <span class="law-limit">전도 Fs ≥ 2.0 / 활동 Fs ≥ 1.5 / 지지력 Fs ≥ 3.0</span>
+        </div>
+        <div class="law-item">
+          <div class="law-code">KDS 11 10 05</div>
+          <div class="law-desc">기초구조 설계기준. 기초의 안정성 및 지반거동 검토 기준.</div>
+          <span class="law-limit">편심 e ≤ B/6 (합력위치 기준)</span>
+        </div>
+        <div class="law-item">
+          <div class="law-code">KDS 14 20 54</div>
+          <div class="law-desc">콘크리트 구조 설계기준 (철근콘크리트). 캔틸레버식 옹벽 철근 설계 기준.</div>
+          <span class="law-limit">최소 철근비 ρmin ≥ 0.002</span>
+        </div>
+        <div class="law-item">
+          <div class="law-code">KDS 11 50 15</div>
+          <div class="law-desc">앵커 설계기준. 어스앵커·소일네일 내력 및 안정성 검토.</div>
+          <span class="law-limit">인발 Fs ≥ 2.0 / 전체안정 Fs ≥ 1.2</span>
+        </div>
+        <div class="law-item">
+          <div class="law-code">구조물기초설계기준 (2021)</div>
+          <div class="law-desc">국토교통부 고시. 기초 지지력 산정 및 안전율 적용.</div>
+          <span class="law-limit">극한 지지력 Fs ≥ 3.0</span>
+        </div>
+        <div class="law-item">
+          <div class="law-code">건설기술진흥법 시행규칙</div>
+          <div class="law-desc">높이 5m 이상 옹벽 구조안전 확인서 제출 의무 규정.</div>
+          <span class="law-limit">H ≥ 5m: 전문가 검토 필수</span>
+        </div>
+      </div>
+      <!-- 계산식 -->
+      <div class="help-tab-panel" id="help-formula">
+        <div class="law-item">
+          <div class="law-code">랭킨 토압계수 (Rankine)</div>
+          <div class="law-desc">Ka = tan²(45° - φ/2) · (수동) Kp = tan²(45° + φ/2)</div>
+        </div>
+        <div class="law-item">
+          <div class="law-code">수평토압 (Ea)</div>
+          <div class="law-desc">Ea = ½·Ka·γs·H² + Ka·q·H (kN/m)</div>
+        </div>
+        <div class="law-item">
+          <div class="law-code">전도 안전율 (Fs₀)</div>
+          <div class="law-desc">Fs₀ = ΣMr / ΣMo ≥ 2.0<br/>ΣMr: 저항모멘트 / ΣMo: 전도모멘트</div>
+        </div>
+        <div class="law-item">
+          <div class="law-code">활동 안전율 (Fs₅)</div>
+          <div class="law-desc">Fs₅ = μ·ΣV / ΣH ≥ 1.5<br/>μ: 마찰계수, ΣV: 연직합력, ΣH: 수평합력</div>
+        </div>
+        <div class="law-item">
+          <div class="law-code">합력위치 / 편심</div>
+          <div class="law-desc">x̄ = (ΣMr - ΣMo) / ΣV<br/>편심 e = B/2 - x̄ ≤ B/6</div>
+        </div>
+        <div class="law-item">
+          <div class="law-code">최대 지반반력 (qmax)</div>
+          <div class="law-desc">qmax = ΣV/B · (1 + 6e/B) ≤ qa<br/>qa: 허용 지지력 (kPa)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ 공유 모달 ══════ -->
+<div class="modal-overlay" id="share-modal" onclick="closeShareModal(event)">
+  <div class="share-modal-box">
+    <div class="modal-head">
+      <div class="modal-tit">📤 결과 공유</div>
+      <button class="modal-cls" onclick="closeShareModal()">✕</button>
+    </div>
+    <div class="share-btns">
+      <button class="share-btn" onclick="saveJpg()">
+        <span class="share-btn-ico">🖼️</span>
+        <span class="share-btn-lbl">JPG 저장</span>
+      </button>
+      <button class="share-btn" onclick="shareNative()">
+        <span class="share-btn-ico">📱</span>
+        <span class="share-btn-lbl">모바일 공유</span>
+      </button>
+      <button class="share-btn" onclick="copyResult()">
+        <span class="share-btn-ico">📋</span>
+        <span class="share-btn-lbl">결과 복사</span>
+      </button>
+      <button class="share-btn" onclick="window.print()">
+        <span class="share-btn-ico">🖨️</span>
+        <span class="share-btn-lbl">인쇄</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ TOAST ══════ -->
+<div class="toast" id="toast"></div>
+
+</div><!-- /root-app -->
+<div id="print-target" style="display:none;"></div>
+
+<script>
+/* ════════════════════════════════════════════
+   전역 상태
+════════════════════════════════════════════ */
+var currentTab = 'gravity';
+var G = { result: null };
+var C_RES = { result: null };
+var AN_RES = { result: null };
+
+// 미리보기 선택 상태 (a4/mob 각각 독립)
+var previewSel = { a4: 'gravity', mob: 'gravity' };
+
+/* ════════════════════════════════════════════
+   미리보기 옹벽 선택
+════════════════════════════════════════════ */
+function selectPreviewWall(wallType, mode){
+  previewSel[mode] = wallType;
+
+  // 버튼 활성화
+  var prefix = (mode === 'a4') ? 'a4sel-' : 'mobsel-';
+  ['gravity','cantilever','anchored'].forEach(function(t){
+    var btn = document.getElementById(prefix + t);
+    if(btn) btn.classList.toggle('active', t === wallType);
+  });
+
+  // 결과 객체 선택
+  var r = getResultByType(wallType);
+
+  if(mode === 'a4'){
+    renderA4Iso(r);
+    scaleA4Iso();
+  } else {
+    renderA4Report(r);
+    scaleA4();
+  }
+
+  if(!r){
+    showToast('⚠️ ' + wallTypeLabel(wallType) + ' 검토를 먼저 실행해주세요.');
+  }
+}
+
+function getResultByType(wallType){
+  if(wallType === 'gravity')    return G.result;
+  if(wallType === 'cantilever') return C_RES.result;
+  if(wallType === 'anchored')   return AN_RES.result;
+  return null;
+}
+
+function wallTypeLabel(t){
+  return {gravity:'중력식', cantilever:'캔틸레버식', anchored:'앵커식'}[t] || t;
+}
+
+// 검토 완료 후 해당 탭을 자동 선택하고 배지 갱신
+function refreshPreviewSelBadges(){
+  ['gravity','cantilever','anchored'].forEach(function(t){
+    var r = getResultByType(t);
+    var badge = (r ? (r.allPass ? '✓' : '!') : '-');
+    ['a4sel-','mobsel-'].forEach(function(pfx){
+      var btn = document.getElementById(pfx + t);
+      if(!btn) return;
+      var bdg = btn.querySelector('.prev-sel-badge');
+      if(!bdg){ bdg = document.createElement('span'); bdg.className='prev-sel-badge'; btn.appendChild(bdg); }
+      bdg.textContent = badge;
+      bdg.style.background = r ? (r.allPass ? 'rgba(46,125,50,.2)' : 'rgba(198,40,40,.2)') : '';
+      bdg.style.color = r ? (r.allPass ? '#2e7d32' : '#c62828') : '#94a3b8';
+    });
+  });
+}
+
+/* ════════════════════════════════════════════
+   탭 전환
+════════════════════════════════════════════ */
+function switchTab(name){
+  currentTab = name;
+  document.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.tb').forEach(function(b){ b.classList.remove('active'); });
+  document.getElementById('panel-' + name).classList.add('active');
+  var tb = document.getElementById('tab-' + name);
+  if(tb) tb.classList.add('active');
+  if(name === 'preview'){
+    var r = getResultByType(previewSel.mob);
+    renderA4Report(r);
+    scaleA4();
+  }
+  if(name === 'a4preview'){
+    var r = getResultByType(previewSel.a4);
+    renderA4Iso(r);
+    scaleA4Iso();
+  }
+  updateCalcBtn();
+}
+function updateCalcBtn(){
+  var btn = document.getElementById('btn-calc');
+  if(currentTab === 'preview' || currentTab === 'a4preview'){
+    btn.textContent = '← 검토 탭으로 이동';
+    btn.onclick = function(){ switchTab('gravity'); };
+  } else {
+    btn.textContent = '🔍 안전성 검토 실행';
+    btn.onclick = calcCurrent;
+  }
+}
+
+/* ════════════════════════════════════════════
+   STEP 상태 업데이트 (중력식)
+════════════════════════════════════════════ */
+function gUpdateSteps(){
+  var H = parseFloat(document.getElementById('g-H').value)||0;
+  var B = parseFloat(document.getElementById('g-B').value)||0;
+  var phi = parseFloat(document.getElementById('g-phi').value)||0;
+  var s1 = document.getElementById('g-projname').value.trim().length > 0;
+  var s2 = H > 0 && B > 0;
+  var s3 = phi > 0;
+  setStep('g', 1, s1, false);
+  setStep('g', 2, s2, s2);
+  setStep('g', 3, s3 && s2, s3 && s2);
+  setStep('g', 4, false, false);
+  drawGravityDiagram();
+}
+function setStep(prefix, n, done, prev){
+  var sc = document.getElementById(prefix + 's' + n);
+  var sl = document.getElementById(prefix + 'sl' + n);
+  if(!sc) return;
+  sc.className = 'sc' + (done ? ' done' : (prev ? ' active' : ''));
+  if(sl) sl.className = 'sl' + (done ? ' done' : (prev ? ' active' : ''));
+  var div = document.getElementById(prefix + 'sd' + n);
+  if(div) div.className = 'sdiv' + (done ? ' done' : '');
+}
+
+/* ════════════════════════════════════════════
+   단면 다이어그램 (SVG)
+════════════════════════════════════════════ */
+function drawGravityDiagram(){
+  var svg = document.getElementById('g-diagram');
+  var H = Math.max(0.5, parseFloat(document.getElementById('g-H').value)||4);
+  var B = Math.max(0.5, parseFloat(document.getElementById('g-B').value)||2.8);
+  var a = Math.max(0.3, parseFloat(document.getElementById('g-a').value)||0.5);
+  var Df = Math.max(0, parseFloat(document.getElementById('g-Df').value)||0.5);
+
+  var W=320, Hsvg=240;
+  var pad=30;
+  var scale = Math.min((W-pad*2)/B, (Hsvg-pad*2)/(H+Df));
+  var bPx = B*scale, hPx = H*scale, aPx = a*scale, dfPx = Df*scale;
+  var ox = (W-bPx)/2, oy = pad;
+
+  // 지반선 y
+  var groundY = oy + hPx;
+
+  svg.innerHTML = '';
+
+  // 배경 격자
+  var defs='<defs><pattern id="g" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e8f4fd" stroke-width="0.5"/></pattern></defs>';
+  svg.innerHTML = defs + '<rect width="320" height="240" fill="#f8fafd"/><rect width="320" height="240" fill="url(#g)"/>';
+
+  // 지반
+  var gEl = document.createElementNS('http://www.w3.org/2000/svg','rect');
+  gEl.setAttribute('x','0'); gEl.setAttribute('y',String(groundY));
+  gEl.setAttribute('width','320'); gEl.setAttribute('height',String(Hsvg-groundY));
+  gEl.setAttribute('fill','#ffe0b2'); gEl.setAttribute('opacity','0.5');
+  svg.appendChild(gEl);
+
+  // 뒷채움 토사
+  var fillEl = document.createElementNS('http://www.w3.org/2000/svg','rect');
+  fillEl.setAttribute('x',String(ox+bPx)); fillEl.setAttribute('y',String(oy));
+  fillEl.setAttribute('width',String(Math.max(60, W-ox-bPx-10))); fillEl.setAttribute('height',String(hPx));
+  fillEl.setAttribute('fill','#a5d6a7'); fillEl.setAttribute('opacity','0.35');
+  svg.appendChild(fillEl);
+
+  // 옹벽 몸체 (사다리꼴)
+  var wall = document.createElementNS('http://www.w3.org/2000/svg','polygon');
+  var pts = ox+','+oy + ' ' + (ox+aPx)+','+(oy) + ' ' + (ox+bPx)+','+groundY + ' ' + ox+','+groundY;
+  wall.setAttribute('points', pts);
+  wall.setAttribute('fill','#cfd8dc'); wall.setAttribute('stroke','#546e7a'); wall.setAttribute('stroke-width','1.5');
+  svg.appendChild(wall);
+
+  // 치수선: H
+  addDimLine(svg, ox-20, oy, ox-20, groundY, 'H='+H+'m', 'left');
+  // 치수선: B
+  addDimLine(svg, ox, groundY+18, ox+bPx, groundY+18, 'B='+B+'m', 'bottom');
+
+  // 근입깊이
+  if(dfPx > 2){
+    var dfEl = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    dfEl.setAttribute('x',String(ox)); dfEl.setAttribute('y',String(groundY));
+    dfEl.setAttribute('width',String(bPx)); dfEl.setAttribute('height',String(Math.min(dfPx,20)));
+    dfEl.setAttribute('fill','#90a4ae'); dfEl.setAttribute('opacity','0.4');
+    svg.appendChild(dfEl);
+    addText(svg, ox+bPx/2, groundY+10, 'Df='+Df+'m', 8, '#546e7a');
+  }
+
+  // 지반선 해칭
+  addHatch(svg, 0, groundY, W, groundY+4);
+
+  // 라벨
+  addText(svg, ox+bPx/2, oy+hPx/2, '중력식 옹벽', 10, '#455a64');
+  addText(svg, ox+bPx+18, oy+hPx/2, '뒷채움', 9, '#2e7d32');
+
+  // 토압 화살표 표시
+  var arrowX = ox+bPx+4;
+  for(var i=1;i<=3;i++){
+    var arY = oy + (hPx/4)*i;
+    var len = 12 + (i*5);
+    addArrow(svg, arrowX+len, arY, arrowX, arY, '#f57c00');
+  }
+}
+function addDimLine(svg, x1, y1, x2, y2, txt, pos){
+  var line = document.createElementNS('http://www.w3.org/2000/svg','line');
+  line.setAttribute('x1',x1); line.setAttribute('y1',y1);
+  line.setAttribute('x2',x2); line.setAttribute('y2',y2);
+  line.setAttribute('stroke','#1565c0'); line.setAttribute('stroke-width','1');
+  line.setAttribute('stroke-dasharray','3,2');
+  svg.appendChild(line);
+  var mx=(x1+x2)/2, my=(y1+y2)/2;
+  addText(svg, mx+(pos==='left'?-8:0), my+(pos==='bottom'?-3:5), txt, 8, '#1565c0');
+}
+function addText(svg, x, y, txt, size, color){
+  var t = document.createElementNS('http://www.w3.org/2000/svg','text');
+  t.setAttribute('x',x); t.setAttribute('y',y);
+  t.setAttribute('font-size',size); t.setAttribute('fill',color);
+  t.setAttribute('text-anchor','middle'); t.setAttribute('font-weight','700');
+  t.textContent = txt;
+  svg.appendChild(t);
+}
+function addArrow(svg, x1, y1, x2, y2, color){
+  var line = document.createElementNS('http://www.w3.org/2000/svg','line');
+  line.setAttribute('x1',x1); line.setAttribute('y1',y1);
+  line.setAttribute('x2',x2); line.setAttribute('y2',y2);
+  line.setAttribute('stroke',color); line.setAttribute('stroke-width','1.5');
+  line.setAttribute('marker-end','url(#arr)');
+  svg.appendChild(line);
+  // 화살표 마커 (있으면 재사용)
+  if(!document.getElementById('arr')){
+    var defs = svg.querySelector('defs') || document.createElementNS('http://www.w3.org/2000/svg','defs');
+    var mk = document.createElementNS('http://www.w3.org/2000/svg','marker');
+    mk.setAttribute('id','arr'); mk.setAttribute('viewBox','0 0 10 10');
+    mk.setAttribute('refX','10'); mk.setAttribute('refY','5');
+    mk.setAttribute('markerWidth','6'); mk.setAttribute('markerHeight','6');
+    mk.setAttribute('orient','auto');
+    var path = document.createElementNS('http://www.w3.org/2000/svg','path');
+    path.setAttribute('d','M 0 0 L 10 5 L 0 10 z'); path.setAttribute('fill',color);
+    mk.appendChild(path); defs.appendChild(mk); svg.appendChild(defs);
+  }
+}
+function addHatch(svg, x, y, w, yEnd){
+  for(var i=0;i<w;i+=8){
+    var line = document.createElementNS('http://www.w3.org/2000/svg','line');
+    line.setAttribute('x1',x+i); line.setAttribute('y1',y);
+    line.setAttribute('x2',x+i-6); line.setAttribute('y2',yEnd+2);
+    line.setAttribute('stroke','#78909c'); line.setAttribute('stroke-width','0.8');
+    svg.appendChild(line);
+  }
+}
+
+/* ════════════════════════════════════════════
+   캔틸레버식 단면 다이어그램 (역T형)
+════════════════════════════════════════════ */
+function drawCantileverDiagram(){
+  var svg = document.getElementById('c-diagram');
+  if(!svg) return;
+  var H  = Math.max(1,   parseFloat(document.getElementById('c-H').value)||5);
+  var B  = Math.max(0.5, parseFloat(document.getElementById('c-B').value)||3.5);
+  var bt = Math.max(0.2, parseFloat(document.getElementById('c-bt').value)||0.8);
+  var tf = Math.max(0.2, parseFloat(document.getElementById('c-tf').value)||0.5);
+  var tw = Math.max(0.1, parseFloat(document.getElementById('c-tw').value)||0.35);
+  var Df = Math.max(0,   parseFloat(document.getElementById('c-Df')?document.getElementById('c-Df').value:0.5)||0.5);
+
+  var W=320, Hsvg=260, pad=28;
+  var scale = Math.min((W-pad*2)/(B+0.4), (Hsvg-pad*2-20)/(H+Df+0.3));
+  var bPx  = B*scale,  hPx  = H*scale,  btPx = bt*scale;
+  var tfPx = tf*scale, twPx = tw*scale, dfPx = Df*scale;
+  var ox   = (W - bPx) / 2;
+  var oy   = pad;
+  var groundY = oy + hPx; // 지표면 y (기초 상단)
+  var baseY   = groundY + tfPx; // 기초 저면
+
+  svg.innerHTML = '';
+  // 배경 격자
+  svg.innerHTML = '<defs>'
+    +'<pattern id="cg" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e8f4fd" stroke-width="0.5"/></pattern>'
+    +'<marker id="carr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">'
+    +'<path d="M 0 0 L 10 5 L 0 10 z" fill="#f57c00"/></marker>'
+    +'</defs>'
+    +'<rect width="320" height="260" fill="#f8fafd"/>'
+    +'<rect width="320" height="260" fill="url(#cg)"/>';
+
+  function el(tag,attrs){
+    var e=document.createElementNS('http://www.w3.org/2000/svg',tag);
+    Object.keys(attrs).forEach(function(k){e.setAttribute(k,attrs[k]);});
+    return e;
+  }
+  function txt(x,y,s,sz,col,anchor){
+    var t=el('text',{x:x,y:y,'font-size':sz||9,fill:col||'#455a64','text-anchor':anchor||'middle','font-weight':'700'});
+    t.textContent=s; return t;
+  }
+  function line(x1,y1,x2,y2,col,sw,dash){
+    var l=el('line',{x1:x1,y1:y1,x2:x2,y2:y2,stroke:col||'#546e7a','stroke-width':sw||1});
+    if(dash) l.setAttribute('stroke-dasharray',dash);
+    return l;
+  }
+
+  // 지반 (주황)
+  svg.appendChild(el('rect',{x:0,y:groundY,width:W,height:Hsvg-groundY,fill:'#ffe0b2',opacity:'0.45'}));
+
+  // 뒷채움 토사 (오른쪽)
+  var fillX = ox+bPx, fillW = Math.max(55, W-fillX-8);
+  svg.appendChild(el('rect',{x:fillX,y:oy,width:fillW,height:hPx,fill:'#a5d6a7',opacity:'0.35'}));
+
+  // ── 역T형 단면 (콘크리트) ──
+  // 기초판
+  svg.appendChild(el('rect',{x:ox,y:groundY,width:bPx,height:tfPx,fill:'#cfd8dc',stroke:'#546e7a','stroke-width':'1.5'}));
+  // 벽체
+  var wallX = ox + btPx; // 전면돌출 후 벽체 시작
+  svg.appendChild(el('rect',{x:wallX,y:oy,width:twPx,height:hPx,fill:'#b0bec5',stroke:'#546e7a','stroke-width':'1.5'}));
+
+  // 근입깊이 표시
+  if(dfPx > 3){
+    svg.appendChild(el('rect',{x:ox,y:baseY,width:bPx,height:Math.min(dfPx,16),fill:'#90a4ae',opacity:'0.4'}));
+    svg.appendChild(txt(ox+bPx/2, baseY+9, 'Df='+Df+'m', 7.5, '#546e7a'));
+  }
+
+  // 지반 해칭
+  addHatch(svg, 0, groundY, W, groundY+4);
+
+  // ── 치수선 ──
+  // H (벽체 높이)
+  svg.appendChild(line(ox-18,oy, ox-18,groundY,'#1565c0',0.8,'3,2'));
+  svg.appendChild(txt(ox-28, oy+hPx/2, 'H='+H+'m', 8,'#1565c0','middle'));
+  // B (기초폭)
+  svg.appendChild(line(ox,baseY+14, ox+bPx,baseY+14,'#1565c0',0.8,'3,2'));
+  svg.appendChild(txt(ox+bPx/2, baseY+22, 'B='+B+'m', 8,'#1565c0'));
+  // bt (전면돌출)
+  svg.appendChild(line(ox,groundY-7, ox+btPx,groundY-7,'#00695c',0.7,'2,2'));
+  svg.appendChild(txt(ox+btPx/2, groundY-10, 'bt='+bt+'m', 7,'#00695c'));
+  // tw (벽체두께)
+  svg.appendChild(line(wallX,oy-8, wallX+twPx,oy-8,'#00695c',0.7,'2,2'));
+  svg.appendChild(txt(wallX+twPx/2, oy-12, 'tw='+tw+'m', 7,'#00695c'));
+  // tf (기초두께)
+  svg.appendChild(line(ox+bPx+6,groundY, ox+bPx+6,baseY,'#00695c',0.7,'2,2'));
+  svg.appendChild(txt(ox+bPx+22, groundY+tfPx/2, 'tf='+tf+'m', 7,'#00695c','start'));
+
+  // ── 토압 화살표 (뒷채움 배면→벽체 배면) ──
+  // 배면 위치: wallX+twPx (벽체 우측면 = 뒷채움과 접하는 면)
+  var Ea_x = fillX; // 뒷채움 시작 x
+  for(var i=1;i<=4;i++){
+    var ay = oy + (hPx/5)*i;
+    var alen = Math.min(12 + i*4, fillW - 8);
+    // 삼각분포: 아래로 갈수록 길어짐
+    svg.appendChild(line(Ea_x+alen, ay, wallX+twPx+2, ay,'#f57c00',1.4));
+    var tip=el('polygon',{points:(wallX+twPx+6)+','+(ay-3)+' '+(wallX+twPx+1)+','+ay+' '+(wallX+twPx+6)+','+(ay+3),fill:'#f57c00'});
+    svg.appendChild(tip);
+  }
+
+  // 랭킨 토압 삼각형 (좌측면)
+  var Ka_val = Math.pow(Math.tan(Math.PI/4 - (parseFloat(document.getElementById('c-phi').value)||30)*Math.PI/360), 2);
+  var kaStr = 'Ka='+Ka_val.toFixed(3);
+  svg.appendChild(txt(ox+bPx+28, oy+hPx*0.55, '토압', 8,'#e65100'));
+  svg.appendChild(txt(ox+bPx+28, oy+hPx*0.68, kaStr, 7.5,'#e65100'));
+
+  // 라벨
+  svg.appendChild(txt(wallX+twPx/2, oy+hPx/2, '벽체', 9,'#263238'));
+  svg.appendChild(txt(ox+bPx/2, groundY+tfPx/2, '기초판', 8.5,'#263238'));
+  svg.appendChild(txt(Math.min(ox+bPx+30, W-20), oy+hPx*0.25, '뒷채움', 8.5,'#2e7d32','start'));
+
+  // 반력 화살표 (하향)
+  for(var j=0;j<3;j++){
+    var rx=ox+bPx*(0.2+j*0.3), ry=baseY;
+    svg.appendChild(line(rx,ry+2,rx,ry+10,'#1565c0',1.2));
+    svg.appendChild(el('polygon',{points:(rx-3)+','+(ry+8)+' '+rx+','+(ry+14)+' '+(rx+3)+','+(ry+8),fill:'#1565c0'}));
+  }
+  svg.appendChild(txt(ox+bPx/2, baseY+20, '지반반력', 8,'#1565c0'));
+}
+
+/* ════════════════════════════════════════════
+   앵커식 단면 다이어그램
+════════════════════════════════════════════ */
+function drawAnchoredDiagram(){
+  var svg = document.getElementById('an-diagram');
+  if(!svg) return;
+  var H   = Math.max(2,  parseFloat(document.getElementById('an-H').value)||6);
+  var ang = Math.max(5,  parseFloat(document.getElementById('an-ang').value)||15);
+  var sv  = Math.max(0.5,parseFloat(document.getElementById('an-sv').value)||2);
+  var La  = Math.max(1,  parseFloat(document.getElementById('an-La').value)||5);
+  var Lf_val = parseFloat(document.getElementById('an-Lf')?document.getElementById('an-Lf').value:3)||3;
+
+  var W=320, Hsvg=260, pad=26;
+  var scale = Math.min((W-pad*2-40)/H*0.65, (Hsvg-pad*2)/H);
+  scale = Math.min(scale, 28);
+  var hPx = H*scale;
+  var wThick = Math.max(10, 0.3*scale); // 벽체 두께 픽셀
+  var ox = pad + 18;
+  var oy = pad;
+  var groundY = oy + hPx;
+  var angR = ang * Math.PI / 180;
+
+  svg.innerHTML = '';
+  svg.innerHTML = '<defs>'
+    +'<pattern id="ag" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e8f4fd" stroke-width="0.5"/></pattern>'
+    +'</defs>'
+    +'<rect width="320" height="260" fill="#f8fafd"/>'
+    +'<rect width="320" height="260" fill="url(#ag)"/>';
+
+  function el(tag,attrs){
+    var e=document.createElementNS('http://www.w3.org/2000/svg',tag);
+    Object.keys(attrs).forEach(function(k){e.setAttribute(k,attrs[k]);});
+    return e;
+  }
+  function txt(x,y,s,sz,col,anchor){
+    var t=el('text',{x:x,y:y,'font-size':sz||9,fill:col||'#455a64','text-anchor':anchor||'middle','font-weight':'700'});
+    t.textContent=s; return t;
+  }
+  function ln(x1,y1,x2,y2,col,sw,dash){
+    var l=el('line',{x1:x1,y1:y1,x2:x2,y2:y2,stroke:col||'#546e7a','stroke-width':sw||1});
+    if(dash) l.setAttribute('stroke-dasharray',dash);
+    return l;
+  }
+
+  // 지반 배경
+  svg.appendChild(el('rect',{x:0,y:groundY,width:W,height:Hsvg-groundY,fill:'#ffe0b2',opacity:'0.4'}));
+  // 암반/지반 (앵커 고정부 쪽 어둡게)
+  svg.appendChild(el('rect',{x:ox+wThick+hPx*0.3,y:oy,width:W-(ox+wThick+hPx*0.3),height:Hsvg,fill:'#bcaaa4',opacity:'0.18'}));
+  // 뒷채움
+  svg.appendChild(el('rect',{x:ox+wThick,y:oy,width:hPx*0.3+4,height:hPx,fill:'#a5d6a7',opacity:'0.3'}));
+
+  // 벽체 (수직 패널)
+  svg.appendChild(el('rect',{x:ox,y:oy,width:wThick,height:hPx,fill:'#b0bec5',stroke:'#546e7a','stroke-width':'2'}));
+  // 기초판
+  var baseH = Math.max(8, 0.12*hPx);
+  svg.appendChild(el('rect',{x:ox-4,y:groundY,width:wThick+8,height:baseH,fill:'#90a4ae',stroke:'#546e7a','stroke-width':'1.2'}));
+
+  // 지반 해칭
+  addHatch(svg, 0, groundY, W, groundY+4);
+
+  // ── 앵커 그리기 ──
+  var nAnchors = Math.max(1, Math.round(H / sv));
+  var aColors = ['#1565c0','#0d47a1','#1976d2'];
+  var LfPx = Lf_val * scale * 0.7;
+  var LaPx = La * scale * 0.7;
+
+  for(var i=0;i<nAnchors;i++){
+    var ay = oy + hPx*(0.15 + i*(0.7/Math.max(1,nAnchors-1)));
+    if(nAnchors===1) ay = oy + hPx*0.5;
+    var ax0 = ox + wThick;
+    // 자유장 끝점
+    var fx1 = ax0 + Math.cos(angR)*LfPx;
+    var fy1 = ay  + Math.sin(angR)*LfPx;
+    // 정착장 끝점
+    var ax1 = ax0 + Math.cos(angR)*(LfPx+LaPx);
+    var ay1 = ay  + Math.sin(angR)*(LfPx+LaPx);
+    ax1 = Math.min(ax1, W-12); ay1 = Math.min(ay1, Hsvg-12);
+
+    var col = aColors[i%3];
+    // 자유장 (점선)
+    svg.appendChild(ln(ax0,ay,fx1,fy1,col,1.5,'5,3'));
+    // 정착장 (실선, 굵게)
+    svg.appendChild(ln(fx1,fy1,ax1,ay1,col,2.5));
+    // 정착부 원
+    svg.appendChild(el('ellipse',{cx:ax1,cy:ay1,rx:5,ry:3,fill:col,opacity:'0.85'}));
+    // 벽면 앵커 헤드
+    svg.appendChild(el('rect',{x:ox-5,y:ay-4,width:7,height:8,rx:1,fill:'#37474f',stroke:'#263238','stroke-width':'0.8'}));
+  }
+
+  // ── 토압 화살표 (좌→우, 벽면 밀기) ──
+  for(var k=1;k<=4;k++){
+    var ty = oy + (hPx/5)*k;
+    var tlen = 8 + k*4;
+    svg.appendChild(ln(ox-tlen-2,ty, ox-1,ty,'#f57c00',1.4));
+    svg.appendChild(el('polygon',{
+      points:(ox-3)+','+(ty-3)+' '+ox+','+ty+' '+(ox-3)+','+(ty+3),
+      fill:'#f57c00'
+    }));
+  }
+
+  // 토압 분포 삼각형 윤곽
+  var Ka_an = Math.pow(Math.tan(Math.PI/4 - (parseFloat(document.getElementById('an-phi').value)||30)*Math.PI/360), 2);
+  svg.appendChild(el('polygon',{
+    points: (ox-6)+','+oy+' '+(ox-6)+','+oy+' '+(ox-24)+','+groundY+' '+(ox-6)+','+groundY,
+    fill:'#ff8f00',opacity:'0.18',stroke:'#f57c00','stroke-width':'0.8','stroke-dasharray':'3,2'
+  }));
+
+  // 치수선 H
+  svg.appendChild(ln(ox-36,oy, ox-36,groundY,'#1565c0',0.8,'3,2'));
+  svg.appendChild(txt(ox-46, oy+hPx/2, 'H='+H+'m', 8,'#1565c0','end'));
+
+  // 각도 표시
+  var arcR=18;
+  svg.appendChild(el('path',{
+    d:'M '+(ax0+arcR)+','+ay+' A '+arcR+','+arcR+' 0 0,1 '+(ax0+Math.cos(angR)*arcR)+','+(ay+Math.sin(angR)*arcR),
+    fill:'none',stroke:'#0d47a1','stroke-width':'1'
+  }));
+  svg.appendChild(txt(ax0+arcR+8, ay+8, ang+'°', 8,'#0d47a1','start'));
+
+  // La/Lf 라벨
+  if(nAnchors>0){
+    var mid_ay = oy + hPx*0.5;
+    var mid_fx = ox+wThick + Math.cos(angR)*LfPx/2;
+    var mid_fy = mid_ay + Math.sin(angR)*LfPx/2 - 6;
+    svg.appendChild(txt(mid_fx+6, mid_fy, 'Lf', 7.5,'#546e7a','start'));
+    var mid_ax = ox+wThick + Math.cos(angR)*(LfPx+LaPx/2);
+    var mid_ay2= mid_ay + Math.sin(angR)*(LfPx+LaPx/2) - 6;
+    svg.appendChild(txt(Math.min(mid_ax+6,W-20), mid_ay2, 'La', 7.5,'#0d47a1','start'));
+  }
+
+  // 라벨
+  svg.appendChild(txt(ox+wThick/2, oy+hPx/2, '벽체', 8,'#263238'));
+  svg.appendChild(txt(ox+wThick+16, oy+hPx*0.22, '뒷채움', 8,'#2e7d32'));
+  svg.appendChild(txt(ox-22, oy+hPx*0.35, 'Ea', 9,'#e65100'));
+  svg.appendChild(txt(Math.min(ox+wThick+hPx*0.45+8, W-22), oy+hPx*0.5, '지반', 8,'#5d4037','start'));
+}
+
+/* ════════════════════════════════════════════
+   중력식 안전성 계산 (KDS 11 80 10)
+════════════════════════════════════════════ */
+function calcGravity(){
+  var H  = parseFloat(document.getElementById('g-H').value)||4;
+  var B  = parseFloat(document.getElementById('g-B').value)||2.8;
+  var a  = parseFloat(document.getElementById('g-a').value)||0.5;
+  var gc = parseFloat(document.getElementById('g-gc').value)||23;
+  var gs = parseFloat(document.getElementById('g-gs').value)||18;
+  var phi= parseFloat(document.getElementById('g-phi').value)||30;
+  var c  = parseFloat(document.getElementById('g-c').value)||0;
+  var mu = parseFloat(document.getElementById('g-mu').value)||0.5;
+  var qa = parseFloat(document.getElementById('g-qa').value)||200;
+  var q  = parseFloat(document.getElementById('g-q').value)||10;
+  var beta= parseFloat(document.getElementById('g-beta').value)||0;
+  var proj= document.getElementById('g-projname').value||'';
+  var author= document.getElementById('g-author').value||'';
+  var date= document.getElementById('g-date').value||'';
+
+  // 랭킨 토압계수
+  var phiR = phi * Math.PI / 180;
+  var betaR = beta * Math.PI / 180;
+  var Ka = Math.pow(Math.tan(Math.PI/4 - phiR/2), 2);
+
+  // 토압 (삼각형 + 상재하중 직사각형)
+  var Ea_tri = 0.5 * Ka * gs * H * H; // 삼각형 토압 (kN/m)
+  var Ea_rect= Ka * q * H;             // 상재하중 토압 (kN/m)
+  var Ea = Ea_tri + Ea_rect;           // 총 수평토압
+
+  // 수평토압 작용점
+  var ya_tri = H / 3;
+  var ya_rect = H / 2;
+  var ya = (Ea_tri * ya_tri + Ea_rect * ya_rect) / Ea;
+
+  // 옹벽 자중 (사다리꼴 단면: 전면수직, 배면경사)
+  // 사다리꼴 = 직사각형(a×H) + 직각삼각형((B-a)×H)
+  var A_rect = a * H;       // 직사각형 면적
+  var A_tri  = 0.5*(B-a)*H; // 삼각형 면적
+  var Aw = A_rect + A_tri;  // 전체 단면적
+  var Ww = gc * Aw;
+  // 발끝(전면 하단)에서 각 도심 x 거리
+  var xw_rect = a / 2;              // 직사각형 도심
+  var xw_tri  = a + (B-a)*2/3;     // 삼각형 도심 (발끝 기준)
+  var xw = (A_rect*xw_rect + A_tri*xw_tri) / Aw;
+  if(isNaN(xw)||xw<=0) xw = (a+2*B)/3/(a+B)*B; // fallback: 사다리꼴 도심
+
+  // 뒷채움 상재하중 (저면 전체에 분포)
+  var Wq = q * B; // kN/m (상재하중 수직력)
+  var xq = B / 2; // 도심 x (발끝 기준)
+
+  // 토압 작용점 수정: 발끝에서 배면까지 B 위치 기준
+  var ya_total = ya; // 저면에서 토압 작용높이
+
+  // 총 수직력 ΣV
+  var SV = Ww + Wq;
+  var SH = Ea;
+
+  // 저항모멘트 (전면 발끝 기준) — 토압은 배면(x=B)에서 발생
+  var Mr_wall = Ww * xw;
+  var Mr_q    = Wq * xq;
+  var Mr = Mr_wall + Mr_q;
+
+  // 전도모멘트 (발끝 기준, 수평토압×작용높이)
+  var Mo = SH * ya_total;
+
+  // 전도 안전율
+  var Fs_o = Mr / Mo;
+
+  // 활동 안전율
+  var Fs_s = (mu * SV) / SH;
+
+  // 합력 위치
+  var xR = (Mr - Mo) / SV;
+  var e  = B / 2 - xR;  // 편심
+
+  // 지반반력
+  var qmax = SV / B * (1 + 6 * Math.abs(e) / B);
+  var qmin = SV / B * (1 - 6 * Math.abs(e) / B);
+
+  // 지반 안전율
+  var Fs_b = qa / qmax;
+
+  // 편심 허용치
+  var e_allow = B / 6;
+  var e_ok = Math.abs(e) <= e_allow;
+
+  // 합격 판정
+  var pass_o = Fs_o >= 2.0;
+  var pass_s = Fs_s >= 1.5;
+  var pass_b = qmax <= qa;
+  var pass_e = e_ok;
+  var allPass = pass_o && pass_s && pass_b && pass_e;
+
+  var result = {
+    H:H, B:B, a:a, gc:gc, gs:gs, phi:phi, c:c, mu:mu, qa:qa, q:q,
+    Ka:Ka, Ea:Ea, Ea_tri:Ea_tri, Ea_rect:Ea_rect, ya:ya,
+    Ww:Ww, SV:SV, SH:SH, Mr:Mr, Mo:Mo,
+    Fs_o:Fs_o, Fs_s:Fs_s, Fs_b:Fs_b,
+    xR:xR, e:e, e_allow:e_allow, qmax:qmax, qmin:qmin,
+    pass_o:pass_o, pass_s:pass_s, pass_b:pass_b, pass_e:pass_e, allPass:allPass,
+    proj:proj, author:author, date:date, type:'중력식 옹벽'
+  };
+  return result;
+}
+
+function renderGravityResult(r){
+  var heroClass = r.allPass ? 'grn' : 'red';
+  var heroIcon = r.allPass ? '✅' : '⚠️';
+  var heroTxt = r.allPass ? '안전 (ALL PASS)' : '불안전 (검토 요망)';
+
+  function fs(n){ return n.toFixed(3); }
+  function ok(v){ return v ? '<span class="td-pass">OK ✓</span>' : '<span class="td-fail">NG ✗</span>'; }
+
+  var html = '';
+
+  // 판정 히어로
+  html += '<div class="result-hero ' + heroClass + '">';
+  html += '<div class="rh-label">최소 안전율 (전도 기준)</div>';
+  html += '<div class="rh-num">' + fs(r.Fs_o) + '</div>';
+  html += '<div class="rh-unit">Fs (전도) / 기준: 2.00</div>';
+  html += '<div class="rh-badge">' + heroIcon + ' ' + heroTxt + '</div>';
+  html += '</div>';
+
+  // 안전율 스탯 그리드
+  html += '<div class="stat-grid">';
+  html += '<div class="sbox ' + (r.pass_o ? 'pass' : 'fail') + '">';
+  html += '<div class="sico">🔄</div><div class="sval ' + (r.pass_o ? 'grn' : 'red') + '">' + fs(r.Fs_o) + '</div>';
+  html += '<div class="slbl">전도 안전율</div><div class="spass ' + (r.pass_o ? 'ok' : 'ng') + '">' + (r.pass_o ? '✓ OK (≥2.0)' : '✗ NG (<2.0)') + '</div></div>';
+
+  html += '<div class="sbox ' + (r.pass_s ? 'pass' : 'fail') + '">';
+  html += '<div class="sico">↔️</div><div class="sval ' + (r.pass_s ? 'grn' : 'red') + '">' + fs(r.Fs_s) + '</div>';
+  html += '<div class="slbl">활동 안전율</div><div class="spass ' + (r.pass_s ? 'ok' : 'ng') + '">' + (r.pass_s ? '✓ OK (≥1.5)' : '✗ NG (<1.5)') + '</div></div>';
+
+  html += '<div class="sbox ' + (r.pass_b ? 'pass' : 'fail') + '">';
+  html += '<div class="sico">🏗️</div><div class="sval ' + (r.pass_b ? 'grn' : 'red') + '">' + r.qmax.toFixed(1) + '</div>';
+  html += '<div class="slbl">최대지반반력 (kPa)</div><div class="spass ' + (r.pass_b ? 'ok' : 'ng') + '">' + (r.pass_b ? '✓ OK (≤'+r.qa+')' : '✗ NG (>'+r.qa+')') + '</div></div>';
+
+  html += '<div class="sbox ' + (r.pass_e ? 'pass' : 'fail') + '">';
+  html += '<div class="sico">📏</div><div class="sval ' + (r.pass_e ? 'grn' : 'red') + '">' + r.e.toFixed(3) + '</div>';
+  html += '<div class="slbl">편심 e (m)</div><div class="spass ' + (r.pass_e ? 'ok' : 'ng') + '">' + (r.pass_e ? '✓ OK (≤'+r.e_allow.toFixed(3)+')' : '✗ NG') + '</div></div>';
+
+  html += '<div class="sbox"><div class="sico">⬇️</div><div class="sval">' + r.SV.toFixed(1) + '</div><div class="slbl">합계 수직력 ΣV (kN/m)</div></div>';
+  html += '<div class="sbox"><div class="sico">➡️</div><div class="sval">' + r.Ea.toFixed(1) + '</div><div class="slbl">수평토압 Ea (kN/m)</div></div>';
+  html += '</div>';
+
+  // 상세 결과표
+  html += '<div class="card"><div class="card-head"><div class="card-ico blue">📊</div><span class="card-tit">안전성 검토 상세 (KDS 11 80 10)</span></div>';
+  html += '<div class="card-body"><div class="tbl-wrap"><table>';
+  html += '<thead><tr><th>검토항목</th><th>산정값</th><th>허용기준</th><th>판정</th></tr></thead><tbody>';
+  html += '<tr><td>전도 안전율 Fs₀</td><td class="mono">' + fs(r.Fs_o) + '</td><td>≥ 2.00</td><td>' + ok(r.pass_o) + '</td></tr>';
+  html += '<tr><td>활동 안전율 Fs₅</td><td class="mono">' + fs(r.Fs_s) + '</td><td>≥ 1.50</td><td>' + ok(r.pass_s) + '</td></tr>';
+  html += '<tr><td>최대지반반력 qmax (kPa)</td><td class="mono">' + r.qmax.toFixed(2) + '</td><td>≤ ' + r.qa + '</td><td>' + ok(r.pass_b) + '</td></tr>';
+  html += '<tr><td>편심 e (m)</td><td class="mono">' + r.e.toFixed(4) + '</td><td>≤ ' + r.e_allow.toFixed(4) + ' (B/6)</td><td>' + ok(r.pass_e) + '</td></tr>';
+  html += '<tr><td>랭킨 토압계수 Ka</td><td class="mono">' + r.Ka.toFixed(4) + '</td><td>-</td><td>-</td></tr>';
+  html += '<tr><td>수평토압 Ea (kN/m)</td><td class="mono">' + r.Ea.toFixed(3) + '</td><td>-</td><td>-</td></tr>';
+  html += '<tr><td>저항모멘트 ΣMr (kN·m/m)</td><td class="mono">' + r.Mr.toFixed(3) + '</td><td>-</td><td>-</td></tr>';
+  html += '<tr><td>전도모멘트 ΣMo (kN·m/m)</td><td class="mono">' + r.Mo.toFixed(3) + '</td><td>-</td><td>-</td></tr>';
+  html += '<tr><td>최소지반반력 qmin (kPa)</td><td class="mono">' + r.qmin.toFixed(2) + '</td><td>> 0 (인장없음)</td><td>' + ok(r.qmin >= 0) + '</td></tr>';
+  html += '</tbody></table></div></div></div>';
+
+  // 안전 권고
+  if(!r.allPass){
+    html += '<div class="nb red"><div class="nb-tit">⚠️ 보완 권고사항</div><div class="nb-txt">';
+    if(!r.pass_o) html += '• 전도 안전율 부족: 저면폭 B 증가 또는 뒷굽 연장 검토<br/>';
+    if(!r.pass_s) html += '• 활동 안전율 부족: 활동방지 key 설치 또는 마찰계수 개선 검토<br/>';
+    if(!r.pass_b) html += '• 지반반력 초과: 기초 면적 확대 또는 지반 보강 검토<br/>';
+    if(!r.pass_e) html += '• 편심 과다: 단면 형상 수정 또는 배면 경사 조정 검토<br/>';
+    html += '</div></div>';
+  } else {
+    html += '<div class="nb grn"><div class="nb-tit">✅ 구조 안전</div><div class="nb-txt">모든 안전율 기준을 만족합니다. KDS 11 80 10 기준 적합.</div></div>';
+  }
+
+  // 결과 패널에 삽입
+  document.getElementById('g-result-panel').innerHTML = html;
+  // 스텝 완료
+  setStep('g', 4, true, true);
+  // 전역 저장 + 미리보기 자동 선택
+  G.result = r;
+  previewSel.a4  = 'gravity';
+  previewSel.mob = 'gravity';
+  refreshPreviewSelBadges();
+  // A4 갱신
+  renderA4Report(r);
+}
+
+/* ════════════════════════════════════════════
+   캔틸레버식 계산
+════════════════════════════════════════════ */
+function calcCantilever(){
+  var H  = parseFloat(document.getElementById('c-H').value)||5;
+  var B  = parseFloat(document.getElementById('c-B').value)||3.5;
+  var bt = parseFloat(document.getElementById('c-bt').value)||0.8;
+  var tf = parseFloat(document.getElementById('c-tf').value)||0.5;
+  var tw = parseFloat(document.getElementById('c-tw').value)||0.35;
+  var gs = parseFloat(document.getElementById('c-gs').value)||18;
+  var phi= parseFloat(document.getElementById('c-phi').value)||30;
+  var mu = parseFloat(document.getElementById('c-mu').value)||0.5;
+  var qa = parseFloat(document.getElementById('c-qa').value)||200;
+  var q  = parseFloat(document.getElementById('c-q').value)||10;
+  var c_val = parseFloat(document.getElementById('c-c')?document.getElementById('c-c').value:0)||0;
+  var beta  = parseFloat(document.getElementById('c-beta')?document.getElementById('c-beta').value:0)||0;
+  var Df = parseFloat(document.getElementById('c-Df')?document.getElementById('c-Df').value:0.5)||0.5;
+  var gc = parseFloat(document.getElementById('c-gc')?document.getElementById('c-gc').value:23)||23;
+
+  var phiR = phi * Math.PI / 180;
+  var Ka = Math.pow(Math.tan(Math.PI/4 - phiR/2), 2);
+
+  // 유효높이: 기초 저면에서 옹벽 상단까지
+  var He = H + tf;
+  // 토압 (삼각+상재 직사각)
+  var Ea_tri  = 0.5 * Ka * gs * He * He;
+  var Ea_rect = Ka * q * He;
+  var Ea = Ea_tri + Ea_rect;
+  // 토압 합력 작용점 (저면에서)
+  var ya = (Ea_tri*(He/3) + Ea_rect*(He/2)) / Ea;
+
+  // 부재 자중 (발끝 기준 x 도심)
+  var W_base = gc * B * tf;                 // 기초판
+  var x_base = B / 2;
+  var H_stem = H;                           // 벽체: 기초판 상면~옹벽 상단
+  var W_stem = gc * tw * H_stem;
+  var x_stem = bt + tw / 2;                // 전면돌출+벽체 중심
+  var fill_w = B - bt - tw;                 // 뒷채움 폭 (뒷굽)
+  var W_fill = gs * fill_w * H_stem;        // 뒷채움 (기초판 위)
+  var x_fill = bt + tw + fill_w / 2;
+  var W_q    = q * B;                       // 상재하중 수직력
+  var x_q    = B / 2;
+
+  var SV = W_base + W_stem + W_fill + W_q;
+  var SH = Ea;
+
+  // 저항모멘트 (발끝 기준)
+  var Mr = W_base*x_base + W_stem*x_stem + W_fill*x_fill + W_q*x_q;
+  // 전도모멘트 (발끝 기준)
+  var Mo = Ea * ya;
+
+  var Fs_o = Mr / Mo;
+  var Fs_s = (mu * SV) / SH;
+  var xR = (Mr - Mo) / SV;
+  var e = B/2 - xR;
+  var e_allow = B/6;
+  var qmax = SV/B*(1+6*Math.abs(e)/B);
+  var qmin = SV/B*(1-6*Math.abs(e)/B);
+
+  var pass_o = Fs_o >= 2.0;
+  var pass_s = Fs_s >= 1.5;
+  var pass_b = qmax <= qa;
+  var pass_e = Math.abs(e) <= e_allow;
+  var allPass = pass_o && pass_s && pass_b && pass_e;
+
+  var proj= document.getElementById('c-projname').value||'';
+  var author= document.getElementById('c-author').value||'';
+  var date= document.getElementById('c-date').value||'';
+
+  return {H:H,B:B,tw:tw,tf:tf,bt:bt,gs:gs,phi:phi,mu:mu,qa:qa,q:q,gc:gc,
+    Ka:Ka,Ea:Ea,ya:ya,SV:SV,SH:SH,Mr:Mr,Mo:Mo,
+    Fs_o:Fs_o,Fs_s:Fs_s,qmax:qmax,qmin:qmin,xR:xR,e:e,e_allow:e_allow,
+    pass_o:pass_o,pass_s:pass_s,pass_b:pass_b,pass_e:pass_e,allPass:allPass,
+    proj:proj,author:author,date:date,type:'캔틸레버식 옹벽'};
+}
+function renderCantileverResult(r){
+  function fs(n){ return n.toFixed(3); }
+  function ok(v){ return v ? '<span class="td-pass">OK ✓</span>' : '<span class="td-fail">NG ✗</span>'; }
+  var heroClass = r.allPass ? 'grn' : 'red';
+  var html='';
+  html += '<div class="result-hero '+heroClass+'">';
+  html += '<div class="rh-label">전도 안전율 Fs₀</div>';
+  html += '<div class="rh-num">'+fs(r.Fs_o)+'</div>';
+  html += '<div class="rh-unit">기준: ≥ 2.00</div>';
+  html += '<div class="rh-badge">'+(r.allPass?'✅ 안전':'⚠️ 불안전')+'</div></div>';
+  html += '<div class="stat-grid">';
+  html += '<div class="sbox '+(r.pass_o?'pass':'fail')+'"><div class="sico">🔄</div><div class="sval '+(r.pass_o?'grn':'red')+'">'+fs(r.Fs_o)+'</div><div class="slbl">전도</div><div class="spass '+(r.pass_o?'ok':'ng')+'">'+(r.pass_o?'✓ OK':'✗ NG')+'</div></div>';
+  html += '<div class="sbox '+(r.pass_s?'pass':'fail')+'"><div class="sico">↔️</div><div class="sval '+(r.pass_s?'grn':'red')+'">'+fs(r.Fs_s)+'</div><div class="slbl">활동</div><div class="spass '+(r.pass_s?'ok':'ng')+'">'+(r.pass_s?'✓ OK':'✗ NG')+'</div></div>';
+  html += '<div class="sbox '+(r.pass_b?'pass':'fail')+'"><div class="sico">🏗️</div><div class="sval '+(r.pass_b?'grn':'red')+'">'+r.qmax.toFixed(1)+'</div><div class="slbl">최대지반반력</div><div class="spass '+(r.pass_b?'ok':'ng')+'">'+(r.pass_b?'✓ OK':'✗ NG')+'</div></div>';
+  html += '<div class="sbox '+(r.pass_e?'pass':'fail')+'"><div class="sico">📏</div><div class="sval '+(r.pass_e?'grn':'red')+'">'+r.e.toFixed(3)+'</div><div class="slbl">편심 e (m)</div><div class="spass '+(r.pass_e?'ok':'ng')+'">'+(r.pass_e?'✓ OK':'✗ NG')+'</div></div>';
+  html += '<div class="sbox"><div class="sico">⬇️</div><div class="sval">'+r.SV.toFixed(1)+'</div><div class="slbl">ΣV (kN/m)</div></div>';
+  html += '<div class="sbox"><div class="sico">➡️</div><div class="sval">'+r.Ea.toFixed(1)+'</div><div class="slbl">Ea (kN/m)</div></div>';
+  html += '</div>';
+  html += '<div class="card"><div class="card-head"><div class="card-ico teal">📊</div><span class="card-tit">안전성 검토 상세 (캔틸레버식)</span></div>';
+  html += '<div class="card-body"><div class="tbl-wrap"><table class="teal"><thead><tr><th>검토항목</th><th>산정값</th><th>기준</th><th>판정</th></tr></thead><tbody>';
+  html += '<tr><td>전도 Fs₀</td><td class="mono">'+fs(r.Fs_o)+'</td><td>≥2.0</td><td>'+ok(r.pass_o)+'</td></tr>';
+  html += '<tr><td>활동 Fs₅</td><td class="mono">'+fs(r.Fs_s)+'</td><td>≥1.5</td><td>'+ok(r.pass_s)+'</td></tr>';
+  html += '<tr><td>qmax (kPa)</td><td class="mono">'+r.qmax.toFixed(2)+'</td><td>≤'+r.qa+'</td><td>'+ok(r.pass_b)+'</td></tr>';
+  html += '<tr><td>편심 e (m)</td><td class="mono">'+r.e.toFixed(4)+'</td><td>≤'+r.e_allow.toFixed(4)+'</td><td>'+ok(r.pass_e)+'</td></tr>';
+  html += '</tbody></table></div></div></div>';
+  C_RES.result = r;
+  previewSel.a4  = 'cantilever';
+  previewSel.mob = 'cantilever';
+  refreshPreviewSelBadges();
+  document.getElementById('c-result-panel').innerHTML = html
+    + '<div class="card"><div class="card-head"><div class="card-ico teal">📐</div><span class="card-tit">단면 다이어그램 (역T형)</span></div>'
+    + '<div class="card-body" style="padding:10px;"><svg id="c-diagram" viewBox="0 0 320 260" width="100%" style="max-width:320px;display:block;margin:0 auto;border:1px solid #e2e8f0;border-radius:8px;background:#f8fafd;"></svg></div></div>';
+  drawCantileverDiagram();
+  renderA4Report(r);
+}
+
+/* ════════════════════════════════════════════
+   앵커식 계산
+════════════════════════════════════════════ */
+function calcAnchored(){
+  var H   = parseFloat(document.getElementById('an-H').value)||6;
+  var ang = parseFloat(document.getElementById('an-ang').value)||15;
+  var sh  = parseFloat(document.getElementById('an-sh').value)||2;
+  var sv  = parseFloat(document.getElementById('an-sv').value)||2;
+  var T   = parseFloat(document.getElementById('an-T').value)||200;
+  var La  = parseFloat(document.getElementById('an-La').value)||5;
+  var phi = parseFloat(document.getElementById('an-phi').value)||30;
+  var gs  = parseFloat(document.getElementById('an-gs').value)||18;
+  var q_an = parseFloat(document.getElementById('an-q')?document.getElementById('an-q').value:10)||10;
+  var qa_an= parseFloat(document.getElementById('an-qa')?document.getElementById('an-qa').value:150)||150;
+  var D_mm = parseFloat(document.getElementById('an-D')?document.getElementById('an-D').value:150)||150;
+  var tau  = parseFloat(document.getElementById('an-tau')?document.getElementById('an-tau').value:100)||100;
+
+  var phiR = phi * Math.PI / 180;
+  var angR = ang * Math.PI / 180;
+  var Ka = Math.pow(Math.tan(Math.PI/4 - phiR/2), 2);
+
+  // 수평토압 (삼각형 + 상재하중 직사각형)
+  var Ea_tri  = 0.5 * Ka * gs * H * H;
+  var Ea_rect = Ka * q_an * H;
+  var Ea = Ea_tri + Ea_rect;
+  var ya_an = (Ea_tri*(H/3) + Ea_rect*(H/2)) / Ea; // 합력 작용높이
+
+  // 앵커 열수 (정수)
+  var n_rows = Math.max(1, Math.floor(H / sv));
+  // 앵커 1본의 수평·수직 분력
+  var Th = T * Math.cos(angR);
+  var Tv = T * Math.sin(angR);
+
+  // 단위폭당 앵커 수평저항력 합계 (kN/m)
+  var R_h_total = (Th / sh) * n_rows;
+
+  // 앵커 내력 안전율: 총저항 / 총토압
+  var Fs_anchor = (Ea > 0) ? R_h_total / Ea : 999;
+
+  // 전체안정 안전율 (간이 원호활동 — 테르자기 개략식)
+  // Fs = (c'·L + N·tanφ) / T_drive ; 여기선 점착력 0 가정, 쐐기 기반
+  var theta_f = Math.PI/4 + phiR/2;           // 파괴면 경사각
+  var Nc = Math.cos(phiR)/Math.sin(theta_f);  // 법선력 계수
+  var W_wedge = 0.5 * gs * H * H / Math.tan(theta_f); // 쐐기 자중
+  var driving = Ea;                            // 구동력 = 수평토압
+  var resist  = W_wedge * Math.tan(phiR) + R_h_total * Math.cos(angR);
+  var Fs_global = (driving > 0) ? resist / driving : 999;
+  Fs_global = Math.min(Fs_global, 9.99); // 상한 캡
+
+  // 인발 안전율
+  var D_m = D_mm / 1000;
+  var Pu = Math.PI * D_m * La * tau;
+  var Fs_pull = (T > 0) ? Pu / T : 999;
+
+  var pass_anc = Fs_anchor >= 1.5;
+  var pass_pull = Fs_pull >= 2.0;
+  var pass_glob = Fs_global >= 1.2;
+  var allPass = pass_anc && pass_pull && pass_glob;
+
+  var proj= document.getElementById('an-projname').value||'';
+  var author= document.getElementById('an-author').value||'';
+  var date= document.getElementById('an-date').value||'';
+  var atype= document.getElementById('an-type').value||'어스앵커';
+
+  return {H:H,ang:ang,sh:sh,sv:sv,T:T,La:La,phi:phi,gs:gs,Ka:Ka,Ea:Ea,
+    n_rows:n_rows, Th:Th, Tv:Tv, R_total:R_h_total, Pu:Pu,
+    ya:ya_an, q:q_an, qa:qa_an,
+    Fs_anchor:Fs_anchor, Fs_pull:Fs_pull, Fs_global:Fs_global,
+    pass_anc:pass_anc, pass_pull:pass_pull, pass_glob:pass_glob, allPass:allPass,
+    proj:proj, author:author, date:date, type:'앵커식 옹벽 ('+atype+')'};
+}
+function renderAnchoredResult(r){
+  function fs(n){ return n.toFixed(3); }
+  function ok(v){ return v ? '<span class="td-pass">OK ✓</span>' : '<span class="td-fail">NG ✗</span>'; }
+  var heroClass = r.allPass ? 'grn' : 'red';
+  var html='';
+  html += '<div class="result-hero '+heroClass+'">';
+  html += '<div class="rh-label">앵커 내력 안전율</div>';
+  html += '<div class="rh-num">'+fs(r.Fs_anchor)+'</div>';
+  html += '<div class="rh-unit">기준: ≥ 1.50</div>';
+  html += '<div class="rh-badge">'+(r.allPass?'✅ 안전':'⚠️ 검토 요망')+'</div></div>';
+  html += '<div class="stat-grid">';
+  html += '<div class="sbox '+(r.pass_anc?'pass':'fail')+'"><div class="sico">⚓</div><div class="sval '+(r.pass_anc?'grn':'red')+'">'+fs(r.Fs_anchor)+'</div><div class="slbl">앵커 내력</div><div class="spass '+(r.pass_anc?'ok':'ng')+'">'+(r.pass_anc?'✓ OK (≥1.5)':'✗ NG')+'</div></div>';
+  html += '<div class="sbox '+(r.pass_pull?'pass':'fail')+'"><div class="sico">🔩</div><div class="sval '+(r.pass_pull?'grn':'red')+'">'+fs(r.Fs_pull)+'</div><div class="slbl">인발 안전율</div><div class="spass '+(r.pass_pull?'ok':'ng')+'">'+(r.pass_pull?'✓ OK (≥2.0)':'✗ NG')+'</div></div>';
+  html += '<div class="sbox '+(r.pass_glob?'pass':'fail')+'"><div class="sico">🏔️</div><div class="sval '+(r.pass_glob?'grn':'red')+'">'+fs(r.Fs_global)+'</div><div class="slbl">전체안정</div><div class="spass '+(r.pass_glob?'ok':'ng')+'">'+(r.pass_glob?'✓ OK (≥1.2)':'✗ NG')+'</div></div>';
+  html += '<div class="sbox"><div class="sico">➡️</div><div class="sval">'+r.Ea.toFixed(1)+'</div><div class="slbl">수평토압 Ea</div></div>';
+  html += '<div class="sbox"><div class="sico">⬆️</div><div class="sval">'+r.n_rows+'</div><div class="slbl">앵커 열수</div></div>';
+  html += '<div class="sbox"><div class="sico">💪</div><div class="sval">'+r.Th.toFixed(1)+'</div><div class="slbl">앵커 수평분력</div></div>';
+  html += '</div>';
+  html += '<div class="card"><div class="card-head"><div class="card-ico amber">📊</div><span class="card-tit">안전성 검토 상세 (KDS 11 50 15)</span></div>';
+  html += '<div class="card-body"><div class="tbl-wrap"><table><thead><tr><th>검토항목</th><th>산정값</th><th>기준</th><th>판정</th></tr></thead><tbody>';
+  html += '<tr><td>앵커 내력 Fs</td><td class="mono">'+fs(r.Fs_anchor)+'</td><td>≥1.5</td><td>'+ok(r.pass_anc)+'</td></tr>';
+  html += '<tr><td>인발 안전율 Fs</td><td class="mono">'+fs(r.Fs_pull)+'</td><td>≥2.0</td><td>'+ok(r.pass_pull)+'</td></tr>';
+  html += '<tr><td>전체안정 Fs</td><td class="mono">'+fs(r.Fs_global)+'</td><td>≥1.2</td><td>'+ok(r.pass_glob)+'</td></tr>';
+  html += '<tr><td>수평토압 Ea (kN/m)</td><td class="mono">'+r.Ea.toFixed(2)+'</td><td>-</td><td>-</td></tr>';
+  html += '<tr><td>정착부 극한내력 Pu (kN)</td><td class="mono">'+r.Pu.toFixed(1)+'</td><td>-</td><td>-</td></tr>';
+  html += '</tbody></table></div></div></div>';
+  AN_RES.result = r;
+  previewSel.a4  = 'anchored';
+  previewSel.mob = 'anchored';
+  refreshPreviewSelBadges();
+  document.getElementById('an-result-panel').innerHTML = html
+    + '<div class="card"><div class="card-head"><div class="card-ico amber">📐</div><span class="card-tit">단면 다이어그램 (앵커식)</span></div>'
+    + '<div class="card-body" style="padding:10px;"><svg id="an-diagram" viewBox="0 0 320 260" width="100%" style="max-width:320px;display:block;margin:0 auto;border:1px solid #e2e8f0;border-radius:8px;background:#f8fafd;"></svg></div></div>';
+  drawAnchoredDiagram();
+  renderA4Report(r);
+}
+
+/* ════════════════════════════════════════════
+   공통 계산 실행
+════════════════════════════════════════════ */
+function calcCurrent(){
+  if(currentTab === 'gravity'){
+    var r = calcGravity();
+    renderGravityResult(r);
+    showToast('✅ 중력식 옹벽 안전성 검토 완료');
+  } else if(currentTab === 'cantilever'){
+    var r = calcCantilever();
+    renderCantileverResult(r);
+    showToast('✅ 캔틸레버식 옹벽 안전성 검토 완료');
+  } else if(currentTab === 'anchored'){
+    var r = calcAnchored();
+    renderAnchoredResult(r);
+    showToast('✅ 앵커식 옹벽 안전성 검토 완료');
+  } else {
+    // 미리보기 탭에서 하단 버튼 클릭 → 현재 선택된 옹벽 재렌더
+    var sel = (currentTab === 'a4preview') ? previewSel.a4 : previewSel.mob;
+    showToast('💡 검토할 옹벽 탭으로 이동 후 실행해주세요.');
+  }
+}
+function resetCurrent(){
+  if(currentTab === 'gravity'){ resetGravity(); }
+  else if(currentTab === 'cantilever'){ resetCantilever(); }
+  else if(currentTab === 'anchored'){ resetAnchored(); }
+}
+function resetGravity(){
+  document.getElementById('g-H').value='4.0';
+  document.getElementById('g-B').value='2.8';
+  document.getElementById('g-a').value='0.5';
+  document.getElementById('g-gc').value='23.0';
+  document.getElementById('g-gs').value='18.0';
+  document.getElementById('g-phi').value='30';
+  document.getElementById('g-c').value='0';
+  document.getElementById('g-mu').value='0.5';
+  document.getElementById('g-qa').value='200';
+  document.getElementById('g-q').value='10';
+  document.getElementById('g-beta').value='0';
+  document.getElementById('g-Df').value='0.5';
+  G.result=null;
+  document.getElementById('g-result-panel').innerHTML='<div class="nb blue"><div class="nb-tit">💡 사용 방법</div><div class="nb-txt">좌측 조건을 입력하고 안전성 검토 버튼을 눌러주세요.</div></div>';
+  gUpdateSteps(); drawGravityDiagram();
+  showToast('중력식 옹벽이 초기화되었습니다.');
+}
+function resetCantilever(){
+  var defaults={
+    'c-H':'5.0','c-B':'3.5','c-bt':'0.8','c-tf':'0.5','c-tw':'0.35',
+    'c-gs':'18.0','c-phi':'30','c-mu':'0.5','c-qa':'200','c-q':'10',
+    'c-c':'0','c-beta':'0','c-Df':'0.5','c-gc':'23.0','c-fck':'24','c-fy':'400'
+  };
+  Object.keys(defaults).forEach(function(id){
+    var el=document.getElementById(id); if(el) el.value=defaults[id];
+  });
+  C_RES.result=null;
+  document.getElementById('c-result-panel').innerHTML=
+    '<div class="nb teal"><div class="nb-tit">💡 캔틸레버식 옹벽</div><div class="nb-txt">조건을 입력하고 검토를 실행해주세요.</div></div>'
+    +'<div class="card"><div class="card-head"><div class="card-ico teal">📐</div><span class="card-tit">단면 다이어그램 (역T형)</span></div>'
+    +'<div class="card-body" style="padding:10px;"><svg id="c-diagram" viewBox="0 0 320 260" width="100%" style="max-width:320px;display:block;margin:0 auto;border:1px solid #e2e8f0;border-radius:8px;background:#f8fafd;"></svg></div></div>';
+  drawCantileverDiagram();
+  showToast('캔틸레버식 옹벽이 초기화되었습니다.');
+}
+function resetAnchored(){
+  var defaults={
+    'an-H':'6.0','an-ang':'15','an-sh':'2.0','an-sv':'2.0',
+    'an-T':'200','an-La':'5.0','an-phi':'30','an-gs':'18.0',
+    'an-c':'0','an-beta':'0','an-q':'10','an-qa':'150',
+    'an-D':'150','an-Lf':'3.0','an-tau':'100','an-E':'200'
+  };
+  Object.keys(defaults).forEach(function(id){
+    var el=document.getElementById(id); if(el) el.value=defaults[id];
+  });
+  AN_RES.result=null;
+  document.getElementById('an-result-panel').innerHTML=
+    '<div class="nb amber"><div class="nb-tit">💡 앵커식 옹벽</div><div class="nb-txt">조건을 입력하고 검토를 실행해주세요.</div></div>'
+    +'<div class="card"><div class="card-head"><div class="card-ico amber">📐</div><span class="card-tit">단면 다이어그램 (앵커식)</span></div>'
+    +'<div class="card-body" style="padding:10px;"><svg id="an-diagram" viewBox="0 0 320 260" width="100%" style="max-width:320px;display:block;margin:0 auto;border:1px solid #e2e8f0;border-radius:8px;background:#f8fafd;"></svg></div></div>';
+  drawAnchoredDiagram();
+  showToast('앵커식 옹벽이 초기화되었습니다.');
+}
+function resetAll(){ resetGravity(); resetCantilever(); resetAnchored(); }
+
+/* ════════════════════════════════════════════
+   A4(모바일) 보고서 렌더링
+════════════════════════════════════════════ */
+function renderA4Report(r){
+  var el = document.getElementById('a4-content');
+  if(!el) return;
+  var today = new Date();
+  var dateStr = today.getFullYear()+'년 '+('0'+(today.getMonth()+1)).slice(-2)+'월 '+('0'+today.getDate()).slice(-2)+'일';
+
+  // r이 명시적으로 전달되지 않으면 선택된 옹벽 결과 사용
+  if(r === undefined) r = getResultByType(previewSel.mob);
+  if(!r){
+    el.innerHTML='<div style="text-align:center;padding:40px 20px;color:#90a4ae;"><div style="font-size:28px;margin-bottom:10px;">🏗️</div><div style="font-size:13px;font-weight:800;color:#546e7a;">검토 결과가 없습니다</div><div style="font-size:11px;margin-top:6px;line-height:1.6;">검토를 먼저 실행해주세요.</div></div>';
+    return;
+  }
+  function fs(n){ return n.toFixed(3); }
+  function judgeHtml(pass){ return pass ? '<span class="judge-badge ok">✓ OK</span>' : '<span class="judge-badge ng">✗ NG</span>'; }
+
+  var heroColor = r.allPass ? '#2e7d32' : '#c62828';
+  var heroLabel = r.allPass ? '✅ 안전 (PASS)' : '⚠️ 불안전 (NG)';
+
+  var html = '';
+  // 헤더
+  html += '<div class="a4-title-wrap">';
+  html += '<div><div class="a4-title-main">옹벽 안전성 검토</div><div style="font-size:8px;color:#1976d2;font-weight:700;">'+r.type+'</div></div>';
+  html += '<div class="a4-title-sub">'+r.proj+'<br/>작성: '+r.author+'<br/>'+dateStr+'</div>';
+  html += '</div>';
+
+  // 종합 판정
+  html += '<div class="a4-rbox '+(r.allPass?'grn':'red')+'">';
+  html += '<div style="font-size:9px;font-weight:700;opacity:.7;margin-bottom:2px;">종합 판정</div>';
+  html += '<div style="font-size:13px;font-weight:900;">'+heroLabel+'</div>';
+  if(r.Fs_o !== undefined) html += '<div style="font-size:11px;opacity:.8;margin-top:3px;">전도 Fs = '+fs(r.Fs_o)+' / 활동 Fs = '+fs(r.Fs_s)+'</div>';
+  html += '</div>';
+
+  // 설계 조건
+  html += '<div class="a4-sec">① 설계 조건</div>';
+  html += '<div class="a4-grid">';
+  html += '<div class="a4-ic"><span class="a4-ik">옹벽높이 H</span><span class="a4-iv">'+r.H+' m</span></div>';
+  html += '<div class="a4-ic"><span class="a4-ik">저면폭 B</span><span class="a4-iv">'+r.B+' m</span></div>';
+  if(r.phi !== undefined){
+    html += '<div class="a4-ic"><span class="a4-ik">내부마찰각 φ</span><span class="a4-iv">'+r.phi+'°</span></div>';
+    html += '<div class="a4-ic"><span class="a4-ik">단위중량 γs</span><span class="a4-iv">'+r.gs+' kN/m³</span></div>';
+  }
+  if(r.mu !== undefined){
+    html += '<div class="a4-ic"><span class="a4-ik">마찰계수 μ</span><span class="a4-iv">'+r.mu+'</span></div>';
+    html += '<div class="a4-ic"><span class="a4-ik">허용지지력 qa</span><span class="a4-iv">'+r.qa+' kPa</span></div>';
+  }
+  html += '</div>';
+
+  // 안전성 검토표
+  html += '<div class="a4-sec">② 안전성 검토 결과</div>';
+  html += '<table class="a4-tbl"><thead><tr><th>검토항목</th><th>기준</th><th>산정값</th><th>판정</th></tr></thead><tbody>';
+  if(r.Fs_o !== undefined){
+    html += '<tr><td>전도 안전율</td><td>≥ 2.00</td><td class="mono">'+fs(r.Fs_o)+'</td><td>'+(r.pass_o?'<b style="color:#2e7d32">OK</b>':'<b style="color:#c62828">NG</b>')+'</td></tr>';
+    html += '<tr><td>활동 안전율</td><td>≥ 1.50</td><td class="mono">'+fs(r.Fs_s)+'</td><td>'+(r.pass_s?'<b style="color:#2e7d32">OK</b>':'<b style="color:#c62828">NG</b>')+'</td></tr>';
+    html += '<tr><td>최대지반반력 (kPa)</td><td>≤ '+r.qa+'</td><td class="mono">'+r.qmax.toFixed(2)+'</td><td>'+(r.pass_b?'<b style="color:#2e7d32">OK</b>':'<b style="color:#c62828">NG</b>')+'</td></tr>';
+    html += '<tr><td>편심 e (m)</td><td>≤ '+r.e_allow.toFixed(3)+'</td><td class="mono">'+r.e.toFixed(4)+'</td><td>'+(r.pass_e?'<b style="color:#2e7d32">OK</b>':'<b style="color:#c62828">NG</b>')+'</td></tr>';
+  }
+  if(r.Fs_anchor !== undefined){
+    html += '<tr><td>앵커 내력 Fs</td><td>≥ 1.50</td><td class="mono">'+fs(r.Fs_anchor)+'</td><td>'+(r.pass_anc?'<b style="color:#2e7d32">OK</b>':'<b style="color:#c62828">NG</b>')+'</td></tr>';
+    html += '<tr><td>인발 안전율</td><td>≥ 2.00</td><td class="mono">'+fs(r.Fs_pull)+'</td><td>'+(r.pass_pull?'<b style="color:#2e7d32">OK</b>':'<b style="color:#c62828">NG</b>')+'</td></tr>';
+    html += '<tr><td>전체안정 Fs</td><td>≥ 1.20</td><td class="mono">'+fs(r.Fs_global)+'</td><td>'+(r.pass_glob?'<b style="color:#2e7d32">OK</b>':'<b style="color:#c62828">NG</b>')+'</td></tr>';
+  }
+  html += '</tbody></table>';
+
+  // 계산 경과
+  if(r.Ka !== undefined){
+    html += '<div class="a4-sec teal">③ 토압 계산</div>';
+    html += '<div class="a4-grid3">';
+    html += '<div class="a4-ic"><span class="a4-ik">토압계수 Ka</span><span class="a4-iv">'+r.Ka.toFixed(4)+'</span></div>';
+    html += '<div class="a4-ic"><span class="a4-ik">수평토압 Ea</span><span class="a4-iv">'+(r.Ea||0).toFixed(2)+' kN/m</span></div>';
+    html += '<div class="a4-ic"><span class="a4-ik">작용위치 ya</span><span class="a4-iv">'+(r.ya||0).toFixed(3)+' m</span></div>';
+    if(r.Mr !== undefined){
+      html += '<div class="a4-ic"><span class="a4-ik">저항모멘트 Mr</span><span class="a4-iv">'+r.Mr.toFixed(2)+' kN·m</span></div>';
+      html += '<div class="a4-ic"><span class="a4-ik">전도모멘트 Mo</span><span class="a4-iv">'+r.Mo.toFixed(2)+' kN·m</span></div>';
+      html += '<div class="a4-ic"><span class="a4-ik">합력위치 x̄</span><span class="a4-iv">'+r.xR.toFixed(3)+' m</span></div>';
+    }
+    html += '</div>';
+  }
+
+  // 적용 기준
+  html += '<div class="a4-sec">④ 적용 기준</div>';
+  html += '<div style="background:#f8fafd;border:1px solid #e2e8f0;border-radius:5px;padding:6px 8px;font-size:8.5px;line-height:1.8;color:#334155;">';
+  html += '• KDS 11 80 10 (옹벽 설계기준) — 전도·활동·지지력 안전율<br/>';
+  html += '• KDS 11 10 05 (기초구조 설계기준) — 편심 허용범위<br/>';
+  html += '• 구조물기초설계기준 (2021, 국토교통부)<br/>';
+  html += r.type.indexOf('캔틸레버')>=0 ? '• KDS 14 20 54 (RC 구조기준) — 철근 설계<br/>' : '';
+  html += r.type.indexOf('앵커')>=0 ? '• KDS 11 50 15 (앵커 설계기준) — 인발·내력 검토<br/>' : '';
+  html += '</div>';
+
+  // 비고
+  html += '<div style="margin-top:8px;padding:6px 8px;background:#fff8e1;border:1px solid #ffe082;border-radius:5px;font-size:8px;color:#795548;line-height:1.7;">';
+  html += '※ 본 검토는 자동 산정 결과이며, H≥5m 구조물은 관련 법령에 따라 책임기술자의 검토·날인이 필요합니다.<br/>';
+  html += '※ 건설기술진흥법 시행규칙 제60조 및 구조물기초설계기준에 의거하여 현장 지반조사 결과를 반드시 반영하십시오.';
+  html += '</div>';
+
+  // 푸터
+  html += '<div class="a4-footer"><span>🏗️ CIVIL ENGINEER</span><span>MANMIN Ver2.0</span><span>KDS 11 80 10</span></div>';
+
+  el.innerHTML = html;
+}
+
+/* ════════════════════════════════════════════
+   A4 스케일 (모바일 프리뷰)
+════════════════════════════════════════════ */
+function scaleA4(){
+  var wrap = document.getElementById('a4-scale-wrap');
+  if(!wrap) return;
+  var parent = wrap.parentElement;
+  var padX = window.innerWidth <= 600 ? 16 : 40;
+  var available = parent.clientWidth - padX;
+  var naturalW = 456; // phone-frame width (432dp + 12×2)
+  var scale = Math.min(1, available / naturalW);
+  wrap.style.transform = 'scale('+scale+')';
+  wrap.style.transformOrigin = available >= naturalW ? 'top center' : 'top left';
+  // RAF 보장: 렌더 후 높이 계산
+  requestAnimationFrame(function(){
+    var scaledH = wrap.offsetHeight * scale;
+    parent.style.minHeight = Math.max(scaledH + padX, 300) + 'px';
+  });
+}
+
+/* ════════════════════════════════════════════
+   JPG 저장 (갤럭시 S24 Ultra 규격)
+════════════════════════════════════════════ */
+function saveJpg(){
+  var el = document.getElementById('a4-content');
+  showToast('🖼️ 이미지 생성 중...');
+  html2canvas(el, {
+    scale: 3,
+    useCORS: true,
+    backgroundColor: '#ffffff',
+    width: 432,
+    logging: false
+  }).then(function(canvas){
+    var url = canvas.toDataURL('image/jpeg', 0.95);
+    var now = new Date();
+    var fname = '옹벽안전성검토_' + now.getFullYear() + ('0'+(now.getMonth()+1)).slice(-2) + ('0'+now.getDate()).slice(-2) + '.jpg';
+    var a = document.createElement('a');
+    a.href = url; a.download = fname; a.click();
+    showToast('✅ JPG 저장 완료 (' + fname + ')');
+  }).catch(function(){ showToast('⚠️ 이미지 생성 오류'); });
+}
+
+/* ════════════════════════════════════════════
+   공유 기능
+════════════════════════════════════════════ */
+function shareNative(){
+  var el = document.getElementById('a4-content');
+  html2canvas(el, {scale:2, useCORS:true, backgroundColor:'#ffffff'}).then(function(canvas){
+    canvas.toBlob(function(blob){
+      if(navigator.share && navigator.canShare){
+        var file = new File([blob], '옹벽안전성검토.jpg', {type:'image/jpeg'});
+        if(navigator.canShare({files:[file]})){
+          navigator.share({title:'옹벽 안전성 검토', files:[file]}).catch(function(){});
+          return;
+        }
+      }
+      showToast('📱 이 브라우저는 공유를 지원하지 않습니다. JPG 저장을 이용해주세요.');
+    }, 'image/jpeg', 0.95);
+  });
+  closeShareModal();
+}
+function copyResult(){
+  var r = G.result || C_RES.result || AN_RES.result;
+  if(!r){ showToast('⚠️ 먼저 검토를 실행해주세요.'); return; }
+  var txt = '[옹벽 안전성 검토 결과]\n';
+  txt += '형식: '+r.type+'\n';
+  txt += '현장: '+r.proj+'\n';
+  if(r.Fs_o) txt += '전도 Fs: '+r.Fs_o.toFixed(3)+' ('+(r.pass_o?'OK':'NG')+')\n';
+  if(r.Fs_s) txt += '활동 Fs: '+r.Fs_s.toFixed(3)+' ('+(r.pass_s?'OK':'NG')+')\n';
+  if(r.qmax) txt += '최대지반반력: '+r.qmax.toFixed(2)+' kPa ('+(r.pass_b?'OK':'NG')+')\n';
+  txt += '종합: '+(r.allPass?'안전 (PASS)':'불안전 (NG)')+'\n';
+  txt += '기준: KDS 11 80 10';
+  navigator.clipboard.writeText(txt).then(function(){
+    showToast('📋 결과 복사 완료');
+  }).catch(function(){
+    showToast('⚠️ 복사에 실패했습니다.');
+  });
+  closeShareModal();
+}
+
+/* ════════════════════════════════════════════
+   도움말 패널 (중앙 모달)
+════════════════════════════════════════════ */
+var _helpOpen = false;
+var _scrollY = 0;
+function toggleHelp(){
+  _helpOpen = !_helpOpen;
+  var overlay = document.getElementById('help-overlay');
+  if(_helpOpen){
+    _scrollY = window.scrollY;
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.top = '-'+_scrollY+'px';
+    document.body.style.width = '100%';
+  } else {
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
+    window.scrollTo(0, _scrollY);
+  }
+}
+function handleHelpOverlayClick(e){
+  if(e.target === document.getElementById('help-overlay')) toggleHelp();
+}
+function switchHelpTab(name){
+  document.querySelectorAll('.help-tab').forEach(function(t){ t.classList.remove('active'); });
+  document.querySelectorAll('.help-tab-panel').forEach(function(p){ p.classList.remove('active'); });
+  document.getElementById('help-'+name).classList.add('active');
+  var names = ['usage','law','formula'];
+  var idx = names.indexOf(name);
+  var tabs = document.querySelectorAll('.help-tab');
+  if(tabs[idx]) tabs[idx].classList.add('active');
+}
+
+/* ════════════════════════════════════════════
+   공유 모달
+════════════════════════════════════════════ */
+function openShareModal(){
+  document.getElementById('share-modal').classList.add('open');
+}
+function closeShareModal(e){
+  if(!e || e.target === document.getElementById('share-modal')){
+    document.getElementById('share-modal').classList.remove('open');
+  }
+}
+
+/* ════════════════════════════════════════════
+   TOAST
+════════════════════════════════════════════ */
+function showToast(msg){
+  var t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, 2800);
+}
+
+/* ════════════════════════════════════════════
+   ISO A4 보고서 렌더링 (794×1123px)
+════════════════════════════════════════════ */
+function renderA4Iso(r){
+  var el = document.getElementById('a4iso-content');
+  if(!el) return;
+  // r이 명시적으로 전달되지 않으면 선택된 옹벽 결과 사용
+  if(r === undefined) r = getResultByType(previewSel.a4);
+  var today = new Date();
+  var ymd = today.getFullYear()+'.'+(today.getMonth()+1).toString().padStart(2,'0')+'.'+today.getDate().toString().padStart(2,'0');
+
+  if(!r){
+    el.innerHTML='<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:600px;color:#90a4ae;"><div style="font-size:56px;margin-bottom:16px;">📄</div><div style="font-size:16px;font-weight:800;color:#546e7a;">위 탭에서 옹벽을 선택하세요</div><div style="font-size:12px;margin-top:8px;color:#b0bec5;">해당 옹벽의 검토를 먼저 실행해주세요.</div></div>';
+    return;
+  }
+  function fv(n,d){ return (n||0).toFixed(d!=null?d:3); }
+  var passClass = r.allPass ? 'pass' : 'fail';
+  var passLabel = r.allPass ? '✅  안전 (ALL PASS)' : '⚠️  불안전 (재검토 필요)';
+
+  var html = '';
+  // 워터마크
+  html += '<div class="a4iso-watermark">MANMIN</div>';
+
+  // ── 헤더 ──
+  html += '<div class="a4iso-hd">';
+  html += '<div class="a4iso-hd-left">';
+  html += '<div class="a4iso-hd-logo">🏗️</div>';
+  html += '<div><div class="a4iso-hd-tit">옹벽 구조물 안전성 검토 보고서</div>';
+  html += '<div class="a4iso-hd-sub">KDS 11 80 10 / KDS 11 10 05 / 구조물기초설계기준 (2021) · MANMIN Ver2.0</div></div>';
+  html += '</div>';
+  html += '<div class="a4iso-hd-info"><table>';
+  html += '<tr><td>현 장 명</td><td>'+(r.proj||'-')+'</td></tr>';
+  html += '<tr><td>작 성 자</td><td>'+(r.author||'-')+'</td></tr>';
+  html += '<tr><td>작 성 일</td><td>'+ymd+'</td></tr>';
+  html += '<tr><td>옹벽형식</td><td>'+r.type+'</td></tr>';
+  html += '</table></div>';
+  html += '</div>';
+
+  // ── 종합 판정 ──
+  html += '<div class="a4iso-judge '+passClass+'">';
+  html += '<div><div class="a4iso-judge-main">'+passLabel+'</div>';
+  html += '<div class="a4iso-judge-sub">KDS 11 80 10 기준 안전성 종합 판정</div></div>';
+  if(r.Fs_o !== undefined){
+    html += '<div style="text-align:right;"><div style="font-size:10px;opacity:.7;margin-bottom:2px;">전도 안전율 Fs₀</div>';
+    html += '<div class="a4iso-judge-fs">'+fv(r.Fs_o)+'</div>';
+    html += '<div style="font-size:10px;opacity:.7;margin-top:2px;">기준 ≥ 2.000</div></div>';
+  }
+  html += '</div>';
+
+  // ── 설계 조건 ──
+  html += '<div class="a4iso-sec">① 설계 조건</div>';
+  if(r.H !== undefined){
+    html += '<div class="a4iso-grid4">';
+    html += '<div class="a4iso-cell"><span class="a4iso-cell-k">옹벽 높이 H</span><span class="a4iso-cell-v">'+r.H+' m</span></div>';
+    html += '<div class="a4iso-cell"><span class="a4iso-cell-k">저면폭 B</span><span class="a4iso-cell-v">'+r.B+' m</span></div>';
+    if(r.phi) html += '<div class="a4iso-cell"><span class="a4iso-cell-k">내부마찰각 φ</span><span class="a4iso-cell-v">'+r.phi+'°</span></div>';
+    if(r.gs) html += '<div class="a4iso-cell"><span class="a4iso-cell-k">단위중량 γs</span><span class="a4iso-cell-v">'+r.gs+' kN/m³</span></div>';
+    if(r.mu) html += '<div class="a4iso-cell"><span class="a4iso-cell-k">마찰계수 μ</span><span class="a4iso-cell-v">'+r.mu+'</span></div>';
+    if(r.qa) html += '<div class="a4iso-cell"><span class="a4iso-cell-k">허용지지력 qa</span><span class="a4iso-cell-v">'+r.qa+' kPa</span></div>';
+    if(r.q!=null) html += '<div class="a4iso-cell"><span class="a4iso-cell-k">상재하중 q</span><span class="a4iso-cell-v">'+r.q+' kPa</span></div>';
+    if(r.gc) html += '<div class="a4iso-cell"><span class="a4iso-cell-k">콘크리트 γc</span><span class="a4iso-cell-v">'+r.gc+' kN/m³</span></div>';
+    html += '</div>';
+  }
+
+  // ── 토압 계산 ──
+  if(r.Ka !== undefined){
+    html += '<div class="a4iso-sec amber">② 토압 산정 (Rankine 이론)</div>';
+    html += '<div class="a4iso-grid4">';
+    html += '<div class="a4iso-cell"><span class="a4iso-cell-k">토압계수 Ka</span><span class="a4iso-cell-v">'+fv(r.Ka,4)+'</span></div>';
+    html += '<div class="a4iso-cell"><span class="a4iso-cell-k">수평토압 Ea</span><span class="a4iso-cell-v">'+fv(r.Ea,2)+' kN/m</span></div>';
+    html += '<div class="a4iso-cell"><span class="a4iso-cell-k">작용위치 ya</span><span class="a4iso-cell-v">'+fv(r.ya||0,3)+' m</span></div>';
+    if(r.SV) html += '<div class="a4iso-cell"><span class="a4iso-cell-k">연직합력 ΣV</span><span class="a4iso-cell-v">'+fv(r.SV,2)+' kN/m</span></div>';
+    if(r.Mr) html += '<div class="a4iso-cell"><span class="a4iso-cell-k">저항모멘트 Mr</span><span class="a4iso-cell-v">'+fv(r.Mr,2)+' kN·m</span></div>';
+    if(r.Mo) html += '<div class="a4iso-cell"><span class="a4iso-cell-k">전도모멘트 Mo</span><span class="a4iso-cell-v">'+fv(r.Mo,2)+' kN·m</span></div>';
+    if(r.e!=null) html += '<div class="a4iso-cell"><span class="a4iso-cell-k">합력위치 x̄</span><span class="a4iso-cell-v">'+fv(r.xR||0,3)+' m</span></div>';
+    if(r.qmax) html += '<div class="a4iso-cell"><span class="a4iso-cell-k">최대지반반력</span><span class="a4iso-cell-v">'+fv(r.qmax,2)+' kPa</span></div>';
+    html += '</div>';
+  }
+
+  // ── 안전성 검토 결과표 ──
+  html += '<div class="a4iso-sec '+(r.allPass?'grn':'red')+'">③ 안전성 검토 결과 (KDS 11 80 10)</div>';
+  html += '<table class="a4iso-tbl"><thead><tr>';
+  html += '<th>검토 항목</th><th>산정값</th><th>허용 기준</th><th>안전율 기준</th><th>판정</th>';
+  html += '</tr></thead><tbody>';
+
+  if(r.Fs_o !== undefined){
+    html += '<tr><td>전도 안전율 Fs₀</td>';
+    html += '<td class="mono" style="font-weight:800;">'+fv(r.Fs_o)+'</td>';
+    html += '<td>≥ 2.000</td><td>KDS 11 80 10</td>';
+    html += '<td class="'+(r.pass_o?'pass-cell':'fail-cell')+'">'+(r.pass_o?'✓ OK':'✗ NG')+'</td></tr>';
+
+    html += '<tr><td>활동 안전율 Fs₅</td>';
+    html += '<td class="mono" style="font-weight:800;">'+fv(r.Fs_s)+'</td>';
+    html += '<td>≥ 1.500</td><td>KDS 11 80 10</td>';
+    html += '<td class="'+(r.pass_s?'pass-cell':'fail-cell')+'">'+(r.pass_s?'✓ OK':'✗ NG')+'</td></tr>';
+
+    html += '<tr><td>최대 지반반력 qmax</td>';
+    html += '<td class="mono" style="font-weight:800;">'+fv(r.qmax,2)+' kPa</td>';
+    html += '<td>≤ '+r.qa+' kPa</td><td>구조물기초설계기준</td>';
+    html += '<td class="'+(r.pass_b?'pass-cell':'fail-cell')+'">'+(r.pass_b?'✓ OK':'✗ NG')+'</td></tr>';
+
+    html += '<tr><td>편심 e (합력위치)</td>';
+    html += '<td class="mono" style="font-weight:800;">'+fv(r.e,4)+' m</td>';
+    html += '<td>≤ '+fv(r.e_allow,4)+' m (B/6)</td><td>KDS 11 10 05</td>';
+    html += '<td class="'+(r.pass_e?'pass-cell':'fail-cell')+'">'+(r.pass_e?'✓ OK':'✗ NG')+'</td></tr>';
+
+    html += '<tr><td>최소 지반반력 qmin</td>';
+    html += '<td class="mono">'+fv(r.qmin,2)+' kPa</td>';
+    html += '<td>≥ 0 kPa (인장없음)</td><td>-</td>';
+    html += '<td class="'+((r.qmin>=0)?'pass-cell':'fail-cell')+'">'+((r.qmin>=0)?'✓ OK':'✗ NG')+'</td></tr>';
+  }
+  if(r.Fs_anchor !== undefined){
+    html += '<tr><td>앵커 내력 안전율</td><td class="mono">'+fv(r.Fs_anchor)+'</td><td>≥ 1.500</td><td>KDS 11 50 15</td><td class="'+(r.pass_anc?'pass-cell':'fail-cell')+'">'+(r.pass_anc?'✓ OK':'✗ NG')+'</td></tr>';
+    html += '<tr><td>인발 안전율</td><td class="mono">'+fv(r.Fs_pull)+'</td><td>≥ 2.000</td><td>KDS 11 50 15</td><td class="'+(r.pass_pull?'pass-cell':'fail-cell')+'">'+(r.pass_pull?'✓ OK':'✗ NG')+'</td></tr>';
+    html += '<tr><td>전체안정 안전율</td><td class="mono">'+fv(r.Fs_global)+'</td><td>≥ 1.200</td><td>KDS 11 50 15</td><td class="'+(r.pass_glob?'pass-cell':'fail-cell')+'">'+(r.pass_glob?'✓ OK':'✗ NG')+'</td></tr>';
+  }
+  html += '<tr style="background:#f8fafd;font-weight:900;"><td colspan="4" style="text-align:right;font-weight:900;color:#0d47a1;">종 합 판 정</td>';
+  html += '<td class="'+(r.allPass?'pass-cell':'fail-cell')+'" style="font-size:13px;">'+(r.allPass?'✅ 적합':'⚠️ 부적합')+'</td></tr>';
+  html += '</tbody></table>';
+
+  // ── 보완 권고 ──
+  if(!r.allPass){
+    html += '<div class="a4iso-sec red">④ 보완 권고사항</div>';
+    html += '<div style="background:#fff8e1;border:1px solid #ffe082;border-radius:6px;padding:10px 14px;font-size:10.5px;line-height:1.9;color:#795548;">';
+    if(r.pass_o===false) html += '▸ <b>전도 안전율 부족</b>: 저면폭 B 증가 또는 뒷굽(heel) 연장 검토<br/>';
+    if(r.pass_s===false) html += '▸ <b>활동 안전율 부족</b>: 활동 방지키(key) 설치 또는 기초 콘크리트 마찰면 개선<br/>';
+    if(r.pass_b===false) html += '▸ <b>지반반력 초과</b>: 기초 저면적 확대 또는 지반 개량·보강 공법 적용<br/>';
+    if(r.pass_e===false) html += '▸ <b>편심 과다</b>: 단면 형상 재조정 또는 뒷채움 하중 재분배 검토<br/>';
+    html += '</div>';
+  }
+
+  // ── 적용 기준 ──
+  html += '<div class="a4iso-sec">⑤ 적용 설계 기준</div>';
+  html += '<div style="background:#f8fafd;border:1px solid #e2e8f0;border-radius:6px;padding:10px 14px;font-size:10.5px;line-height:2;color:#334155;">';
+  html += '• KDS 11 80 10 (2016) — 옹벽 설계기준 (전도·활동·지지력 안전율)<br/>';
+  html += '• KDS 11 10 05 (2021) — 기초구조 설계기준 (편심 허용범위, B/6 이내)<br/>';
+  html += '• 구조물기초설계기준 (2021, 국토교통부) — 극한지지력 안전율 ≥ 3.0<br/>';
+  if(r.type && r.type.indexOf('캔틸레버')>=0) html += '• KDS 14 20 54 (2021) — 콘크리트구조 설계기준 (철근콘크리트 구조 설계)<br/>';
+  if(r.type && r.type.indexOf('앵커')>=0) html += '• KDS 11 50 15 (2019) — 앵커 설계기준 (인발·전체안정 안전율)<br/>';
+  html += '• 건설기술진흥법 시행규칙 제60조 — H≥5m 옹벽 구조안전 확인서 의무 제출';
+  html += '</div>';
+
+  // ── 비고 ──
+  html += '<div style="margin-top:12px;padding:8px 12px;background:#fff3e0;border-left:4px solid #ff9800;border-radius:0 6px 6px 0;font-size:9.5px;color:#795548;line-height:1.8;">';
+  html += '<b>※ 주 의 사 항</b><br/>';
+  html += '① 본 검토는 자동 산정 결과로서 현장 지반조사 결과(시추주상도, 평판재하시험 등)를 반드시 반영하시기 바랍니다.<br/>';
+  html += '② 높이 5m 이상 옹벽은 건설기술진흥법 시행규칙 제60조에 따라 책임기술자의 검토·날인이 필요합니다.<br/>';
+  html += '③ 지진하중, 수압, 동결심도 등 특수 조건은 별도 검토가 필요합니다.';
+  html += '</div>';
+
+  // ── 푸터 ──
+  html += '<div class="a4iso-footer">';
+  html += '<span>🏗️ CIVIL ENGINEER — KIM MANMIN</span>';
+  html += '<span style="font-weight:900;color:#1565c0;">옹벽 구조물 안전성 검토 보고서</span>';
+  html += '<span>MANMIN Ver2.0 · '+ymd+'</span>';
+  html += '</div>';
+
+  el.innerHTML = html;
+}
+
+/* ════════════════════════════════════════════
+   A4 ISO 스케일 조정
+════════════════════════════════════════════ */
+function scaleA4Iso(){
+  var wrap = document.getElementById('a4iso-scale-wrap');
+  if(!wrap) return;
+  var parent = wrap.closest('.a4iso-wrap');
+  if(!parent) return;
+  var padX = window.innerWidth <= 600 ? 16 : 48;
+  var available = parent.clientWidth - padX;
+  var naturalW = 794;
+  var scale = Math.min(1, available / naturalW);
+  wrap.style.transform = 'scale('+scale+')';
+  wrap.style.transformOrigin = available >= naturalW ? 'top center' : 'top left';
+  requestAnimationFrame(function(){
+    var scaledH = wrap.offsetHeight * scale;
+    parent.style.minHeight = Math.max(scaledH + 60, 400) + 'px';
+  });
+}
+
+/* ════════════════════════════════════════════
+   A4 PDF 인쇄
+════════════════════════════════════════════ */
+function printA4(){
+  var src = document.getElementById('a4iso-content');
+  var tgt = document.getElementById('print-target');
+  if(src && tgt){
+    tgt.innerHTML = '<div class="a4iso-page" style="box-shadow:none;position:relative;">' + src.innerHTML + '</div>';
+  }
+  window.print();
+}
+
+/* ════════════════════════════════════════════
+   A4 JPG 저장
+════════════════════════════════════════════ */
+function saveA4Jpg(){
+  var el = document.getElementById('a4iso-content');
+  showToast('🖼️ A4 이미지 생성 중...');
+  html2canvas(el,{
+    scale:2, useCORS:true, backgroundColor:'#ffffff',
+    width:794, logging:false
+  }).then(function(canvas){
+    var url = canvas.toDataURL('image/jpeg', 0.95);
+    var now = new Date();
+    var fname = '옹벽안전성검토_A4_' + now.getFullYear() + (now.getMonth()+1).toString().padStart(2,'0') + now.getDate().toString().padStart(2,'0') + '.jpg';
+    var a = document.createElement('a');
+    a.href = url; a.download = fname; a.click();
+    showToast('✅ A4 JPG 저장 완료');
+  }).catch(function(){ showToast('⚠️ 이미지 생성 오류'); });
+}
+
+
+document.addEventListener('DOMContentLoaded', function(){
+  var today = new Date();
+  var ymd = today.getFullYear()+'-'+('0'+(today.getMonth()+1)).slice(-2)+'-'+('0'+today.getDate()).slice(-2);
+  ['g-date','c-date','an-date'].forEach(function(id){ document.getElementById(id).value = ymd; });
+  gUpdateSteps();
+  drawGravityDiagram();
+  drawCantileverDiagram();
+  drawAnchoredDiagram();
+  refreshPreviewSelBadges();
+  setTimeout(function(){ scaleA4(); scaleA4Iso(); }, 200);
+
+  // resize + 화면 회전 대응
+  var _resizeTimer;
+  window.addEventListener('resize', function(){
+    clearTimeout(_resizeTimer);
+    _resizeTimer = setTimeout(function(){ scaleA4(); scaleA4Iso(); }, 100);
+  });
+  window.addEventListener('orientationchange', function(){
+    setTimeout(function(){ scaleA4(); scaleA4Iso(); }, 300);
+  });
+
+  // ESC 키 (단일 등록)
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && _helpOpen) toggleHelp();
+  });
+});
+</script>
+
+<!-- ═══ iOS 홈화면 추가 안내 모달 ═══ -->
+<div id="ios-modal-rw">
+  <div class="rw-ios-hdr">
+    <div class="rw-ios-title">📱 홈 화면에 추가하기 (iOS)</div>
+    <button class="rw-ios-cls" onclick="document.getElementById('ios-modal-rw').classList.remove('show')">✕</button>
+  </div>
+  <div class="rw-ios-step"><div class="rw-ios-num">1</div><div class="rw-ios-txt">Safari 하단 <strong>공유 버튼</strong> (□↑) 을 탭하세요</div></div>
+  <div class="rw-ios-step"><div class="rw-ios-num">2</div><div class="rw-ios-txt">스크롤해서 <strong>홈 화면에 추가</strong>를 탭하세요</div></div>
+  <div class="rw-ios-step"><div class="rw-ios-num">3</div><div class="rw-ios-txt">오른쪽 상단 <strong>추가</strong>를 탭하면 완료!</div></div>
+  <div class="rw-ios-foot">토목옹벽을 홈 화면에서 오프라인으로도 사용 가능합니다 ✓</div>
+</div>
+
+<!-- ═══ PWA 설치 배너 ═══ -->
+<div id="pwa-banner">
+  <div class="rw-pwa-inner">
+    <div class="rw-pwa-icon">
+      <img src="./icons/brand-icon.jpg" alt="토목옹벽 MANMIN"/>
+    </div>
+    <div class="rw-pwa-texts">
+      <div class="rw-pwa-title">📲 토목옹벽 앱으로 설치!</div>
+      <div class="rw-pwa-desc">홈화면 추가 → 오프라인 옹벽 검토 가능 · 빠른 실행</div>
+    </div>
+    <div class="rw-pwa-btns">
+      <button class="rw-pwa-ok" onclick="window.pwaTriggerInstall&&window.pwaTriggerInstall()">설치하기</button>
+      <button class="rw-pwa-no" onclick="window.pwaDismiss&&window.pwaDismiss()">나중에</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ Service Worker 등록 + PWA 설치 로직 ═══ -->
+<script>
+(function(){
+  var deferred = null;
+  var _isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  var _isSA  = window.matchMedia('(display-mode:standalone)').matches || !!navigator.standalone;
+
+  /* ── 1. Service Worker 등록 ── */
+  if('serviceWorker' in navigator){
+    window.addEventListener('load', function(){
+      navigator.serviceWorker.register('./sw.js', {scope:'./'})
+        .then(function(r){
+          console.log('[PWA] SW 등록:', r.scope);
+          r.addEventListener('updatefound', function(){
+            var nw = r.installing; if(!nw) return;
+            nw.addEventListener('statechange', function(){
+              if(nw.state === 'installed' && navigator.serviceWorker.controller){
+                var b = document.createElement('div');
+                b.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:9999;background:#0f4c81;color:#fff;padding:10px 20px;border-radius:12px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:10px;box-shadow:0 4px 20px rgba(15,76,129,.5);white-space:nowrap;font-family:inherit;';
+                b.innerHTML = '<span>🔄 새 버전 준비됨</span>'
+                  + '<button onclick="navigator.serviceWorker.ready.then(function(r){if(r.waiting)r.waiting.postMessage({type:'SKIP_WAITING'});});this.parentNode.remove();location.reload();" '
+                  + 'style="background:rgba(255,255,255,.2);border:none;color:#fff;padding:5px 12px;border-radius:7px;cursor:pointer;font-weight:800;font-family:inherit;">지금 적용</button>'
+                  + '<button onclick="this.parentNode.remove()" style="background:none;border:none;color:rgba(255,255,255,.7);cursor:pointer;font-size:16px;padding:0 4px;">✕</button>';
+                document.body.appendChild(b);
+                setTimeout(function(){if(b.parentNode)b.remove();}, 8000);
+              }
+            });
+          });
+        }).catch(function(e){ console.warn('[PWA] SW 실패:', e); });
+      navigator.serviceWorker.addEventListener('controllerchange', function(){
+        if(!window._pwaR){ window._pwaR=true; location.reload(); }
+      });
+    });
+  }
+
+  /* ── 2. beforeinstallprompt (Android/PC) ── */
+  window.addEventListener('beforeinstallprompt', function(e){
+    e.preventDefault();
+    deferred = e;
+    var btn = document.getElementById('pwa-install-btn');
+    if(btn) btn.classList.add('visible');
+    if(!sessionStorage.getItem('pwa-dismissed') && !_isSA){
+      setTimeout(function(){
+        var b = document.getElementById('pwa-banner');
+        if(b) b.classList.add('visible');
+      }, 2000);
+    }
+  });
+
+  /* ── 3. iOS: 헤더 버튼 표시 + 2초 후 안내 모달 ── */
+  document.addEventListener('DOMContentLoaded', function(){
+    if(_isIOS && !_isSA){
+      var btn = document.getElementById('pwa-install-btn');
+      if(btn) btn.classList.add('visible');
+      if(!sessionStorage.getItem('pwa-dismissed')){
+        setTimeout(function(){
+          var m = document.getElementById('ios-modal-rw');
+          if(m) m.classList.add('show');
+        }, 2000);
+      }
+    }
+    if(_isSA){
+      var btn = document.getElementById('pwa-install-btn');
+      if(btn) btn.style.display = 'none';
+    }
+  });
+
+  /* ── 4. 설치 실행 ── */
+  window.pwaTriggerInstall = function(){
+    var b = document.getElementById('pwa-banner');
+    if(b) b.classList.remove('visible');
+    if(_isIOS && !_isSA){
+      var m = document.getElementById('ios-modal-rw');
+      if(m) m.classList.add('show');
+      return;
+    }
+    if(!deferred){
+      if(_isSA){ alert('✅ 이미 앱으로 설치되어 있습니다.'); return; }
+      alert('📱 브라우저 메뉴 → 앱 설치 / 홈 화면에 추가를 선택하세요.');
+      return;
+    }
+    deferred.prompt();
+    deferred.userChoice.then(function(r){
+      if(r.outcome === 'accepted'){
+        var btn = document.getElementById('pwa-install-btn');
+        if(btn) btn.classList.remove('visible');
+      }
+      deferred = null;
+    });
+  };
+
+  /* ── 5. 배너 닫기 ── */
+  window.pwaDismiss = function(){
+    var b = document.getElementById('pwa-banner');
+    if(b){
+      b.style.transition = 'transform .3s,opacity .25s';
+      b.style.transform = 'translateY(110%)';
+      b.style.opacity = '0';
+      setTimeout(function(){ b.classList.remove('visible'); b.style = ''; }, 330);
+    }
+    try{ sessionStorage.setItem('pwa-dismissed','1'); }catch(e){}
+  };
+
+  /* ── 6. 설치 완료 ── */
+  window.addEventListener('appinstalled', function(){
+    var btn = document.getElementById('pwa-install-btn');
+    var b   = document.getElementById('pwa-banner');
+    if(btn) btn.classList.remove('visible');
+    if(b)   b.classList.remove('visible');
+    deferred = null;
+  });
+})();
+</script>
+
+</body>
+</html>
