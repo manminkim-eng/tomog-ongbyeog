@@ -308,10 +308,10 @@ table tr:nth-child(even) td{background:#f8fafd;}
 /*══════════════════════════════════════
   A4 REPORT (모바일 프리뷰)
 ══════════════════════════════════════*/
-.a4-wrap{background:#78909c;padding:20px;min-height:calc(100vh - 130px);overflow-x:hidden;overflow-y:auto;position:relative;display:flex;justify-content:center;align-items:flex-start;}
-.a4-scale-wrap{display:block;transform-origin:top center;width:432px;flex-shrink:0;}
+.a4-wrap{background:#78909c;padding:20px;min-height:calc(100vh - 130px);overflow-x:hidden;overflow-y:auto;position:relative;display:block;}
+.a4-scale-wrap{display:block;transform-origin:top left;width:456px;flex-shrink:0;}
 @media(max-width:860px){
-  .a4-wrap{padding:8px;justify-content:flex-start;align-items:flex-start;}
+  .a4-wrap{padding:8px;}
   .a4-scale-wrap{transform-origin:top left;}
 }
 /* 갤럭시 S24 Ultra: 432×932 dp (논리해상도 기준) */
@@ -509,19 +509,17 @@ table tr:nth-child(even) td{background:#f8fafd;}
 ══════════════════════════════════════*/
 .a4iso-wrap{
   background:#607d8b;
-  padding:24px 20px;
+  padding:24px 0;
   min-height:calc(100vh - 130px);
-  display:flex;
-  flex-direction:column;
-  align-items:center;
+  display:block;
+  overflow-x:hidden;
+  position:relative;
 }
 @media(max-width:900px){
-  .a4iso-wrap{padding:12px 8px;}
-  .a4iso-scale-wrap{transform-origin:top center!important;}
+  .a4iso-wrap{padding:12px 0;}
 }
 @media(max-width:600px){
-  .a4iso-wrap{padding:8px 4px;}
-  .a4iso-scale-wrap{transform-origin:top left!important;}
+  .a4iso-wrap{padding:4px 0;}
 }
 .a4iso-toolbar{
   display:flex;gap:8px;align-items:center;justify-content:center;
@@ -533,9 +531,10 @@ table tr:nth-child(even) td{background:#f8fafd;}
   .a4iso-toolbar .btn-secondary span{display:none;}
 }
 .a4iso-scale-wrap{
-  transform-origin:top center;
+  transform-origin:top left;  /* JS가 offset으로 정중앙 배치 */
   width:794px;
   flex-shrink:0;
+  position:relative;
 }
 /* ISO A4 용지: 794 × 1123 px (96dpi 기준) */
 .a4iso-page{
@@ -2453,16 +2452,23 @@ function scaleA4(){
   var wrap = document.getElementById('a4-scale-wrap');
   if(!wrap) return;
   var parent = wrap.parentElement;
-  var padX = window.innerWidth <= 600 ? 16 : 40;
-  var available = parent.clientWidth - padX;
-  var naturalW = 456; // phone-frame width (432dp + 12×2)
-  var scale = Math.min(1, available / naturalW);
-  wrap.style.transform = 'scale('+scale+')';
-  wrap.style.transformOrigin = available >= naturalW ? 'top center' : 'top left';
-  // RAF 보장: 렌더 후 높이 계산
+  if(!parent) return;
+
+  var NATURAL_W = 456;   /* phone-frame 고정폭 */
+  /* getBoundingClientRect: 소수점 포함 실제 렌더 너비 (padding 오차 없음) */
+  var outerW  = parent.getBoundingClientRect().width;
+  var scale   = Math.min(1, outerW / NATURAL_W);
+  var scaledW = NATURAL_W * scale;
+  /* 정중앙 오프셋 */
+  var offset  = Math.max(0, (outerW - scaledW) / 2);
+
+  wrap.style.transformOrigin = 'top left';
+  wrap.style.transform = 'translateX('+offset+'px) scale('+scale+')';
+
+  /* 높이 보정: scale 된 실제 높이 + 여백 */
   requestAnimationFrame(function(){
-    var scaledH = wrap.offsetHeight * scale;
-    parent.style.minHeight = Math.max(scaledH + padX, 300) + 'px';
+    var scaledH = wrap.scrollHeight * scale;
+    parent.style.minHeight = Math.max(scaledH + 40, 300) + 'px';
   });
 }
 
@@ -2752,14 +2758,18 @@ function scaleA4Iso(){
   if(!wrap) return;
   var parent = wrap.closest('.a4iso-wrap');
   if(!parent) return;
-  var padX = window.innerWidth <= 600 ? 16 : 48;
-  var available = parent.clientWidth - padX;
-  var naturalW = 794;
-  var scale = Math.min(1, available / naturalW);
-  wrap.style.transform = 'scale('+scale+')';
-  wrap.style.transformOrigin = available >= naturalW ? 'top center' : 'top left';
+
+  var NATURAL_W = 794;   /* A4 고정폭 */
+  var outerW  = parent.getBoundingClientRect().width;
+  var scale   = Math.min(1, outerW / NATURAL_W);
+  var scaledW = NATURAL_W * scale;
+  var offset  = Math.max(0, (outerW - scaledW) / 2);
+
+  wrap.style.transformOrigin = 'top left';
+  wrap.style.transform = 'translateX('+offset+'px) scale('+scale+')';
+
   requestAnimationFrame(function(){
-    var scaledH = wrap.offsetHeight * scale;
+    var scaledH = wrap.scrollHeight * scale;
     parent.style.minHeight = Math.max(scaledH + 60, 400) + 'px';
   });
 }
