@@ -812,14 +812,8 @@ table tr:nth-child(even) td{background:#f8fafd;}
             <div class="fgrp"><label class="flbl">현장명</label><input class="finput" id="g-projname" value="만민 아파트 신축공사" oninput="gUpdateSteps()"/></div>
             <div class="fgrp"><label class="flbl">작성자</label><input class="finput" id="g-author" value="김만민" oninput="gUpdateSteps()"/></div>
           </div>
-          <div class="frow">
-            <div class="fgrp"><label class="flbl">작성일</label><input class="finput" type="date" id="g-date"/></div>
-            <div class="fgrp">
-              <label class="flbl">옹벽 형식</label>
-              <select class="fselect" id="g-type" onchange="gUpdateSteps()">
-                <option value="gravity">중력식 옹벽</option>
-              </select>
-            </div>
+          <div class="fgrp">
+            <label class="flbl">작성일</label><input class="finput" type="date" id="g-date"/>
           </div>
         </div>
       </div>
@@ -2465,12 +2459,10 @@ function scaleA4(){
   var scale   = Math.min(1, outerW / NATURAL_W);
   var scaledW = NATURAL_W * scale;
 
-  /* 수학적 정중앙:
-     scale=1이면 offset=(outerW-456)/2 → 데스크탑에서 가운데
-     scale<1이면 offset=0 → 좌상단 기준 꽉 채움 (모바일) */
-  var offset  = (scale >= 1)
-    ? Math.max(0, (outerW - scaledW) / 2)
-    : 0;
+  /* 항상 수평 중앙 정렬:
+     데스크탑(scale=1): offset = (outerW-456)/2
+     모바일(scale<1) : scaledW < outerW → 남은 공간 절반씩 좌우 패딩 */
+  var offset  = Math.max(0, (outerW - scaledW) / 2);
 
   wrap.style.transformOrigin = 'top left';
   wrap.style.transform       = 'translateX('+offset+'px) scale('+scale+')';
