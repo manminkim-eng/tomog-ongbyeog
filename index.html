@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
-<title>토목옹벽 — 옹벽 구조물 안전성 검토 시스템 [MANMIN Ver2.0]</title>
+<title>옹벽 구조물 안전성 검토 시스템 · MANMIN Ver-5.0</title>
 <meta name="description" content="KDS 11 80 10 / KDS 11 10 05 / 구조물기초설계기준 기반 옹벽 안전성 자동 검토 — CIVIL ENGINEER KIM MANMIN"/>
-<meta name="theme-color" content="#0f4c81"/>
+<meta name="theme-color" content="#b45309"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -20,14 +20,16 @@
 <meta name="msapplication-TileColor" content="#0f4c81"/>
 <meta name="msapplication-TileImage" content="icons/icon-144x144.png"/>
 
+<link rel="stylesheet" href="./assets/fonts/manmin-fonts.css"/><!-- v5.0 로컬 폴백 폰트 — CDN 차단·오프라인 대비. CDN link 보다 먼저 로드되어야 한다 -->
 <link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css"/>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
-/*══════════════════════════════════════
-  BASE RESET & TOKENS
-══════════════════════════════════════*/
-*{box-sizing:border-box;margin:0;padding:0;font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif!important;}
+/* v5.0 — 유니버설 셀렉터에서 font-family 를 뺐다.
+   *{font-family:…!important} 는 .mono·JetBrains Mono·Orbitron 선언을 전부 무효화한다(§3-7). */
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body,button,input,select,textarea,table,th,td,div,span,p,h1,h2,h3,h4,h5,h6,li,label,strong,em,small
+  {font-family:'Pretendard','Apple SD Gothic Neo','Noto Sans KR Local','Malgun Gothic',sans-serif;}
 html,body{min-height:100vh;background:#f0f5fb;color:#0d1f3c;}
 :root{
   --blue-dark:#0f4c81;
@@ -67,88 +69,65 @@ input[type="number"]::-webkit-outer-spin-button,input[type="number"]::-webkit-in
 input[type="number"]{-moz-appearance:textfield;}
 .mono{font-family:'JetBrains Mono','Courier New',monospace!important;}
 
-/*══════════════════════════════════════
-  HEADER
-══════════════════════════════════════*/
-.app-header{
-  background:linear-gradient(135deg,#0f3460,#0f4c81);
-  position:sticky;top:0;z-index:50;
-  box-shadow:0 3px 20px rgba(15,76,129,.45);
-}
-.header-inner{max-width:1400px;margin:0 auto;padding:0 14px;min-height:60px;height:auto;display:flex;align-items:center;gap:10px;}
-.brand-logo{display:flex;align-items:center;gap:10px;flex:1;min-width:0;}
-.brand-icon{
-  width:38px;height:38px;
-  background:linear-gradient(135deg,#1976d2,#42a5f5);
-  border-radius:10px;display:flex;align-items:center;justify-content:center;
-  box-shadow:0 2px 12px rgba(66,165,245,.4);flex-shrink:0;font-size:18px;
-}
+/* ── HEADER ── */
+/* v5.0 — 헤더+탭바를 하나의 그라데이션 면으로 통합한다(§3-2-1). sticky 금지(§3-1).
+   v5.0-HDR (2026-09-02 확정 §18-1) — 줄높이 px 고정 · flex-start · 활성탭 단색+바 · 헤더 버튼 0개 */
+.hdr-shell{background:linear-gradient(135deg,#431407 0%,#b45309 50%,#d97706 100%);
+  box-shadow:0 2px 20px rgba(180,83,9,.35);}
+.app-header{background:transparent;color:#fff;}
+.header-inner{max-width:1300px;margin:0 auto;padding:20px 24px 16px;
+  display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+.brand-logo{display:flex;align-items:flex-start;min-width:0;}
 .brand-texts{min-width:0;}
-.brand-title{font-size:13px;font-weight:900;color:#fff;letter-spacing:-.02em;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.brand-sub{font-size:9px;color:#90caf9;margin-top:2px;font-weight:700;white-space:nowrap;line-height:1.4;}
-.hdr-btns{display:flex;gap:5px;flex-shrink:0;}
-.btn-hdr{background:rgba(255,255,255,.12);color:#fff;border:1.5px solid rgba(255,255,255,.2);padding:6px 10px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px;font-family:inherit;transition:all .15s;white-space:nowrap;}
-.btn-hdr:hover{background:rgba(255,255,255,.22);border-color:rgba(255,255,255,.4);}
-.btn-hdr-acc{background:linear-gradient(135deg,#00897b,#26a69a);color:#fff;border:none;padding:6px 12px;border-radius:8px;font-size:11px;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:4px;font-family:inherit;transition:all .15s;white-space:nowrap;box-shadow:0 2px 8px rgba(0,137,123,.35);}
-.btn-hdr-acc:hover{background:linear-gradient(135deg,#00796b,#00897b);}
-@media(max-width:760px){
-  .header-inner{padding:8px 12px;min-height:56px;}
-  .brand-sub{white-space:normal;word-break:keep-all;font-size:8.5px;line-height:1.5;}
-  .brand-title{font-size:11.5px;}
-  .hdr-btns{gap:3px;}
-  .btn-hdr .btn-txt,.btn-hdr-acc .btn-txt{display:none;}
-  .btn-hdr,.btn-hdr-acc{padding:6px 8px;}
-}
-@media(max-width:480px){
-  .brand-icon{width:32px;height:32px;font-size:15px;}
-  .brand-title{font-size:10.5px;}
-  .brand-sub{font-size:8px;}
-  .header-inner{gap:7px;}
+.hdr-eyebrow{font-size:11px;font-weight:600;opacity:.7;color:#fff;letter-spacing:.15em;line-height:16px;
+  text-transform:uppercase;margin-bottom:6px;}
+.hdr-h1{font-size:26px;font-weight:900;color:#fff;letter-spacing:.04em;line-height:1.2;}
+.hdr-sub{font-size:11px;margin-top:8px;color:#fff;opacity:.85;letter-spacing:.02em;line-height:17px;}
+.hdr-manmin{font-family:'Orbitron',sans-serif!important;font-weight:900;font-size:12px;
+  color:#fcd34d;letter-spacing:.08em;text-shadow:0 0 8px rgba(252,211,77,.6);
+  white-space:nowrap;display:inline-block;line-height:17px;vertical-align:top;}
+.hdr-right-wrap{display:flex;flex-direction:column;align-items:flex-end;gap:6px;
+  padding-bottom:2px;flex-shrink:0;}
+.hdr-right{text-align:right;opacity:.75;color:#fff;font-size:11px;line-height:16px;}   /* 4줄 13/11/11/10 = 70px ≤ 78.2 */
+.hdr-right strong{font-size:13px;font-weight:700;line-height:19px;}
+.hdr-right em{font-size:10px;color:#fcd34d;font-style:normal;display:block;margin-top:4px;line-height:15px;}
+@media(max-width:768px){ .hdr-right{display:none;} .hdr-right-wrap{gap:0;} }
+@media(max-width:640px){
+  .hdr-h1{font-size:18px;}
+  /* eyebrow 표시 · sub 11px · 각인 12px 유지 · 좌우 14px · 유령 gap 제거 (01 마스터 실측 §18-4) */
+  .header-inner{padding:20px 14px 16px;row-gap:0;}
+  .hdr-right-wrap{padding-bottom:0;}
+  .tab-bar-inner{padding:4px 14px 0;}
 }
 
-/*══════════════════════════════════════
-  TAB BAR
-══════════════════════════════════════*/
-.tab-bar{
-  background:rgba(15,52,96,.95);
-  backdrop-filter:blur(8px);
-  border-bottom:1px solid rgba(255,255,255,.08);
-  overflow-x:auto;scrollbar-width:none;
-}
+/* ── TAB BAR ── */
+.tab-bar{background:transparent;overflow-x:auto;scrollbar-width:none;}   /* 배경은 .hdr-shell 이 담당 */
 .tab-bar::-webkit-scrollbar{display:none;}
-.tab-bar-inner{max-width:1400px;margin:0 auto;padding:0 6px;display:flex;}
-.tb{
-  background:none;border:none;cursor:pointer;
-  color:rgba(255,255,255,.55);
-  font-family:inherit;padding:10px 14px;font-size:11px;font-weight:700;
-  position:relative;transition:color .15s,background .15s;
-  display:flex;align-items:center;gap:5px;white-space:nowrap;flex-shrink:0;
-  -webkit-tap-highlight-color:transparent;
-}
-.tb-lbl{display:inline;}
-@media(max-width:480px){.tb{padding:10px 8px;font-size:10.5px;gap:3px;}}
-@media(max-width:400px){
-  .tb{padding:9px 7px;font-size:10px;}
-  .tb-lbl{display:none;}
-}
-.tb:hover{color:rgba(255,255,255,.85);background:rgba(255,255,255,.06);}
-.tb.active{color:#fff;}
-.tb.active::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#42a5f5,#26c6da);border-radius:2px 2px 0 0;}
-.tb-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
-.tb-dot.blue{background:#42a5f5;}
-.tb-dot.teal{background:#26c6da;}
-.tb-dot.green{background:#66bb6a;}
-.tb-dot.amber{background:#ffa726;}
-.tb-dot.red{background:#ef5350;}
+.tab-bar-inner{max-width:1300px;margin:0 auto;padding:4px 24px 0;display:flex;}
+.tb{background:none;border:none;cursor:pointer;color:rgba(255,255,255,.75);font-family:inherit;
+  padding:11px 16px;font-size:13px;font-weight:700;letter-spacing:.02em;line-height:19px;
+  border-bottom:3px solid transparent;   /* 11+19+11+3 = 44px */
+  transition:all .15s;display:flex;align-items:center;gap:5px;
+  white-space:nowrap;flex-shrink:0;-webkit-tap-highlight-color:transparent;}
+.tb:hover{color:#fff;background:rgba(255,255,255,.09);}
+.tb.active{color:#fff;background:#b45309;border-bottom-color:#fcd34d;}
+/* v5.0-HDR — 요약 스트립 (헤더 3층) */
+.sum-bar-wrap{background:#0f172a;padding:10px 0;}
+.sum-bar{max-width:1300px;margin:0 auto;padding:0 24px;display:flex;flex-wrap:wrap;gap:14px;}
+.sum-item{font-size:12px;color:#94a3b8;line-height:18px;}
+.sum-item b{font-family:'JetBrains Mono','Noto Sans KR',monospace;font-weight:700;color:#fcd34d;}
+@media(max-width:640px){.sum-bar{padding:0 14px;}.sum-item{font-size:11px;}}
+/* ⛔ v5.0 — 모바일 계산 후 문서폭 471px 넘침(§2⑤ 배포본 실측). 그리드 자식 min-width:auto 가 표 폭만큼 벌어진다 → 20 건물우수 §7 처방 */
+.two-col>*{min-width:0;}
 
 /*══════════════════════════════════════
   LAYOUT
 ══════════════════════════════════════*/
 .main-wrap{max-width:1400px;margin:0 auto;padding:14px 14px 110px;}
-@media(max-width:600px){.main-wrap{padding:10px 10px 110px;}}
+@media(max-width:640px){.main-wrap{padding:10px 10px 110px;}}
 .tab-panel{display:none;}.tab-panel.active{display:block;}
 .two-col{display:grid;grid-template-columns:440px 1fr;gap:14px;align-items:start;}
-@media(max-width:1100px) and (min-width:769px){.two-col{grid-template-columns:380px 1fr;}}
+@media(max-width:1024px) and (min-width:769px){.two-col{grid-template-columns:380px 1fr;}}
 @media(max-width:768px){.two-col{grid-template-columns:1fr;}}
 
 /*══════════════════════════════════════
@@ -174,13 +153,13 @@ input[type="number"]{-moz-appearance:textfield;}
 .flbl{font-size:9.5px;font-weight:700;color:#546e7a;letter-spacing:.07em;text-transform:uppercase;margin-bottom:4px;display:block;}
 .finput{width:100%;padding:8px 11px;background:#f8fafd;border:1.5px solid #dde3ed;border-radius:8px;color:#0d1f3c;font-size:12.5px;font-weight:600;font-family:inherit;outline:none;transition:border-color .15s,box-shadow .15s;}
 .finput:focus{border-color:#1976d2;box-shadow:0 0 0 3px rgba(25,118,210,.1);background:#fff;}
-@media(max-width:760px){.finput{font-size:16px;padding:9px 11px;}.fselect{font-size:16px;padding:9px 26px 9px 10px;}}
+@media(max-width:768px){.finput{font-size:16px;padding:9px 11px;}.fselect{font-size:16px;padding:9px 26px 9px 10px;}}
 .fselect{width:100%;padding:8px 26px 8px 10px;background:#f8fafd;border:1.5px solid #dde3ed;border-radius:8px;color:#0d1f3c;font-size:11.5px;font-weight:700;font-family:inherit;outline:none;cursor:pointer;transition:border-color .15s;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%231565c0' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 9px center;}
 .fselect:focus{border-color:#1976d2;box-shadow:0 0 0 3px rgba(25,118,210,.1);}
 .frow{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:9px;}
-@media(max-width:600px){.frow{grid-template-columns:1fr;}}
+@media(max-width:640px){.frow{grid-template-columns:1fr;}}
 .frow3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:9px;}
-@media(max-width:760px){.frow3{grid-template-columns:1fr 1fr;}}
+@media(max-width:768px){.frow3{grid-template-columns:1fr 1fr;}}
 @media(max-width:480px){.frow3{grid-template-columns:1fr;}}
 .fgrp{display:flex;flex-direction:column;gap:3px;}
 .fgrp.full{grid-column:1/-1;}
@@ -222,7 +201,7 @@ input[type="number"]{-moz-appearance:textfield;}
 .result-hero::before{content:'';position:absolute;top:-20px;right:-20px;width:100px;height:100px;background:rgba(255,255,255,.05);border-radius:50%;}
 .rh-label{font-size:9.5px;opacity:.65;margin-bottom:2px;font-weight:700;letter-spacing:.05em;}
 .rh-num{font-size:44px;font-weight:900;color:#fff176;line-height:1;font-family:'JetBrains Mono',monospace!important;}
-@media(max-width:380px){.rh-num{font-size:32px;}}
+@media(max-width:420px){.rh-num{font-size:32px;}}
 .rh-unit{font-size:13px;font-weight:700;opacity:.8;margin-top:3px;}
 .rh-note{font-size:9.5px;opacity:.65;margin-top:7px;line-height:1.5;}
 .rh-badge{display:inline-block;margin-top:8px;padding:4px 14px;border-radius:20px;font-size:11px;font-weight:900;background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.3);}
@@ -267,7 +246,7 @@ table tr:nth-child(even) td{background:#f8fafd;}
 .sc.done{background:#43a047;color:#fff;}
 .sc.active{background:#1976d2;color:#fff;box-shadow:0 0 0 3px rgba(25,118,210,.22);}
 .sl{font-size:10.5px;font-weight:700;color:#94a3b8;white-space:nowrap;}
-@media(max-width:400px){.sl{display:none;}}
+@media(max-width:420px){.sl{display:none;}}
 .sl.active{color:#1565c0;}.sl.done{color:#2e7d32;}
 .sdiv{width:16px;height:2px;background:#e2e8f0;margin:0 3px;flex-shrink:0;transition:background .2s;}
 .sdiv.done{background:#43a047;}
@@ -304,371 +283,184 @@ table tr:nth-child(even) td{background:#f8fafd;}
   .btn-calc{font-size:12px;padding:11px;}
   .btn-secondary .btn-stxt{display:none;}
 }
-
-/*══════════════════════════════════════
-  A4 REPORT (모바일 프리뷰)
-══════════════════════════════════════*/
-.a4-wrap{background:#78909c;padding:20px 0;min-height:calc(100vh - 130px);overflow-x:hidden;overflow-y:auto;position:relative;display:block;}
-.a4-scale-wrap{display:block;transform-origin:top left;width:456px;flex-shrink:0;position:relative;}
-@media(max-width:860px){
-  .a4-wrap{padding:8px 0;}
-  .a4-scale-wrap{transform-origin:top left;}
-}
-/* 갤럭시 S24 Ultra: 432×932 dp (논리해상도 기준) */
-.a4-page{
-  background:#fff;width:432px;min-height:932px;
-  margin:0 auto;padding:16px 14px 20px;
-  box-shadow:0 8px 40px rgba(0,0,0,.28);
-  font-size:10px;color:#0d1f3c;
-  border-radius:8px;
-  position:relative;
-}
-/* 스마트폰 프레임 효과 */
-.phone-frame{
-  background:#1a1a2e;
-  border-radius:20px;
-  padding:12px;
-  width:456px;
-  margin:0 auto;
-  box-shadow:0 12px 48px rgba(0,0,0,.5);
-}
-.phone-notch{
-  width:80px;height:10px;background:#1a1a2e;
-  border-radius:0 0 8px 8px;
-  margin:0 auto 8px;
-  position:relative;z-index:1;
-}
-.a4-page *{font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif!important;}
-.a4-title-wrap{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;border-bottom:2.5px solid var(--blue-mid);padding-bottom:8px;}
-.a4-title-main{font-size:14px;font-weight:900;color:#0d47a1;letter-spacing:-.02em;}
-.a4-title-sub{font-size:8px;color:#90a4ae;font-weight:700;text-align:right;line-height:1.7;}
-.a4-sec{font-size:10px;font-weight:800;color:#1565c0;margin-bottom:4px;margin-top:8px;padding-left:7px;border-left:3px solid var(--blue-mid);text-align:left;}
-.a4-sec.teal{color:#00695c;border-left-color:#00897b;}
-.a4-sec.red{color:#c62828;border-left-color:#ef5350;}
-.a4-sec.grn{color:#2e7d32;border-left-color:#43a047;}
-.a4-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:7px;}
-.a4-grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:7px;}
-.a4-ic{background:#f8fafd;border:1px solid var(--gray-200);border-radius:4px;padding:4px 6px;text-align:left;}
-.a4-ik{font-size:7px;font-weight:700;color:#78909c;text-transform:uppercase;letter-spacing:.05em;display:block;}
-.a4-iv{font-size:9.5px;font-weight:900;color:#0d1f3c;margin-top:1px;font-family:'JetBrains Mono',monospace!important;display:block;}
-.a4-tbl{width:100%;border-collapse:collapse;font-size:8.5px;margin-bottom:6px;}
-.a4-tbl th{background:#e3f2fd;padding:3px 5px;text-align:center;font-weight:800;color:#1565c0;border:1px solid var(--blue-border);}
+/* ── A4 미리보기 (v5.0 §3-3 · §3-4 · §3-4-1 · §17-2) ── */
+.a4-export-bar{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.bar-lbl{font-size:11px;font-weight:700;color:#546e7a;}
+/* 출력 버튼 규격 (§3-6). 진입점은 이 출력바 한 곳뿐이다(헤더 버튼·FAB 출력·모바일 탭 제거). */
+.btn-export,.mm-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  padding:9px 16px;border-radius:9px;font-size:12px;font-weight:800;cursor:pointer;
+  border:none;font-family:inherit;white-space:nowrap;line-height:1.2;min-height:38px;
+  transition:background .15s,box-shadow .15s,transform .1s;}
+.mm-btn-print{background:#b45309;color:#fff;}
+.mm-btn-jpg{background:#7e22ce;color:#fff;}
+/* ⛔ width:100% 는 출력바 안으로 한정한다(§16-5). 전역이면 저장 시트 닫기 버튼까지 100% 를 먹는다. */
+@media(max-width:480px){ .a4-export-bar{flex-direction:column;align-items:stretch;}
+  .a4-export-bar .btn-export,.a4-export-bar .mm-btn{width:100%;} }
+.a4-wrap{background:#64748b;padding:20px 20px 32px;min-height:300px;display:flex;justify-content:center;align-items:flex-start;border-radius:10px;overflow:hidden;}
+@media(max-width:640px){.a4-wrap{padding:8px 8px 24px;}}
+.a4-scale-wrap{display:block;transform-origin:top center;flex-shrink:0;}
+/* ⛔ .a4-page 는 언제나 794px 고정(§17-2). 좁은 화면은 .a4-scale-wrap 의 transform:scale() 이 담당한다.
+   화면 여백 = @page 여백 (14/12/22/14mm → 53/45/83/53px) → 내용 영역 696×986px = 184×261mm */
+.a4-page{background:#fff;width:794px;min-height:1122px;margin:0;padding:53px 45px 83px 53px;box-shadow:0 8px 40px rgba(0,0,0,.28);font-size:11px;color:#111827;display:block;position:relative;
+  font-family:'Noto Sans KR Local','Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;}
+.a4-page .mono,.a4-page code{font-family:'JetBrains Mono','Noto Sans KR Local',monospace;}
+.a4-tit{font-size:22px;font-weight:900;color:#431407;text-align:center;border-bottom:2.5px solid #b45309;padding-bottom:9px;margin-bottom:12px;letter-spacing:-.02em;}
+.a4-head2{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin-bottom:12px;}
+.a4-head2 .a4-proj{font-size:12px;font-weight:800;color:#111827;}
+.a4-head2 .a4-meta{font-size:9px;color:#64748b;text-align:right;line-height:1.6;font-weight:600;}
+.a4-sub{font-size:13px;font-weight:800;color:#b45309;margin-bottom:4px;margin-top:9px;padding-left:7px;border-left:3px solid #b45309;text-align:left;}
+.a4-tbl{width:100%;border-collapse:collapse;font-size:10.5px;margin-bottom:8px;}
+.a4-tbl th{background:#e3f2fd;padding:5px 7px;text-align:center;font-weight:800;color:#1565c0;border:1px solid #bbdefb;}
 .a4-tbl.teal th{background:#e0f2f1;color:#00695c;border-color:#80cbc4;}
-.a4-tbl td{padding:3px 5px;text-align:center;border:1px solid var(--gray-200);font-weight:600;}
+.a4-tbl td{padding:5px 7px;text-align:center;border:1px solid #e2e8f0;font-weight:600;color:#111827;}
 .a4-tbl tr:nth-child(even) td{background:#f8fafd;}
-.a4-tbl .td-pass{color:#2e7d32;font-weight:900;}
-.a4-tbl .td-fail{color:#c62828;font-weight:900;}
-.a4-rbox{border-radius:7px;padding:8px 10px 6px;text-align:center;margin-bottom:6px;}
-.a4-rbox.blue{background:linear-gradient(135deg,#0d47a1,#1565c0);color:#fff;}
-.a4-rbox.grn{background:linear-gradient(135deg,#1b5e20,#2e7d32);color:#fff;}
-.a4-rbox.red{background:linear-gradient(135deg,#b71c1c,#c62828);color:#fff;}
-.a4-rnum{font-size:28px;font-weight:900;color:#fff176;font-family:'JetBrains Mono',monospace!important;line-height:1;}
-.a4-footer{margin-top:10px;border-top:1px solid var(--gray-200);padding-top:5px;display:table;width:100%;font-size:7px;color:#90a4ae;font-weight:600;}
-.a4-footer span{display:table-cell;width:33.33%;}
-.a4-footer span:first-child{text-align:left;}
-.a4-footer span:nth-child(2){text-align:center;}
-.a4-footer span:last-child{text-align:right;}
-
-/* 판정 배지 */
-.judge-badge{
-  display:inline-flex;align-items:center;gap:4px;
-  padding:2px 7px;border-radius:12px;font-size:8px;font-weight:900;
-  margin-top:2px;
-}
-.judge-badge.ok{background:#e8f5e9;color:#2e7d32;border:1px solid #a5d6a7;}
-.judge-badge.ng{background:#ffebee;color:#c62828;border:1px solid #ef9a9a;}
-
-/*══════════════════════════════════════
-  △ 삼각자 도움말 버튼 (우측 하단 FAB)
-══════════════════════════════════════*/
-.help-fab{
-  position:fixed;
-  right:18px;
-  bottom:calc(85px + env(safe-area-inset-bottom,0px));
-  z-index:150;
-  width:52px;height:52px;
-  cursor:pointer;
-  -webkit-tap-highlight-color:transparent;
-  filter:drop-shadow(0 4px 12px rgba(15,76,129,.4));
-  transition:transform .2s, filter .2s;
-}
-.help-fab:hover{transform:scale(1.08);filter:drop-shadow(0 6px 18px rgba(15,76,129,.55));}
-.help-fab:active{transform:scale(.96);}
-
-/* ══ 도움말 모달 오버레이 (화면 중앙) ══ */
-.help-overlay{
-  position:fixed;inset:0;
-  background:rgba(0,0,0,.52);
-  z-index:300;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:16px;
-}
-.help-overlay.open{display:flex;}
-
-/* 모달 박스 */
-.help-panel{
-  background:#fff;
-  border-radius:18px;
-  width:min(480px,calc(100vw - 32px));
-  max-height:min(680px,calc(100vh - 80px));
-  overflow:hidden;
-  box-shadow:0 24px 64px rgba(13,31,60,.35);
-  border:1px solid var(--blue-border);
-  display:flex;
-  flex-direction:column;
-  transform:scale(.94) translateY(10px);
-  opacity:0;
-  transition:transform .25s cubic-bezier(.34,1.56,.64,1), opacity .2s;
-}
-.help-overlay.open .help-panel{
-  transform:scale(1) translateY(0);
-  opacity:1;
-}
-.help-panel-head{
-  background:linear-gradient(135deg,#0f3460,#0f4c81);
-  padding:14px 18px;
-  display:flex;align-items:center;gap:10px;
-  flex-shrink:0;
-}
-.help-panel-tit{color:#fff;font-size:13px;font-weight:900;flex:1;}
-.help-panel-cls{width:28px;height:28px;background:rgba(255,255,255,.15);border:none;border-radius:8px;color:#fff;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;transition:background .15s;}
-.help-panel-cls:hover{background:rgba(255,255,255,.28);}
-.help-tabs{display:flex;border-bottom:1px solid var(--gray-200);flex-shrink:0;}
-.help-tab{flex:1;padding:9px 6px;background:none;border:none;font-size:11px;font-weight:700;color:#94a3b8;cursor:pointer;font-family:inherit;transition:all .15s;border-bottom:2.5px solid transparent;}
-.help-tab.active{color:#1565c0;border-bottom-color:#1976d2;background:#f0f8ff;}
-.help-tab-body{padding:14px 16px;overflow-y:auto;flex:1;}
-.help-tab-panel{display:none;}
-.help-tab-panel.active{display:block;}
-.help-item{margin-bottom:11px;padding-bottom:11px;border-bottom:1px solid #f0f5fb;}
-.help-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
-.help-step{display:flex;gap:9px;align-items:flex-start;}
-.help-num{width:22px;height:22px;background:#1976d2;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9.5px;font-weight:900;flex-shrink:0;margin-top:1px;}
-.help-txt{font-size:11px;line-height:1.75;color:#334155;word-break:keep-all;}
-.help-txt b{color:#0f4c81;font-weight:800;}
-.law-item{margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #f0f5fb;}
-.law-item:last-child{border-bottom:none;}
-.law-code{font-size:10.5px;font-weight:900;color:#1565c0;font-family:'JetBrains Mono',monospace!important;margin-bottom:3px;}
-.law-desc{font-size:10.5px;line-height:1.65;color:#334155;}
-.law-limit{font-size:10px;color:#c62828;font-weight:700;background:#ffebee;padding:3px 8px;border-radius:5px;display:inline-block;margin-top:3px;}
-
-/*══════════════════════════════════════
-  PREVIEW 옹벽 선택 탭 바
-══════════════════════════════════════*/
-.preview-sel-bar{
-  display:flex;gap:6px;justify-content:center;
-  padding:10px 12px 8px;
-  flex-wrap:wrap;
-}
-.prev-sel-btn{
-  background:#fff;
-  border:1.5px solid var(--gray-200);
-  border-radius:20px;
-  padding:6px 16px;
-  font-size:11.5px;font-weight:800;
-  color:#64748b;
-  cursor:pointer;font-family:inherit;
-  transition:all .18s;
-  display:flex;align-items:center;gap:5px;
-  white-space:nowrap;
-  -webkit-tap-highlight-color:transparent;
-}
-.prev-sel-btn:hover{border-color:#1976d2;color:#1565c0;background:#e3f2fd;}
-.prev-sel-btn.active{
-  background:linear-gradient(135deg,#1565c0,#1976d2);
-  border-color:#1565c0;color:#fff;
-  box-shadow:0 2px 8px rgba(25,118,210,.35);
-}
-.prev-sel-btn.disabled{opacity:.4;cursor:not-allowed;}
-.prev-sel-badge{
-  font-size:9px;font-weight:900;
-  padding:1px 6px;border-radius:10px;
-  background:rgba(255,255,255,.25);
-}
-.prev-sel-btn:not(.active) .prev-sel-badge{background:#e2e8f0;color:#94a3b8;}
-
-/*══════════════════════════════════════
-  SHARE MODAL
-══════════════════════════════════════*/
-.share-modal-box{
-  background:#fff;border-radius:16px;
-  width:min(360px,calc(100vw - 24px));
-  max-height:80vh;overflow:hidden;
-  box-shadow:0 20px 60px rgba(0,0,0,.3);
-  display:flex;flex-direction:column;
-}
-.share-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:14px;}
-.share-btn{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 8px;border-radius:10px;border:1.5px solid var(--gray-200);background:#f8fafd;cursor:pointer;transition:all .15s;font-family:inherit;}
-.share-btn:hover{border-color:#1976d2;background:#e3f2fd;}
-.share-btn-ico{font-size:22px;}
-.share-btn-lbl{font-size:10.5px;font-weight:800;color:#334155;}
-
-/*══════════════════════════════════════
-  ISO A4 PREVIEW TAB
-══════════════════════════════════════*/
-.a4iso-wrap{
-  background:#607d8b;
-  padding:24px 0;
-  min-height:calc(100vh - 130px);
-  display:block;
-  overflow-x:hidden;
-  position:relative;
-}
-@media(max-width:900px){
-  .a4iso-wrap{padding:12px 0;}
-}
-@media(max-width:600px){
-  .a4iso-wrap{padding:4px 0;}
-}
-.a4iso-toolbar{
-  display:flex;gap:8px;align-items:center;justify-content:center;
-  flex-wrap:wrap;margin-bottom:16px;padding:0 8px;
-}
-@media(max-width:600px){
-  .a4iso-toolbar{gap:6px;}
-  .a4iso-toolbar .btn-secondary{padding:8px 10px;font-size:11px;}
-  .a4iso-toolbar .btn-secondary span{display:none;}
-}
-.a4iso-scale-wrap{
-  transform-origin:top left;  /* JS가 offset으로 정중앙 배치 */
-  width:794px;
-  flex-shrink:0;
-  position:relative;
-}
-/* ISO A4 용지: 794 × 1123 px (96dpi 기준) */
-.a4iso-page{
-  background:#fff;
-  width:794px;min-height:1123px;
-  margin:0 auto;
-  padding:28px 36px 36px;
-  box-shadow:0 8px 48px rgba(0,0,0,.35);
-  font-size:11.5px;color:#0d1f3c;
-  position:relative;
-  font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
-}
-.a4iso-page *{font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif!important;}
-
-/* A4 헤더 */
-.a4iso-hd{
-  display:flex;align-items:flex-start;justify-content:space-between;
-  border-bottom:3px solid #0d47a1;
-  padding-bottom:12px;margin-bottom:16px;
-}
-.a4iso-hd-left{display:flex;align-items:center;gap:10px;}
-.a4iso-hd-logo{
-  width:44px;height:44px;
-  background:linear-gradient(135deg,#1976d2,#0d47a1);
-  border-radius:8px;display:flex;align-items:center;justify-content:center;
-  font-size:22px;flex-shrink:0;
-}
-.a4iso-hd-tit{font-size:18px;font-weight:900;color:#0d47a1;letter-spacing:-.02em;}
-.a4iso-hd-sub{font-size:9px;color:#546e7a;font-weight:700;margin-top:2px;}
-.a4iso-hd-info{text-align:right;}
-.a4iso-hd-info table{font-size:9px;border-collapse:collapse;}
-.a4iso-hd-info td{padding:2px 6px;border:1px solid #e2e8f0;}
-.a4iso-hd-info td:first-child{background:#e3f2fd;color:#1565c0;font-weight:800;}
-.a4iso-hd-info td:last-child{font-weight:700;min-width:100px;}
-
-/* A4 섹션 */
-.a4iso-sec{
-  font-size:12px;font-weight:900;color:#1565c0;
-  padding:5px 10px;background:#e3f2fd;
-  border-left:4px solid #1976d2;border-radius:0 5px 5px 0;
-  margin:14px 0 8px;display:flex;align-items:center;gap:6px;
-}
-.a4iso-sec.grn{color:#2e7d32;background:#e8f5e9;border-left-color:#43a047;}
-.a4iso-sec.amber{color:#f57c00;background:#fff8e1;border-left-color:#ffa726;}
-.a4iso-sec.red{color:#c62828;background:#ffebee;border-left-color:#ef5350;}
-
-/* A4 판정 박스 */
-.a4iso-judge{
-  border-radius:10px;padding:14px 18px;
-  color:#fff;margin-bottom:14px;
-  display:flex;align-items:center;justify-content:space-between;
-  gap:12px;
-}
+.a4-tbl tfoot td{background:#e3f2fd!important;font-weight:900;}
+.a4-tbl.teal tfoot td{background:#e0f2f1!important;}
+/* 섹션 소제목 — 51 의미색 변형(토압 amber · 판정 grn/red) */
+.a4-sub.amber{color:#f57c00;border-left-color:#ffa726;}
+.a4-sub.grn{color:#2e7d32;border-left-color:#43a047;}
+.a4-sub.red{color:#c62828;border-left-color:#ef5350;}
+.a4-tbl .mono{font-family:'JetBrains Mono','Noto Sans KR Local',monospace;}
+.a4-tbl .pass-cell{color:#2e7d32;font-weight:900;background:#e8f5e9!important;}
+.a4-tbl .fail-cell{color:#c62828;font-weight:900;background:#ffebee!important;}
+/* 51 고유 — 판정 박스 · 격자 셀 (원형 보존) */
+.a4iso-judge{border-radius:10px;padding:14px 18px;color:#fff;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
 .a4iso-judge.pass{background:linear-gradient(135deg,#1b5e20,#2e7d32);}
 .a4iso-judge.fail{background:linear-gradient(135deg,#b71c1c,#c62828);}
 .a4iso-judge-main{font-size:20px;font-weight:900;}
 .a4iso-judge-sub{font-size:10px;opacity:.8;margin-top:3px;}
 .a4iso-judge-fs{font-size:36px;font-weight:900;color:#fff176;font-family:'JetBrains Mono',monospace!important;line-height:1;}
-
-/* A4 격자 */
-.a4iso-grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
-.a4iso-grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:12px;}
-.a4iso-grid4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;margin-bottom:12px;}
+.a4iso-grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+.a4iso-grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:10px;}
+.a4iso-grid4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;margin-bottom:10px;}
 .a4iso-cell{background:#f8fafd;border:1px solid #e2e8f0;border-radius:5px;padding:6px 9px;}
 .a4iso-cell-k{font-size:8px;font-weight:700;color:#78909c;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:2px;}
 .a4iso-cell-v{font-size:12px;font-weight:900;color:#0d1f3c;font-family:'JetBrains Mono',monospace!important;display:block;}
+/* 푸터 3분할 (§3-4). 인쇄에서는 flex 가 어긋나므로 table-cell 33.33% 로 고정한다. */
+.a4-footer{border-top:1px solid #e2e8f0;padding-top:8px;font-size:9px;color:#9ca3af;
+  margin-top:16px;line-height:1.6;font-weight:600;display:table;width:100%;table-layout:fixed;}
+.a4-footer>span{display:table-cell;width:33.33%;vertical-align:top;}
+.a4-footer>span:nth-child(2){text-align:center;}
+.a4-footer>span:nth-child(3){text-align:right;}
+/* JPG 저장 시트 (§3-5 · §3-5-3) — 1매여도 뜬다. */
+#mm-save-ov{display:none;position:fixed;inset:0;z-index:9999;background:rgba(12,26,46,.82);
+  align-items:center;justify-content:center;padding:18px;}
+#mm-save-ov.show{display:flex;}
+.mm-sheet{background:#fff;border:1px solid #e2e8f0;border-radius:14px;width:100%;max-width:720px;
+  max-height:88vh;display:flex;flex-direction:column;box-shadow:0 24px 70px rgba(0,0,0,.45);}
+.mm-sheet-head{display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:14px 18px;border-bottom:1px solid #e2e8f0;}
+.mm-sheet-title{font-family:'Orbitron',sans-serif;font-size:11px;font-weight:900;
+  letter-spacing:.12em;color:#b45309;text-transform:uppercase;}
+.mm-sheet-note{font-size:11px;color:#64748b;margin-top:4px;}
+.mm-sheet-body{padding:16px 18px;overflow-y:auto;display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;}
+.mm-shot{background:#f8fafc;border:1px solid #e2e8f0;border-radius:9px;padding:9px;
+  display:flex;flex-direction:column;gap:8px;}
+.mm-shot img{width:100%;height:auto;border-radius:4px;background:#fff;display:block;
+  border:1px solid #e2e8f0;}
+.mm-shot-btn{display:flex;align-items:center;justify-content:center;gap:5px;padding:7px 10px;
+  border-radius:7px;border:1px solid #c4b5fd;background:none;color:#7e22ce;
+  font-family:inherit;font-size:11.5px;font-weight:700;cursor:pointer;transition:background .15s;}
+.mm-shot-btn:hover{background:#f5f3ff;}
+.mm-sheet-foot{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;
+  padding:13px 18px;border-top:1px solid #e2e8f0;}
+.mm-btn-close{background:#e2e8f0;color:#334155;}
+.mm-sheet-head > div:first-child{flex:1 1 auto;min-width:0;}
+.mm-sheet-head .btn-export{flex:0 0 auto;}
+@media(max-width:480px){
+  .mm-sheet-body{grid-template-columns:1fr;padding:12px;}
+  .mm-sheet-body.multi{grid-template-columns:repeat(2,1fr);}
+  .mm-sheet-foot{justify-content:stretch;} .mm-sheet-foot .btn-export{flex:1;}
+  .mm-sheet-head{padding:12px 14px;gap:8px;}
+  .mm-sheet-title{font-size:10px;}
+  .mm-sheet-note{font-size:10px;line-height:1.45;}
+  .mm-sheet-head .btn-export{padding:6px 9px!important;min-height:28px!important;
+    font-size:10.5px!important;align-self:flex-start;}
+  .mm-shot{padding:7px;} .mm-shot-btn{padding:6px;font-size:11px;}
+  .mm-shot img{max-height:46vh;object-fit:contain;}
+}
+/* 버전 각인 (§3-3). position:fixed 라 인쇄 시 매 페이지 우하단에 찍힌다. */
+#dev-stamp{display:none;}
 
-/* A4 표 */
-.a4iso-tbl{width:100%;border-collapse:collapse;font-size:10.5px;margin-bottom:10px;}
-.a4iso-tbl thead th{background:#0d47a1;color:#fff;padding:7px 10px;text-align:center;font-weight:800;border:1px solid #1565c0;}
-.a4iso-tbl tbody td{padding:6px 10px;border:1px solid #e2e8f0;text-align:center;font-weight:600;}
-.a4iso-tbl tbody tr:nth-child(even) td{background:#f8fafd;}
-.a4iso-tbl .pass-cell{color:#2e7d32;font-weight:900;background:#e8f5e9!important;}
-.a4iso-tbl .fail-cell{color:#c62828;font-weight:900;background:#ffebee!important;}
-.a4iso-tbl tfoot td{background:#e3f2fd!important;font-weight:900;color:#0d47a1;border-color:#bbdefb;}
+/* ══ FAB · 모달 (v5.0 §18-11 — 09 제연 기준본 규격 · 색만 기계 토큰) ══ */
+#fab-group{position:fixed;bottom:calc(80px + env(safe-area-inset-bottom,0px));right:18px;   /* 하단 계산바 위 (도구 특이) */z-index:1200;display:flex;flex-direction:column;align-items:flex-end;gap:8px;}
+.help-fab{
+  position:relative;z-index:auto;
+  background:linear-gradient(135deg,#431407 0%,#b45309 55%,#d97706 100%);
+  border:1px solid rgba(252,211,77,.3);
+  color:#fff;border-radius:16px;padding:11px 8px;width:72px;min-width:72px;cursor:pointer;font-family:inherit;   /* 두 버튼 폭·높이 완전 동일 (§16-18 취지 · MIN 2026-09-03) */
+  box-shadow:0 4px 20px rgba(180,83,9,.65);
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+  line-height:1.3;transition:transform .15s,box-shadow .15s;
+  animation:fabIn .55s cubic-bezier(.34,1.56,.64,1) forwards;
+}
+@keyframes fabIn{from{opacity:0;transform:scale(.3) rotate(-20deg);}to{opacity:1;transform:scale(1) rotate(0);}}
+.help-fab:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(180,83,9,.65);}
+.help-fab:active{transform:translateY(0);}
+.help-fab .fab-icon{font-size:20px;line-height:1;}
+.help-fab .fab-lbl{font-size:10px;font-weight:800;letter-spacing:.04em;color:#fff;}
+.help-fab .fab-sub{font-size:9px;opacity:.8;}
 
-/* A4 푸터 */
-.a4iso-footer{
-  position:absolute;bottom:18px;left:36px;right:36px;
-  border-top:1px solid #e2e8f0;padding-top:7px;
-  display:flex;align-items:center;justify-content:space-between;
-  font-size:8px;color:#90a4ae;font-weight:600;
+/* 통합 모달 — 중앙 다이얼로그 (§18-11 overlay·box·head·close·tab·body) */
+.master-modal-ov{position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.65);backdrop-filter:blur(5px);
+  display:none;align-items:center;justify-content:center;padding:16px;}
+.master-modal-ov.open{display:flex;animation:fadeIn .2s;}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+.master-modal-box{background:#fff;border-radius:20px;width:100%;max-width:800px;
+  max-height:calc(100vh - 32px);display:flex;flex-direction:column;overflow:hidden;
+  box-shadow:0 30px 80px rgba(0,0,0,.4);animation:slideUp .25s cubic-bezier(.34,1.5,.64,1);}
+@keyframes slideUp{from{transform:translateY(30px);opacity:0;}to{transform:none;opacity:1;}}
+.master-modal-hd{background:linear-gradient(135deg,#431407,#b45309,#d97706);color:#fff;padding:18px 22px 0;flex-shrink:0;}
+.master-modal-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:13px;gap:10px;}
+.master-modal-tit{font-size:14px;font-weight:900;color:#fff;letter-spacing:.04em;margin-bottom:3px;}
+.master-modal-sub{font-size:10px;color:#fcd34d;font-weight:500;margin-top:1px;}
+.master-modal-cls{width:34px;height:34px;border:none;background:rgba(255,255,255,.13);color:#fff;border-radius:50%;
+  cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s;}
+.master-modal-cls:hover{background:rgba(255,255,255,.26);}
+.master-modal-tabs{display:flex;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;flex-shrink:0;}
+.master-modal-tabs::-webkit-scrollbar{display:none;}
+.mm-mtab{padding:9px 18px;border:none;background:transparent;color:rgba(255,255,255,.6);font-size:12px;font-weight:700;
+  font-family:inherit;cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent;transition:all .15s;flex-shrink:0;}
+.mm-mtab.active{color:#fff;border-bottom-color:#fcd34d;}
+.mm-mtab:hover:not(.active){color:rgba(255,255,255,.88);}
+.master-modal-body{padding:20px 22px 26px;overflow-y:auto;flex:1;-webkit-overflow-scrolling:touch;}
+.master-modal-body::-webkit-scrollbar{width:5px;}
+.master-modal-body::-webkit-scrollbar-thumb{background:#fcd34d;border-radius:3px;}
+@media(max-width:540px){
+  .master-modal-ov{padding:0;align-items:flex-end;}
+  .master-modal-box{border-radius:20px 20px 0 0;max-height:92vh;}
+  .master-modal-hd{padding:14px 16px 0;}
+  .master-modal-body{padding:16px 16px 36px;}
+  .mm-mtab{padding:9px 13px;font-size:11px;}
+  #fab-group{bottom:calc(78px + env(safe-area-inset-bottom,0px));right:12px;}
+  .help-fab{padding:10px 8px;}
 }
-/* 워터마크 */
-.a4iso-watermark{
-  position:absolute;top:50%;left:50%;
-  transform:translate(-50%,-50%) rotate(-30deg);
-  font-size:80px;font-weight:900;color:rgba(25,118,210,.04);
-  pointer-events:none;white-space:nowrap;letter-spacing:.1em;
-  font-family:'JetBrains Mono',monospace!important;
-}
-
-/*══════════════════════════════════════
-  PRINT (ISO A4)
-══════════════════════════════════════*/
-@page{size:A4 portrait;margin:10mm 12mm 14mm;}
-@media print{
-  *,*::before,*::after{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important;}
-  *{font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif!important;}
-  .no-print{display:none!important;}
-  html,body{margin:0!important;padding:0!important;background:#fff!important;}
-  #root-app{display:none!important;}
-  #print-target{display:block!important;}
-  #print-target .a4iso-page{
-    width:100%!important;box-shadow:none!important;
-    min-height:auto!important;box-sizing:border-box!important;
-    padding:0!important;font-size:10px!important;
-  }
-}
-#print-target{display:none;}
-
-/* ══ PWA 설치 버튼 (토목옹벽 Edition) ══ */
-#pwa-install-btn{
-  display:none;align-items:center;gap:5px;
-  background:linear-gradient(135deg,#f97316,#0f4c81);
-  color:#fff;border:none;padding:7px 13px;border-radius:8px;
-  font-size:11px;font-weight:800;cursor:pointer;
-  font-family:inherit;white-space:nowrap;flex-shrink:0;
-  transition:all .2s;
-  box-shadow:0 2px 12px rgba(249,115,22,.45);
-  animation:rw-pwa-glow 2.5s ease-in-out infinite;
-}
-#pwa-install-btn.visible{display:flex;}
-#pwa-install-btn:hover{
-  background:linear-gradient(135deg,#ea580c,#0a3d6b);
-  transform:translateY(-1px);
-  box-shadow:0 4px 18px rgba(249,115,22,.65);
-  animation:none;
-}
-@keyframes rw-pwa-glow{
-  0%,100%{box-shadow:0 2px 12px rgba(249,115,22,.45);}
-  50%{box-shadow:0 2px 22px rgba(249,115,22,.75),0 0 10px rgba(15,76,129,.25);}
-}
-@media(max-width:520px){#pwa-install-btn .pwa-txt{display:none;}}
+/* 51 — 도움말 모달은 .open 토글(JS toggleHelp) · 패널 전이 유지 */
+.help-overlay.open{display:flex;}
+.help-panel{transform:scale(.94) translateY(10px);opacity:0;transition:transform .25s cubic-bezier(.34,1.56,.64,1),opacity .2s;}
+.help-overlay.open .help-panel{transform:scale(1) translateY(0);opacity:1;}
+.help-tab-panel{display:none;}
+.help-tab-panel.active{display:block;}
+.help-item{margin-bottom:11px;padding-bottom:11px;border-bottom:1px solid #f0f5fb;}
+.help-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+.help-step{display:flex;gap:9px;align-items:flex-start;}
+.help-num{width:22px;height:22px;background:#b45309;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9.5px;font-weight:900;flex-shrink:0;margin-top:1px;}
+.help-txt{font-size:11px;line-height:1.75;color:#334155;word-break:keep-all;}
+.help-txt b{color:#78350f;font-weight:800;}
+.law-item{margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #f0f5fb;}
+.law-item:last-child{border-bottom:none;}
+.law-code{font-size:10.5px;font-weight:900;color:#1565c0;font-family:'JetBrains Mono',monospace!important;margin-bottom:3px;}
+.law-desc{font-size:10.5px;line-height:1.65;color:#334155;}
+.law-limit{font-size:10px;color:#c62828;font-weight:700;background:#ffebee;padding:3px 8px;border-radius:5px;display:inline-block;margin-top:3px;}
+/* PREVIEW 옹벽 선택 탭 바 (원형 보존 · 색만 토목) */
+.preview-sel-bar{display:flex;gap:6px;justify-content:center;padding:0 0 10px;flex-wrap:wrap;}
+.prev-sel-btn{background:#fff;border:1.5px solid #e2e8f0;border-radius:20px;padding:6px 16px;font-size:11.5px;font-weight:800;color:#64748b;cursor:pointer;font-family:inherit;transition:all .18s;display:flex;align-items:center;gap:5px;white-space:nowrap;-webkit-tap-highlight-color:transparent;}
+.prev-sel-btn:hover{border-color:#b45309;color:#78350f;background:#fffbeb;}
+.prev-sel-btn.active{background:linear-gradient(135deg,#b45309,#d97706);border-color:#b45309;color:#fff;box-shadow:0 2px 8px rgba(180,83,9,.35);}
+.prev-sel-btn.disabled{opacity:.4;cursor:not-allowed;}
+.prev-sel-badge{font-size:9px;font-weight:900;padding:1px 6px;border-radius:10px;background:rgba(255,255,255,.25);}
+.prev-sel-btn:not(.active) .prev-sel-badge{background:#e2e8f0;color:#94a3b8;}
 
 /* ══ PWA 설치 배너 ══ */
 #pwa-banner{
@@ -740,51 +532,83 @@ table tr:nth-child(even) td{background:#f8fafd;}
 .rw-ios-txt{font-size:13px;color:#90caf9;line-height:1.5;}
 .rw-ios-txt strong{color:#fff;}
 .rw-ios-foot{text-align:center;font-size:11px;color:#64b5f6;margin-top:12px;}
+
+/* ── 인쇄 전용 (v5.0 §3-3 · §16-9 · §16-13 · §16-15 · §17-3) ── */
+@media print{
+  #dev-stamp{display:block!important;position:fixed;right:0;bottom:6mm;
+    font-family:'Orbitron',sans-serif;font-size:8pt;font-weight:700;
+    color:#9CA3AF;letter-spacing:.06em;z-index:9999;}
+  html,body{background:#fff!important;margin:0;padding:0;}
+  *,*::before,*::after{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
+  .hdr-shell,.app-header,.tab-bar,.sum-bar-wrap,.main-wrap .tab-panel:not(#panel-a4preview),.a4-export-bar,
+  #help-overlay,#fab-group,.bottom-bar,.toast,.pwa-banner,.pwa-update-bar,.net-toast,.pwa-done-toast,#pwa-banner,#ios-modal-rw,#mm-save-ov,.no-print{display:none!important;}
+  #panel-a4preview{display:block!important;}
+  /* ⛔ 컨테이너 패딩이 남으면 A4 가 아래로 밀린다(§16-15). A4 패널이 .main-wrap 안이라 패딩만 해제한다. */
+  .main-wrap{padding:0!important;margin:0!important;max-width:none!important;}
+  .a4-wrap{background:#fff!important;padding:0!important;min-height:unset!important;border-radius:0!important;display:block!important;}
+  .a4-scale-wrap{transform:none!important;margin:0!important;height:auto!important;width:auto!important;max-width:none!important;}
+  /* 여백은 @page 하나로만 일원화한다(§3-3). .a4-page 자체 패딩은 인쇄 시 해제. */
+  .a4-page{width:100%!important;max-width:100%!important;box-shadow:none!important;min-height:unset!important;
+    padding:0!important;margin:0!important;font-size:9.5px!important;}
+  /* 표는 통째로 한 장에 둔다(§16-13). 한 장보다 긴 표(.long)만 분할 허용 + thead 반복. */
+  .a4-tbl,.a4iso-judge,.a4iso-grid4,.a4iso-grid3,.a4iso-grid2{break-inside:avoid;page-break-inside:avoid;}
+  .a4-tbl.long{break-inside:auto!important;page-break-inside:auto!important;}
+  .a4-tbl thead{display:table-header-group;}
+  .a4-tbl tr{page-break-inside:avoid;page-break-after:auto;}
+  .a4-sub{page-break-after:avoid;page-break-before:auto;}
+  .a4-sub + table{break-before:avoid;page-break-before:avoid;}
+  @page{size:A4 portrait;margin:14mm 12mm 22mm 14mm;}
+}
 </style>
 </head>
 <body>
 <div id="root-app">
 
 <!-- ══════ HEADER ══════ -->
-<header class="app-header no-print">
+<!-- v5.0 : 헤더+탭바 그라데이션 1면 통합 래퍼 (§3-2-1) · 3단 hdr-* (§3-1 · §18-1) · 토목 토큰 -->
+<div class="hdr-shell">
+<header class="app-header">
   <div class="header-inner">
     <div class="brand-logo">
-      <div class="brand-icon" style="background:none;padding:0;overflow:hidden;width:40px;height:40px;border-radius:10px;flex-shrink:0;box-shadow:0 2px 12px rgba(66,165,245,.4);"><img src="./icons/brand-icon.jpg" alt="토목옹벽 MANMIN" style="width:40px;height:40px;object-fit:cover;border-radius:10px;display:block;"/></div>
       <div class="brand-texts">
-        <div class="brand-title">토목옹벽 — 옹벽 구조물 안전성 검토 시스템</div>
-        <div class="brand-sub">KDS 11 80 10 / KDS 11 10 05 / 구조물기초설계기준 · MANMIN Ver2.0</div>
+        <!-- v5.0-HDR — 375px 1줄 유지(≤40자) -->
+        <div class="hdr-eyebrow">Retaining Wall Stability · KDS 11 80 10</div>
+        <h1 class="hdr-h1">옹벽 구조물 안전성 검토 시스템</h1>
+        <div class="hdr-sub">
+          중력식 · 캔틸레버식 · 앵커식 옹벽 전도 · 활동 · 지지력 · 편심 안전율 자동 검토
+          <span class="hdr-manmin">MANMIN · Ver-5.0</span>
+        </div>
       </div>
     </div>
-    <div class="hdr-btns">
-      <button id="pwa-install-btn" onclick="window.pwaTriggerInstall&&window.pwaTriggerInstall()" title="토목옹벽 앱 설치">
-        📲 <span class="pwa-txt">설치</span>
-      </button>
-      <button class="btn-hdr" onclick="resetAll()">🔄 <span class="btn-txt">초기화</span></button>
-      <button class="btn-hdr-acc" onclick="openShareModal()">📤 <span class="btn-txt">공유</span></button>
+    <div class="hdr-right-wrap">
+      <!-- v5.0-HDR — 마스터 4줄(13/11/11/10). KDS 표기는 현행 유지(kcsc 로그인 필수로 개정 미확인 · MIN 2026-09-03) -->
+      <div class="hdr-right"><strong>옹벽 설계기준</strong><br/>KDS 11 80 10 · KDS 11 10 05<br/>구조물기초설계기준 · KDS 11 50 15<br/><em>[전도 ≥2.0 · 활동 ≥1.5 · 지지력 ≥3.0]</em></div>
+      <!-- v5.0 : 헤더 버튼 없음. 설치는 PWA 배너가, 초기화는 우측 하단 FAB 이 담당한다(§3-1 · §18-1). -->
     </div>
   </div>
 </header>
 
 <!-- ══════ TAB BAR ══════ -->
-<nav class="tab-bar no-print">
+<nav class="tab-bar">
   <div class="tab-bar-inner">
-    <button class="tb active" onclick="switchTab('gravity')" id="tab-gravity">
-      <span class="tb-dot blue"></span><span class="tb-lbl">중력식</span>
-    </button>
-    <button class="tb" onclick="switchTab('cantilever')" id="tab-cantilever">
-      <span class="tb-dot teal"></span><span class="tb-lbl">캔틸레버</span>
-    </button>
-    <button class="tb" onclick="switchTab('anchored')" id="tab-anchored">
-      <span class="tb-dot amber"></span><span class="tb-lbl">앵커</span>
-    </button>
-    <button class="tb" onclick="switchTab('a4preview')" id="tab-a4preview">
-      <span class="tb-dot red"></span><span class="tb-lbl">📄A4미리보기</span>
-    </button>
-    <button class="tb" onclick="switchTab('preview')" id="tab-preview">
-      <span class="tb-dot green"></span><span class="tb-lbl">📱모바일</span>
-    </button>
+    <button class="tb active" onclick="switchTab('gravity')" id="tab-gravity">🏛️ 중력식</button>
+    <button class="tb" onclick="switchTab('cantilever')" id="tab-cantilever">🔲 캔틸레버식</button>
+    <button class="tb" onclick="switchTab('anchored')" id="tab-anchored">⚓ 앵커식</button>
+    <button class="tb" onclick="switchTab('a4preview')" id="tab-a4preview">📄 A4 보고서</button>
   </div>
 </nav>
+</div><!-- /.hdr-shell -->
+<!-- v5.0-HDR : 요약 스트립 (헤더 3층) — 값은 문서 끝 스크립트가 선택 옹벽 result 에서 읽어 채운다 -->
+<div class="sum-bar-wrap no-print">
+  <div class="sum-bar">
+    <span class="sum-item">🧱 형식: <b id="sb-type">—</b></span>
+    <span class="sum-item">🔄 전도 Fs: <b id="sb-fso">—</b></span>
+    <span class="sum-item">↔️ 활동 Fs: <b id="sb-fss">—</b></span>
+    <span class="sum-item">⬇️ qmax: <b id="sb-qmax">—</b></span>
+    <span class="sum-item">📐 편심 e: <b id="sb-e">—</b></span>
+    <span class="sum-item">✅ 판정: <b id="sb-judge">—</b></span>
+  </div>
+</div>
 
 <!-- ══════ MAIN ══════ -->
 <main class="main-wrap no-print">
@@ -1109,31 +933,23 @@ table tr:nth-child(even) td{background:#f8fafd;}
     </div>
   </div>
 </div>
-
-<!-- ─── ISO A4 미리보기 / PDF 출력 탭 ─── -->
+<!-- ─── A4 검토 보고서 탭 (v5.0 §3-4 서식 · 출력 진입점 1곳 · 같은 DOM 에서 인쇄) ─── -->
 <div class="tab-panel" id="panel-a4preview">
-  <div class="a4iso-wrap">
-    <!-- 옹벽 선택 탭 -->
-    <div class="preview-sel-bar">
-      <button class="prev-sel-btn active" id="a4sel-gravity"   onclick="selectPreviewWall('gravity','a4')">🏛️ 중력식</button>
-      <button class="prev-sel-btn"        id="a4sel-cantilever" onclick="selectPreviewWall('cantilever','a4')">🔲 캔틸레버</button>
-      <button class="prev-sel-btn"        id="a4sel-anchored"   onclick="selectPreviewWall('anchored','a4')">⚓ 앵커식</button>
-    </div>
-    <!-- 툴바 (저장/출력/공유만) -->
-    <div class="a4iso-toolbar">
-      <button class="btn-secondary" style="background:#1976d2;border-color:#1976d2;color:#fff;padding:10px 16px;" onclick="printA4()">
-        🖨️ <span>PDF 출력</span>
-      </button>
-      <button class="btn-secondary" style="background:#00897b;border-color:#00897b;color:#fff;padding:10px 16px;" onclick="saveA4Jpg()">
-        💾 <span>JPG 저장</span>
-      </button>
-      <button class="btn-secondary" style="background:#f57c00;border-color:#f57c00;color:#fff;padding:10px 16px;" onclick="openShareModal()">
-        📤 <span>공유</span>
-      </button>
-    </div>
-    <!-- A4 스케일 래퍼 -->
-    <div id="a4iso-scale-wrap" class="a4iso-scale-wrap">
-      <div class="a4iso-page" id="a4iso-content">
+  <!-- 옹벽 선택 탭 -->
+  <div class="preview-sel-bar no-print">
+    <button class="prev-sel-btn active" id="a4sel-gravity"   onclick="selectPreviewWall('gravity','a4')">🏛️ 중력식</button>
+    <button class="prev-sel-btn"        id="a4sel-cantilever" onclick="selectPreviewWall('cantilever','a4')">🔲 캔틸레버</button>
+    <button class="prev-sel-btn"        id="a4sel-anchored"   onclick="selectPreviewWall('anchored','a4')">⚓ 앵커식</button>
+  </div>
+  <div class="a4-export-bar no-print">
+    <span class="bar-lbl">📄 A4 출력 :</span>
+    <button class="mm-btn mm-btn-print" onclick="printA4()">🖨️ 인쇄 / PDF 저장</button>
+    <button class="mm-btn mm-btn-jpg" id="btn-jpg" onclick="exportA4Jpg()">🖼️ JPG 저장</button>
+    <span style="font-size:10px;color:#64748b;margin-left:4px;">※ 검토 실행 후 옹벽 형식을 선택하세요 · 인쇄 대화상자에서 "PDF로 저장" 가능</span>
+  </div>
+  <div class="a4-wrap" id="a4Wrap">
+    <div class="a4-scale-wrap" id="a4iso-scale-wrap">
+      <div class="a4-page" id="a4iso-content">
         <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:600px;color:#90a4ae;">
           <div style="font-size:56px;margin-bottom:16px;">📄</div>
           <div style="font-size:16px;font-weight:800;color:#546e7a;">A4 검토 보고서</div>
@@ -1147,36 +963,6 @@ table tr:nth-child(even) td{background:#f8fafd;}
   </div>
 </div>
 
-<!-- ─── 모바일 미리보기 탭 ─── -->
-<div class="tab-panel" id="panel-preview">
-  <!-- 옹벽 선택 탭 -->
-  <div class="preview-sel-bar">
-    <button class="prev-sel-btn active" id="mobsel-gravity"    onclick="selectPreviewWall('gravity','mob')">🏛️ 중력식</button>
-    <button class="prev-sel-btn"        id="mobsel-cantilever"  onclick="selectPreviewWall('cantilever','mob')">🔲 캔틸레버</button>
-    <button class="prev-sel-btn"        id="mobsel-anchored"    onclick="selectPreviewWall('anchored','mob')">⚓ 앵커식</button>
-  </div>
-  <div style="text-align:center;margin-bottom:10px;">
-    <div style="font-size:10px;font-weight:700;color:#90a4ae;margin-bottom:8px;">📱 갤럭시 S24 Ultra (432 × 932 dp)</div>
-    <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
-      <button class="btn-secondary" style="background:#1976d2;border-color:#1976d2;color:#fff;" onclick="saveJpg()">💾 JPG 저장</button>
-      <button class="btn-secondary" style="background:#00897b;border-color:#00897b;color:#fff;" onclick="openShareModal()">📤 공유</button>
-    </div>
-  </div>
-  <div class="a4-wrap">
-    <div class="a4-scale-wrap" id="a4-scale-wrap">
-      <div class="phone-frame">
-        <div class="phone-notch"></div>
-        <div class="a4-page" id="a4-content">
-          <div style="text-align:center;padding:40px 20px;color:#90a4ae;">
-            <div style="font-size:28px;margin-bottom:10px;">🏗️</div>
-            <div style="font-size:13px;font-weight:800;color:#546e7a;">검토 결과가 없습니다</div>
-            <div style="font-size:11px;margin-top:6px;line-height:1.6;">각 탭에서 검토 후<br/>위 탭으로 옹벽을 선택하세요.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 
 </main><!-- /main-wrap -->
 
@@ -1185,41 +971,43 @@ table tr:nth-child(even) td{background:#f8fafd;}
   <div class="bottom-bar-inner">
     <button class="btn-secondary" onclick="resetCurrent()">🔄 <span class="btn-stxt">초기화</span></button>
     <button class="btn-calc" id="btn-calc" onclick="calcCurrent()">🔍 안전성 검토 실행</button>
-    <button class="btn-secondary" onclick="switchTab('preview')">📱 <span class="btn-stxt">미리보기</span></button>
+    <button class="btn-secondary" onclick="switchTab('a4preview')">📄 <span class="btn-stxt">A4 보고서</span></button>
   </div>
 </div>
 
-<!-- ══════ 삼각자 도움말 FAB ══════ -->
-<div class="no-print">
-  <svg class="help-fab" onclick="toggleHelp()" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
-    <polygon points="4,48 48,48 4,4" fill="url(#tGrad)" rx="4"/>
-    <defs>
-      <linearGradient id="tGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" style="stop-color:#1976d2;stop-opacity:1"/>
-        <stop offset="100%" style="stop-color:#0d47a1;stop-opacity:1"/>
-      </linearGradient>
-    </defs>
-    <rect x="4" y="40" width="8" height="8" fill="none" stroke="#90caf9" stroke-width="1.5"/>
-    <text x="26" y="46" font-family="sans-serif" font-size="14" font-weight="900" fill="white" text-anchor="middle">?</text>
-    <line x1="8" y1="44" x2="8" y2="38" stroke="#90caf9" stroke-width="1"/>
-    <line x1="8" y1="44" x2="14" y2="44" stroke="#90caf9" stroke-width="1"/>
-  </svg>
+<!-- ══ FAB 버튼 그룹 (v5.0 §18-11 — 초기화 위 · 도움말 아래 · 하단 계산바 위) ══ -->
+<div id="fab-group" class="no-print">
+  <button class="help-fab" id="fabReset" onclick="resetAll()" title="전체 초기화">
+    <span class="fab-icon">🔄</span>
+    <span class="fab-lbl">초기화</span>
+    <span class="fab-sub">전체</span>
+  </button>
+  <button class="help-fab" id="fabHelp" onclick="toggleHelp()" title="검토 도움말">
+    <span class="fab-icon">📐</span>
+    <span class="fab-lbl">설계기준</span>
+    <span class="fab-sub">도움말</span>
+  </button>
 </div>
 
-<!-- ══════ 도움말 오버레이 (화면 중앙 모달) ══════ -->
-<div class="help-overlay no-print" id="help-overlay" onclick="handleHelpOverlayClick(event)">
-  <div class="help-panel" id="help-panel">
-    <div class="help-panel-head">
-      <span style="font-size:20px;">📐</span>
-      <span class="help-panel-tit">옹벽 안전성 검토 도움말</span>
-      <button class="help-panel-cls" onclick="toggleHelp()">✕</button>
+<!-- ══════ 도움말 모달 (v5.0 §18-11 — 중앙 다이얼로그 · 그라데이션 head + 탭) ══════ -->
+<div class="master-modal-ov help-overlay no-print" id="help-overlay" onclick="handleHelpOverlayClick(event)">
+  <div class="master-modal-box help-panel" id="help-panel">
+    <div class="master-modal-hd">
+      <div class="master-modal-head">
+        <div>
+          <div class="master-modal-tit">📐 옹벽 안전성 검토 도움말</div>
+          <div class="master-modal-sub">KDS 11 80 10 · KDS 11 10 05 · 구조물기초설계기준 · MANMIN Ver-5.0</div>
+        </div>
+        <button class="master-modal-cls" onclick="toggleHelp()">✕</button>
+      </div>
+      <div class="master-modal-tabs">
+        <button class="mm-mtab help-tab active" onclick="switchHelpTab('usage')">📘 사용방법</button>
+        <button class="mm-mtab help-tab" onclick="switchHelpTab('law')">⚖️ 관련 법규</button>
+        <button class="mm-mtab help-tab" onclick="switchHelpTab('formula')">📐 계산식</button>
+      </div>
     </div>
-    <div class="help-tabs">
-      <button class="help-tab active" onclick="switchHelpTab('usage')">사용방법</button>
-      <button class="help-tab" onclick="switchHelpTab('law')">관련 법규</button>
-      <button class="help-tab" onclick="switchHelpTab('formula')">계산식</button>
-    </div>
-    <div class="help-tab-body">
+    <div class="master-modal-body">
+
       <!-- 사용방법 -->
       <div class="help-tab-panel active" id="help-usage">
         <div class="help-item">
@@ -1238,10 +1026,10 @@ table tr:nth-child(even) td{background:#f8fafd;}
           <div class="help-step"><div class="help-num">5</div><div class="help-txt"><b>안전성 검토 실행</b>: 하단 <b>안전성 검토 실행</b> 버튼을 클릭하면 전도·활동·지지력·편심 안전율을 자동 계산합니다.</div></div>
         </div>
         <div class="help-item">
-          <div class="help-step"><div class="help-num">6</div><div class="help-txt"><b>📄 A4 보고서</b>: A4미리보기 탭에서 ISO A4 규격 검토보고서를 확인하고 <b>PDF 출력 / JPG 저장</b>합니다.</div></div>
+          <div class="help-step"><div class="help-num">6</div><div class="help-txt"><b>📄 A4 보고서</b>: A4 보고서 탭에서 옹벽 형식을 선택해 ISO A4 검토보고서를 확인하고 <b>인쇄 / PDF 저장 · JPG 저장</b>합니다. JPG 는 A4 용지 비율로 쪽 단위 분할되어 미리보기 시트에서 저장합니다.</div></div>
         </div>
         <div class="help-item">
-          <div class="help-step"><div class="help-num">7</div><div class="help-txt"><b>📱 모바일 공유</b>: 모바일 탭에서 갤럭시 S24 Ultra(432×932dp) 규격 미리보기 후 JPG로 저장·공유합니다.</div></div>
+          <div class="help-step"><div class="help-num">7</div><div class="help-txt"><b>🔄 초기화</b>: 하단 초기화는 현재 탭만, 우측 하단 초기화 버튼은 세 형식 전체를 초기화합니다.</div></div>
         </div>
       </div>
       <!-- 관련 법규 -->
@@ -1304,35 +1092,7 @@ table tr:nth-child(even) td{background:#f8fafd;}
           <div class="law-desc">qmax = ΣV/B · (1 + 6e/B) ≤ qa<br/>qa: 허용 지지력 (kPa)</div>
         </div>
       </div>
-    </div>
-  </div>
-</div>
-
-<!-- ══════ 공유 모달 ══════ -->
-<div class="modal-overlay" id="share-modal" onclick="closeShareModal(event)">
-  <div class="share-modal-box">
-    <div class="modal-head">
-      <div class="modal-tit">📤 결과 공유</div>
-      <button class="modal-cls" onclick="closeShareModal()">✕</button>
-    </div>
-    <div class="share-btns">
-      <button class="share-btn" onclick="saveJpg()">
-        <span class="share-btn-ico">🖼️</span>
-        <span class="share-btn-lbl">JPG 저장</span>
-      </button>
-      <button class="share-btn" onclick="shareNative()">
-        <span class="share-btn-ico">📱</span>
-        <span class="share-btn-lbl">모바일 공유</span>
-      </button>
-      <button class="share-btn" onclick="copyResult()">
-        <span class="share-btn-ico">📋</span>
-        <span class="share-btn-lbl">결과 복사</span>
-      </button>
-      <button class="share-btn" onclick="window.print()">
-        <span class="share-btn-ico">🖨️</span>
-        <span class="share-btn-lbl">인쇄</span>
-      </button>
-    </div>
+    </div><!-- /master-modal-body -->
   </div>
 </div>
 
@@ -1340,7 +1100,6 @@ table tr:nth-child(even) td{background:#f8fafd;}
 <div class="toast" id="toast"></div>
 
 </div><!-- /root-app -->
-<div id="print-target" style="display:none;"></div>
 
 <script>
 /* ════════════════════════════════════════════
@@ -1360,23 +1119,16 @@ var previewSel = { a4: 'gravity', mob: 'gravity' };
 function selectPreviewWall(wallType, mode){
   previewSel[mode] = wallType;
 
-  // 버튼 활성화
-  var prefix = (mode === 'a4') ? 'a4sel-' : 'mobsel-';
+  // 버튼 활성화 (v5.0 — 모바일 미리보기 삭제, A4 한 경로)
   ['gravity','cantilever','anchored'].forEach(function(t){
-    var btn = document.getElementById(prefix + t);
+    var btn = document.getElementById('a4sel-' + t);
     if(btn) btn.classList.toggle('active', t === wallType);
   });
 
   // 결과 객체 선택
   var r = getResultByType(wallType);
-
-  if(mode === 'a4'){
-    renderA4Iso(r);
-    scaleA4Iso();
-  } else {
-    renderA4Report(r);
-    scaleA4();
-  }
+  renderA4Iso(r);
+  scaleA4Iso();
 
   if(!r){
     showToast('⚠️ ' + wallTypeLabel(wallType) + ' 검토를 먼저 실행해주세요.');
@@ -1399,7 +1151,7 @@ function refreshPreviewSelBadges(){
   ['gravity','cantilever','anchored'].forEach(function(t){
     var r = getResultByType(t);
     var badge = (r ? (r.allPass ? '✓' : '!') : '-');
-    ['a4sel-','mobsel-'].forEach(function(pfx){
+    ['a4sel-'].forEach(function(pfx){
       var btn = document.getElementById(pfx + t);
       if(!btn) return;
       var bdg = btn.querySelector('.prev-sel-badge');
@@ -1421,11 +1173,6 @@ function switchTab(name){
   document.getElementById('panel-' + name).classList.add('active');
   var tb = document.getElementById('tab-' + name);
   if(tb) tb.classList.add('active');
-  if(name === 'preview'){
-    var r = getResultByType(previewSel.mob);
-    renderA4Report(r);
-    scaleA4();
-  }
   if(name === 'a4preview'){
     var r = getResultByType(previewSel.a4);
     renderA4Iso(r);
@@ -1435,7 +1182,7 @@ function switchTab(name){
 }
 function updateCalcBtn(){
   var btn = document.getElementById('btn-calc');
-  if(currentTab === 'preview' || currentTab === 'a4preview'){
+  if(currentTab === 'a4preview'){
     btn.textContent = '← 검토 탭으로 이동';
     btn.onclick = function(){ switchTab('gravity'); };
   } else {
@@ -2031,8 +1778,8 @@ function renderGravityResult(r){
   previewSel.a4  = 'gravity';
   previewSel.mob = 'gravity';
   refreshPreviewSelBadges();
-  // A4 갱신
-  renderA4Report(r);
+  // A4 갱신 (v5.0 — 모바일 미리보기 삭제)
+  renderA4Iso(r);
 }
 
 /* ════════════════════════════════════════════
@@ -2143,7 +1890,7 @@ function renderCantileverResult(r){
     + '<div class="card"><div class="card-head"><div class="card-ico teal">📐</div><span class="card-tit">단면 다이어그램 (역T형)</span></div>'
     + '<div class="card-body" style="padding:10px;"><svg id="c-diagram" viewBox="0 0 320 260" width="100%" style="max-width:320px;display:block;margin:0 auto;border:1px solid #e2e8f0;border-radius:8px;background:#f8fafd;"></svg></div></div>';
   drawCantileverDiagram();
-  renderA4Report(r);
+  renderA4Iso(r);
 }
 
 /* ════════════════════════════════════════════
@@ -2251,7 +1998,7 @@ function renderAnchoredResult(r){
     + '<div class="card"><div class="card-head"><div class="card-ico amber">📐</div><span class="card-tit">단면 다이어그램 (앵커식)</span></div>'
     + '<div class="card-body" style="padding:10px;"><svg id="an-diagram" viewBox="0 0 320 260" width="100%" style="max-width:320px;display:block;margin:0 auto;border:1px solid #e2e8f0;border-radius:8px;background:#f8fafd;"></svg></div></div>';
   drawAnchoredDiagram();
-  renderA4Report(r);
+  renderA4Iso(r);
 }
 
 /* ════════════════════════════════════════════
@@ -2337,205 +2084,6 @@ function resetAnchored(){
 function resetAll(){ resetGravity(); resetCantilever(); resetAnchored(); }
 
 /* ════════════════════════════════════════════
-   A4(모바일) 보고서 렌더링
-════════════════════════════════════════════ */
-function renderA4Report(r){
-  var el = document.getElementById('a4-content');
-  if(!el) return;
-  var today = new Date();
-  var dateStr = today.getFullYear()+'년 '+('0'+(today.getMonth()+1)).slice(-2)+'월 '+('0'+today.getDate()).slice(-2)+'일';
-
-  // r이 명시적으로 전달되지 않으면 선택된 옹벽 결과 사용
-  if(r === undefined) r = getResultByType(previewSel.mob);
-  if(!r){
-    el.innerHTML='<div style="text-align:center;padding:40px 20px;color:#90a4ae;"><div style="font-size:28px;margin-bottom:10px;">🏗️</div><div style="font-size:13px;font-weight:800;color:#546e7a;">검토 결과가 없습니다</div><div style="font-size:11px;margin-top:6px;line-height:1.6;">검토를 먼저 실행해주세요.</div></div>';
-    return;
-  }
-  function fs(n){ return n.toFixed(3); }
-  function judgeHtml(pass){ return pass ? '<span class="judge-badge ok">✓ OK</span>' : '<span class="judge-badge ng">✗ NG</span>'; }
-
-  var heroColor = r.allPass ? '#2e7d32' : '#c62828';
-  var heroLabel = r.allPass ? '✅ 안전 (PASS)' : '⚠️ 불안전 (NG)';
-
-  var html = '';
-  // 헤더
-  html += '<div class="a4-title-wrap">';
-  html += '<div><div class="a4-title-main">옹벽 안전성 검토</div><div style="font-size:8px;color:#1976d2;font-weight:700;">'+r.type+'</div></div>';
-  html += '<div class="a4-title-sub">'+r.proj+'<br/>작성: '+r.author+'<br/>'+dateStr+'</div>';
-  html += '</div>';
-
-  // 종합 판정
-  html += '<div class="a4-rbox '+(r.allPass?'grn':'red')+'">';
-  html += '<div style="font-size:9px;font-weight:700;opacity:.7;margin-bottom:2px;">종합 판정</div>';
-  html += '<div style="font-size:13px;font-weight:900;">'+heroLabel+'</div>';
-  if(r.Fs_o !== undefined) html += '<div style="font-size:11px;opacity:.8;margin-top:3px;">전도 Fs = '+fs(r.Fs_o)+' / 활동 Fs = '+fs(r.Fs_s)+'</div>';
-  html += '</div>';
-
-  // 설계 조건
-  html += '<div class="a4-sec">① 설계 조건</div>';
-  html += '<div class="a4-grid">';
-  html += '<div class="a4-ic"><span class="a4-ik">옹벽높이 H</span><span class="a4-iv">'+r.H+' m</span></div>';
-  html += '<div class="a4-ic"><span class="a4-ik">저면폭 B</span><span class="a4-iv">'+r.B+' m</span></div>';
-  if(r.phi !== undefined){
-    html += '<div class="a4-ic"><span class="a4-ik">내부마찰각 φ</span><span class="a4-iv">'+r.phi+'°</span></div>';
-    html += '<div class="a4-ic"><span class="a4-ik">단위중량 γs</span><span class="a4-iv">'+r.gs+' kN/m³</span></div>';
-  }
-  if(r.mu !== undefined){
-    html += '<div class="a4-ic"><span class="a4-ik">마찰계수 μ</span><span class="a4-iv">'+r.mu+'</span></div>';
-    html += '<div class="a4-ic"><span class="a4-ik">허용지지력 qa</span><span class="a4-iv">'+r.qa+' kPa</span></div>';
-  }
-  html += '</div>';
-
-  // 안전성 검토표
-  html += '<div class="a4-sec">② 안전성 검토 결과</div>';
-  html += '<table class="a4-tbl"><thead><tr><th>검토항목</th><th>기준</th><th>산정값</th><th>판정</th></tr></thead><tbody>';
-  if(r.Fs_o !== undefined){
-    html += '<tr><td>전도 안전율</td><td>≥ 2.00</td><td class="mono">'+fs(r.Fs_o)+'</td><td>'+(r.pass_o?'<b style="color:#2e7d32">OK</b>':'<b style="color:#c62828">NG</b>')+'</td></tr>';
-    html += '<tr><td>활동 안전율</td><td>≥ 1.50</td><td class="mono">'+fs(r.Fs_s)+'</td><td>'+(r.pass_s?'<b style="color:#2e7d32">OK</b>':'<b style="color:#c62828">NG</b>')+'</td></tr>';
-    html += '<tr><td>최대지반반력 (kPa)</td><td>≤ '+r.qa+'</td><td class="mono">'+r.qmax.toFixed(2)+'</td><td>'+(r.pass_b?'<b style="color:#2e7d32">OK</b>':'<b style="color:#c62828">NG</b>')+'</td></tr>';
-    html += '<tr><td>편심 e (m)</td><td>≤ '+r.e_allow.toFixed(3)+'</td><td class="mono">'+r.e.toFixed(4)+'</td><td>'+(r.pass_e?'<b style="color:#2e7d32">OK</b>':'<b style="color:#c62828">NG</b>')+'</td></tr>';
-  }
-  if(r.Fs_anchor !== undefined){
-    html += '<tr><td>앵커 내력 Fs</td><td>≥ 1.50</td><td class="mono">'+fs(r.Fs_anchor)+'</td><td>'+(r.pass_anc?'<b style="color:#2e7d32">OK</b>':'<b style="color:#c62828">NG</b>')+'</td></tr>';
-    html += '<tr><td>인발 안전율</td><td>≥ 2.00</td><td class="mono">'+fs(r.Fs_pull)+'</td><td>'+(r.pass_pull?'<b style="color:#2e7d32">OK</b>':'<b style="color:#c62828">NG</b>')+'</td></tr>';
-    html += '<tr><td>전체안정 Fs</td><td>≥ 1.20</td><td class="mono">'+fs(r.Fs_global)+'</td><td>'+(r.pass_glob?'<b style="color:#2e7d32">OK</b>':'<b style="color:#c62828">NG</b>')+'</td></tr>';
-  }
-  html += '</tbody></table>';
-
-  // 계산 경과
-  if(r.Ka !== undefined){
-    html += '<div class="a4-sec teal">③ 토압 계산</div>';
-    html += '<div class="a4-grid3">';
-    html += '<div class="a4-ic"><span class="a4-ik">토압계수 Ka</span><span class="a4-iv">'+r.Ka.toFixed(4)+'</span></div>';
-    html += '<div class="a4-ic"><span class="a4-ik">수평토압 Ea</span><span class="a4-iv">'+(r.Ea||0).toFixed(2)+' kN/m</span></div>';
-    html += '<div class="a4-ic"><span class="a4-ik">작용위치 ya</span><span class="a4-iv">'+(r.ya||0).toFixed(3)+' m</span></div>';
-    if(r.Mr !== undefined){
-      html += '<div class="a4-ic"><span class="a4-ik">저항모멘트 Mr</span><span class="a4-iv">'+r.Mr.toFixed(2)+' kN·m</span></div>';
-      html += '<div class="a4-ic"><span class="a4-ik">전도모멘트 Mo</span><span class="a4-iv">'+r.Mo.toFixed(2)+' kN·m</span></div>';
-      html += '<div class="a4-ic"><span class="a4-ik">합력위치 x̄</span><span class="a4-iv">'+r.xR.toFixed(3)+' m</span></div>';
-    }
-    html += '</div>';
-  }
-
-  // 적용 기준
-  html += '<div class="a4-sec">④ 적용 기준</div>';
-  html += '<div style="background:#f8fafd;border:1px solid #e2e8f0;border-radius:5px;padding:6px 8px;font-size:8.5px;line-height:1.8;color:#334155;">';
-  html += '• KDS 11 80 10 (옹벽 설계기준) — 전도·활동·지지력 안전율<br/>';
-  html += '• KDS 11 10 05 (기초구조 설계기준) — 편심 허용범위<br/>';
-  html += '• 구조물기초설계기준 (2021, 국토교통부)<br/>';
-  html += r.type.indexOf('캔틸레버')>=0 ? '• KDS 14 20 54 (RC 구조기준) — 철근 설계<br/>' : '';
-  html += r.type.indexOf('앵커')>=0 ? '• KDS 11 50 15 (앵커 설계기준) — 인발·내력 검토<br/>' : '';
-  html += '</div>';
-
-  // 비고
-  html += '<div style="margin-top:8px;padding:6px 8px;background:#fff8e1;border:1px solid #ffe082;border-radius:5px;font-size:8px;color:#795548;line-height:1.7;">';
-  html += '※ 본 검토는 자동 산정 결과이며, H≥5m 구조물은 관련 법령에 따라 책임기술자의 검토·날인이 필요합니다.<br/>';
-  html += '※ 건설기술진흥법 시행규칙 제60조 및 구조물기초설계기준에 의거하여 현장 지반조사 결과를 반드시 반영하십시오.';
-  html += '</div>';
-
-  // 푸터
-  html += '<div class="a4-footer"><span>🏗️ CIVIL ENGINEER</span><span>MANMIN Ver2.0</span><span>KDS 11 80 10</span></div>';
-
-  el.innerHTML = html;
-}
-
-/* ════════════════════════════════════════════
-   A4 스케일 (모바일 프리뷰)
-════════════════════════════════════════════ */
-function scaleA4(){
-  var wrap = document.getElementById('a4-scale-wrap');
-  if(!wrap) return;
-  var parent = wrap.parentElement;
-  if(!parent) return;
-
-  var NATURAL_W = 456;   /* phone-frame 고정폭 */
-
-  /* ★ clientWidth: padding 제외 순수 내부 너비
-     getBoundingClientRect는 소수점은 정확하나 padding 포함 오차 발생
-     패딩을 0으로 만들었으므로 둘 다 동일하지만 clientWidth가 더 안전 */
-  var outerW = parent.clientWidth;
-  if(outerW <= 0) outerW = window.innerWidth;  /* fallback */
-
-  var scale   = Math.min(1, outerW / NATURAL_W);
-  var scaledW = NATURAL_W * scale;
-
-  /* 항상 수평 중앙 정렬:
-     데스크탑(scale=1): offset = (outerW-456)/2
-     모바일(scale<1) : scaledW < outerW → 남은 공간 절반씩 좌우 패딩 */
-  var offset  = Math.max(0, (outerW - scaledW) / 2);
-
-  wrap.style.transformOrigin = 'top left';
-  wrap.style.transform       = 'translateX('+offset+'px) scale('+scale+')';
-
-  /* 높이 보정: 원본 높이 × scale = 축소 후 실제 점유 높이 */
-  requestAnimationFrame(function(){
-    var naturalH = wrap.scrollHeight;        /* 원본(축소 전) 높이 */
-    var scaledH  = naturalH * scale;         /* 화면상 실제 높이  */
-    parent.style.minHeight = (scaledH + 40) + 'px';
-  });
-}
-
-/* ════════════════════════════════════════════
-   JPG 저장 (갤럭시 S24 Ultra 규격)
-════════════════════════════════════════════ */
-function saveJpg(){
-  var el = document.getElementById('a4-content');
-  showToast('🖼️ 이미지 생성 중...');
-  html2canvas(el, {
-    scale: 3,
-    useCORS: true,
-    backgroundColor: '#ffffff',
-    width: 432,
-    logging: false
-  }).then(function(canvas){
-    var url = canvas.toDataURL('image/jpeg', 0.95);
-    var now = new Date();
-    var fname = '옹벽안전성검토_' + now.getFullYear() + ('0'+(now.getMonth()+1)).slice(-2) + ('0'+now.getDate()).slice(-2) + '.jpg';
-    var a = document.createElement('a');
-    a.href = url; a.download = fname; a.click();
-    showToast('✅ JPG 저장 완료 (' + fname + ')');
-  }).catch(function(){ showToast('⚠️ 이미지 생성 오류'); });
-}
-
-/* ════════════════════════════════════════════
-   공유 기능
-════════════════════════════════════════════ */
-function shareNative(){
-  var el = document.getElementById('a4-content');
-  html2canvas(el, {scale:2, useCORS:true, backgroundColor:'#ffffff'}).then(function(canvas){
-    canvas.toBlob(function(blob){
-      if(navigator.share && navigator.canShare){
-        var file = new File([blob], '옹벽안전성검토.jpg', {type:'image/jpeg'});
-        if(navigator.canShare({files:[file]})){
-          navigator.share({title:'옹벽 안전성 검토', files:[file]}).catch(function(){});
-          return;
-        }
-      }
-      showToast('📱 이 브라우저는 공유를 지원하지 않습니다. JPG 저장을 이용해주세요.');
-    }, 'image/jpeg', 0.95);
-  });
-  closeShareModal();
-}
-function copyResult(){
-  var r = G.result || C_RES.result || AN_RES.result;
-  if(!r){ showToast('⚠️ 먼저 검토를 실행해주세요.'); return; }
-  var txt = '[옹벽 안전성 검토 결과]\n';
-  txt += '형식: '+r.type+'\n';
-  txt += '현장: '+r.proj+'\n';
-  if(r.Fs_o) txt += '전도 Fs: '+r.Fs_o.toFixed(3)+' ('+(r.pass_o?'OK':'NG')+')\n';
-  if(r.Fs_s) txt += '활동 Fs: '+r.Fs_s.toFixed(3)+' ('+(r.pass_s?'OK':'NG')+')\n';
-  if(r.qmax) txt += '최대지반반력: '+r.qmax.toFixed(2)+' kPa ('+(r.pass_b?'OK':'NG')+')\n';
-  txt += '종합: '+(r.allPass?'안전 (PASS)':'불안전 (NG)')+'\n';
-  txt += '기준: KDS 11 80 10';
-  navigator.clipboard.writeText(txt).then(function(){
-    showToast('📋 결과 복사 완료');
-  }).catch(function(){
-    showToast('⚠️ 복사에 실패했습니다.');
-  });
-  closeShareModal();
-}
-
-/* ════════════════════════════════════════════
    도움말 패널 (중앙 모달)
 ════════════════════════════════════════════ */
 var _helpOpen = false;
@@ -2573,18 +2121,6 @@ function switchHelpTab(name){
 }
 
 /* ════════════════════════════════════════════
-   공유 모달
-════════════════════════════════════════════ */
-function openShareModal(){
-  document.getElementById('share-modal').classList.add('open');
-}
-function closeShareModal(e){
-  if(!e || e.target === document.getElementById('share-modal')){
-    document.getElementById('share-modal').classList.remove('open');
-  }
-}
-
-/* ════════════════════════════════════════════
    TOAST
 ════════════════════════════════════════════ */
 function showToast(msg){
@@ -2613,22 +2149,12 @@ function renderA4Iso(r){
   var passLabel = r.allPass ? '✅  안전 (ALL PASS)' : '⚠️  불안전 (재검토 필요)';
 
   var html = '';
-  // 워터마크
-  html += '<div class="a4iso-watermark">MANMIN</div>';
-
   // ── 헤더 ──
-  html += '<div class="a4iso-hd">';
-  html += '<div class="a4iso-hd-left">';
-  html += '<div class="a4iso-hd-logo">🏗️</div>';
-  html += '<div><div class="a4iso-hd-tit">옹벽 구조물 안전성 검토 보고서</div>';
-  html += '<div class="a4iso-hd-sub">KDS 11 80 10 / KDS 11 10 05 / 구조물기초설계기준 (2021) · MANMIN Ver2.0</div></div>';
-  html += '</div>';
-  html += '<div class="a4iso-hd-info"><table>';
-  html += '<tr><td>현 장 명</td><td>'+(r.proj||'-')+'</td></tr>';
-  html += '<tr><td>작 성 자</td><td>'+(r.author||'-')+'</td></tr>';
-  html += '<tr><td>작 성 일</td><td>'+ymd+'</td></tr>';
-  html += '<tr><td>옹벽형식</td><td>'+r.type+'</td></tr>';
-  html += '</table></div>';
+  /* v5.0 §3-4 — .a4-tit 중앙 + .a4-head2 2단(좌 현장명 · 우 근거·작성일·작성자·형식) */
+  html += '<div class="a4-tit">옹벽 구조물 안전성 검토 보고서</div>';
+  html += '<div class="a4-head2">';
+  html += '<div class="a4-proj">현장명 : '+(r.proj||'-')+'</div>';
+  html += '<div class="a4-meta">근거 : KDS 11 80 10 · KDS 11 10 05 · 구조물기초설계기준 (2021)<br/>작성일 : '+ymd+' &nbsp;·&nbsp; 작성자 : '+(r.author||'-')+'<br/>옹벽 형식 : '+r.type+'</div>';
   html += '</div>';
 
   // ── 종합 판정 ──
@@ -2643,7 +2169,7 @@ function renderA4Iso(r){
   html += '</div>';
 
   // ── 설계 조건 ──
-  html += '<div class="a4iso-sec">① 설계 조건</div>';
+  html += '<div class="a4-sub">① 설계 조건</div>';
   if(r.H !== undefined){
     html += '<div class="a4iso-grid4">';
     html += '<div class="a4iso-cell"><span class="a4iso-cell-k">옹벽 높이 H</span><span class="a4iso-cell-v">'+r.H+' m</span></div>';
@@ -2659,7 +2185,7 @@ function renderA4Iso(r){
 
   // ── 토압 계산 ──
   if(r.Ka !== undefined){
-    html += '<div class="a4iso-sec amber">② 토압 산정 (Rankine 이론)</div>';
+    html += '<div class="a4-sub amber">② 토압 산정 (Rankine 이론)</div>';
     html += '<div class="a4iso-grid4">';
     html += '<div class="a4iso-cell"><span class="a4iso-cell-k">토압계수 Ka</span><span class="a4iso-cell-v">'+fv(r.Ka,4)+'</span></div>';
     html += '<div class="a4iso-cell"><span class="a4iso-cell-k">수평토압 Ea</span><span class="a4iso-cell-v">'+fv(r.Ea,2)+' kN/m</span></div>';
@@ -2673,8 +2199,8 @@ function renderA4Iso(r){
   }
 
   // ── 안전성 검토 결과표 ──
-  html += '<div class="a4iso-sec '+(r.allPass?'grn':'red')+'">③ 안전성 검토 결과 (KDS 11 80 10)</div>';
-  html += '<table class="a4iso-tbl"><thead><tr>';
+  html += '<div class="a4-sub '+(r.allPass?'grn':'red')+'">③ 안전성 검토 결과 (KDS 11 80 10)</div>';
+  html += '<table class="a4-tbl"><thead><tr>';
   html += '<th>검토 항목</th><th>산정값</th><th>허용 기준</th><th>안전율 기준</th><th>판정</th>';
   html += '</tr></thead><tbody>';
 
@@ -2715,7 +2241,7 @@ function renderA4Iso(r){
 
   // ── 보완 권고 ──
   if(!r.allPass){
-    html += '<div class="a4iso-sec red">④ 보완 권고사항</div>';
+    html += '<div class="a4-sub red">④ 보완 권고사항</div>';
     html += '<div style="background:#fff8e1;border:1px solid #ffe082;border-radius:6px;padding:10px 14px;font-size:10.5px;line-height:1.9;color:#795548;">';
     if(r.pass_o===false) html += '▸ <b>전도 안전율 부족</b>: 저면폭 B 증가 또는 뒷굽(heel) 연장 검토<br/>';
     if(r.pass_s===false) html += '▸ <b>활동 안전율 부족</b>: 활동 방지키(key) 설치 또는 기초 콘크리트 마찰면 개선<br/>';
@@ -2725,7 +2251,7 @@ function renderA4Iso(r){
   }
 
   // ── 적용 기준 ──
-  html += '<div class="a4iso-sec">⑤ 적용 설계 기준</div>';
+  html += '<div class="a4-sub">⑤ 적용 설계 기준</div>';
   html += '<div style="background:#f8fafd;border:1px solid #e2e8f0;border-radius:6px;padding:10px 14px;font-size:10.5px;line-height:2;color:#334155;">';
   html += '• KDS 11 80 10 (2016) — 옹벽 설계기준 (전도·활동·지지력 안전율)<br/>';
   html += '• KDS 11 10 05 (2021) — 기초구조 설계기준 (편심 허용범위, B/6 이내)<br/>';
@@ -2744,68 +2270,44 @@ function renderA4Iso(r){
   html += '</div>';
 
   // ── 푸터 ──
-  html += '<div class="a4iso-footer">';
-  html += '<span>🏗️ CIVIL ENGINEER — KIM MANMIN</span>';
-  html += '<span style="font-weight:900;color:#1565c0;">옹벽 구조물 안전성 검토 보고서</span>';
-  html += '<span>MANMIN Ver2.0 · '+ymd+'</span>';
+  html += '<div class="a4-footer">';
+  html += '<span>옹벽 구조물 안전성 검토 시스템 [MANMIN-Ver5.0]</span>';
+  html += '<span>KDS 11 80 10 · KDS 11 10 05 · 구조물기초설계기준</span>';
+  html += '<span>작성일: '+ymd+'</span>';
   html += '</div>';
 
   el.innerHTML = html;
+  markLongTables(el);
 }
 
 /* ════════════════════════════════════════════
-   A4 ISO 스케일 조정
+   A4 배율 — v5.0 : .a4-scale-wrap 에 transform:scale() (§17-4). 래퍼 width 인라인 금지(§17-3)
 ════════════════════════════════════════════ */
 function scaleA4Iso(){
   var wrap = document.getElementById('a4iso-scale-wrap');
-  if(!wrap) return;
-  var parent = wrap.closest('.a4iso-wrap');
-  if(!parent) return;
-
-  var NATURAL_W = 794;   /* A4 고정폭 */
-  var outerW  = parent.getBoundingClientRect().width;
-  var scale   = Math.min(1, outerW / NATURAL_W);
-  var scaledW = NATURAL_W * scale;
-  var offset  = Math.max(0, (outerW - scaledW) / 2);
-
-  wrap.style.transformOrigin = 'top left';
-  wrap.style.transform = 'translateX('+offset+'px) scale('+scale+')';
-
-  requestAnimationFrame(function(){
-    var scaledH = wrap.scrollHeight * scale;
-    parent.style.minHeight = Math.max(scaledH + 60, 400) + 'px';
-  });
+  var outer = document.getElementById('a4Wrap');
+  if(!wrap || !outer) return;
+  if(window.matchMedia('print').matches){ wrap.style.transform='none'; wrap.style.height=''; return; }
+  var tab = document.getElementById('panel-a4preview');
+  if(tab && !tab.classList.contains('active')) return;
+  var ocs = getComputedStyle(outer);
+  var availW = outer.clientWidth - (parseFloat(ocs.paddingLeft)||0) - (parseFloat(ocs.paddingRight)||0);
+  if(availW <= 0){ wrap.style.transform='none'; wrap.style.height=''; return; }
+  var scale = Math.max(0.05, Math.min(1, availW / 794));
+  wrap.style.transform = 'scale(' + scale.toFixed(5) + ')';
+  var page = document.getElementById('a4iso-content');
+  wrap.style.height = ((page ? page.offsetHeight : 1122) * scale) + 'px';
 }
+window._scaleA4 = scaleA4Iso;
 
 /* ════════════════════════════════════════════
-   A4 PDF 인쇄
+   A4 인쇄 — v5.0 : 같은 DOM(#panel-a4preview) 을 window.print() (§2② · §3-3). 복제 타깃 폐지
 ════════════════════════════════════════════ */
 function printA4(){
-  var src = document.getElementById('a4iso-content');
-  var tgt = document.getElementById('print-target');
-  if(src && tgt){
-    tgt.innerHTML = '<div class="a4iso-page" style="box-shadow:none;position:relative;">' + src.innerHTML + '</div>';
-  }
+  var r = getResultByType(previewSel.a4);
+  if(!r){ showToast('⚠️ 먼저 검토를 실행하고 옹벽 형식을 선택하세요'); return; }
+  renderA4Iso(r);
   window.print();
-}
-
-/* ════════════════════════════════════════════
-   A4 JPG 저장
-════════════════════════════════════════════ */
-function saveA4Jpg(){
-  var el = document.getElementById('a4iso-content');
-  showToast('🖼️ A4 이미지 생성 중...');
-  html2canvas(el,{
-    scale:2, useCORS:true, backgroundColor:'#ffffff',
-    width:794, logging:false
-  }).then(function(canvas){
-    var url = canvas.toDataURL('image/jpeg', 0.95);
-    var now = new Date();
-    var fname = '옹벽안전성검토_A4_' + now.getFullYear() + (now.getMonth()+1).toString().padStart(2,'0') + now.getDate().toString().padStart(2,'0') + '.jpg';
-    var a = document.createElement('a');
-    a.href = url; a.download = fname; a.click();
-    showToast('✅ A4 JPG 저장 완료');
-  }).catch(function(){ showToast('⚠️ 이미지 생성 오류'); });
 }
 
 
@@ -2818,16 +2320,16 @@ document.addEventListener('DOMContentLoaded', function(){
   drawCantileverDiagram();
   drawAnchoredDiagram();
   refreshPreviewSelBadges();
-  setTimeout(function(){ scaleA4(); scaleA4Iso(); }, 200);
+  setTimeout(function(){ scaleA4Iso(); }, 200);
 
   // resize + 화면 회전 대응
   var _resizeTimer;
   window.addEventListener('resize', function(){
     clearTimeout(_resizeTimer);
-    _resizeTimer = setTimeout(function(){ scaleA4(); scaleA4Iso(); }, 100);
+    _resizeTimer = setTimeout(function(){ scaleA4Iso(); }, 100);
   });
   window.addEventListener('orientationchange', function(){
-    setTimeout(function(){ scaleA4(); scaleA4Iso(); }, 300);
+    setTimeout(function(){ scaleA4Iso(); }, 300);
   });
 
   // ESC 키 (단일 등록)
@@ -2836,6 +2338,7 @@ document.addEventListener('DOMContentLoaded', function(){
   });
 });
 </script>
+
 
 <!-- ═══ iOS 홈화면 추가 안내 모달 ═══ -->
 <div id="ios-modal-rw">
@@ -2909,8 +2412,7 @@ document.addEventListener('DOMContentLoaded', function(){
                    || (window.navigator.standalone === true);
     if(isSA_now){ return; }
     deferred = e;
-    var btn = document.getElementById('pwa-install-btn');
-    if(btn) btn.classList.add('visible');
+    /* v5.0 — 헤더 설치 버튼 없음(§3-1). 설치 진입은 하단 배너. */
     if(!sessionStorage.getItem('pwa-dismissed')){
       setTimeout(function(){
         var b = document.getElementById('pwa-banner');
@@ -2927,18 +2429,12 @@ document.addEventListener('DOMContentLoaded', function(){
     var isSA2 = window.matchMedia('(display-mode:standalone)').matches
                 || (window.navigator.standalone === true);
     if(_isIOS && !isSA2){
-      var btn = document.getElementById('pwa-install-btn');
-      if(btn) btn.classList.add('visible');
       if(!sessionStorage.getItem('pwa-dismissed')){
         setTimeout(function(){
           var m = document.getElementById('ios-modal-rw');
           if(m) m.classList.add('show');
         }, 2000);
       }
-    }
-    if(isSA2){
-      var btn = document.getElementById('pwa-install-btn');
-      if(btn) btn.style.display = 'none';
     }
   }
   if(document.readyState === 'loading'){
@@ -2967,8 +2463,6 @@ document.addEventListener('DOMContentLoaded', function(){
     deferred.prompt();
     deferred.userChoice.then(function(r){
       if(r.outcome === 'accepted'){
-        var btn = document.getElementById('pwa-install-btn');
-        if(btn) btn.classList.remove('visible');
         deferred = null;
       } else {
         deferred = null;
@@ -2990,12 +2484,226 @@ document.addEventListener('DOMContentLoaded', function(){
 
   /* ── 6. 설치 완료 ── */
   window.addEventListener('appinstalled', function(){
-    var btn = document.getElementById('pwa-install-btn');
     var b   = document.getElementById('pwa-banner');
-    if(btn) btn.classList.remove('visible');
     if(b)   b.classList.remove('visible');
     deferred = null;
   });
+})();
+</script>
+<div id="dev-stamp">MANMIN · Ver-5.0</div>
+<script>
+/* ═══════════════ v5.0 — A4 페이지 단위 JPG + 저장 시트 (§3-5 · §14-2 · §17-7) ═══════════════
+   22 냉온배관 v5.0 엔진 이식. 통짜 1장 캡처 → A4 비율(794×1123) 쪽 분할 + 미리보기 시트. */
+function mmSafeCuts(page){
+  var pr=page.getBoundingClientRect(), out=[];
+  page.querySelectorAll('.a4-head2,table.a4-tbl tbody tr')
+    .forEach(function(el){ out.push(el.getBoundingClientRect().bottom-pr.top); });
+  page.querySelectorAll('.a4-sub')
+    .forEach(function(el){ out.push(el.getBoundingClientRect().top-pr.top); });
+  out.push(page.scrollHeight);
+  out.sort(function(a,b){return a-b;});
+  return out.filter(function(v,i,a){return i===0 || v-a[i-1]>0.5;});
+}
+function mmPickCut(cuts,y,limit){
+  var best=0;
+  for(var i=0;i<cuts.length;i++){
+    if(cuts[i]>y+1 && cuts[i]<=limit) best=cuts[i];
+    else if(cuts[i]>limit) break;
+  }
+  return best;
+}
+/* ⛔ .a4-page 에 min-height:1122px 이 걸려 있어 scrollHeight 를 그대로 쓰면 유령 여백이 문서 높이로 잡힌다(§14-2). */
+function mmContentHeight(page){
+  var pr=page.getBoundingClientRect(), max=0;
+  page.querySelectorAll('*').forEach(function(el){
+    var cs=getComputedStyle(el);
+    if(cs.display==='none' || cs.visibility==='hidden') return;
+    var b=el.getBoundingClientRect().bottom-pr.top;
+    if(b>max) max=b;
+  });
+  var pad=parseFloat(getComputedStyle(page).paddingBottom)||0;
+  var h=Math.ceil(max+pad);
+  return (h>0 && h<page.scrollHeight) ? h : page.scrollHeight;
+}
+/* 쪽 나눔은 @page 여백과 같은 값을 쓴다(§3-5-1). 세로 유효 높이 297-14-22 = 261mm. */
+var MM_PAGE = { W:794, H:1123, MT:14, MR:12, MB:22, ML:14 };
+/* 한 장에 못 들어가는 표에는 .long 을 붙여 분할을 허용한다(§16-13). */
+function markLongTables(page){
+  var mmPerPx=210/794, usable=(297-14-22)/mmPerPx;   /* 261mm ≈ 987px */
+  page.querySelectorAll('table.a4-tbl').forEach(function(t){
+    t.classList.toggle('long', t.getBoundingClientRect().height > usable);
+  });
+}
+/* 블록 원자 방식(§17-7) — #a4Page 직계 자식. 소제목(.a4-sub)은 바로 뒤 형제와 한 덩어리. */
+function mmBlocks(page){
+  var pr=page.getBoundingClientRect(), out=[], pend=null;
+  Array.prototype.forEach.call(page.children, function(el){
+    var b=el.getBoundingClientRect();
+    if(b.height<=0) return;
+    var mb=parseFloat(getComputedStyle(el).marginBottom)||0;
+    var top=b.top-pr.top, bot=b.bottom-pr.top+mb;
+    if(el.classList.contains('a4-sub')){
+      if(pend) out.push(pend);
+      pend={top:top, bot:bot};
+      return;
+    }
+    if(pend){ out.push({top:pend.top, bot:bot}); pend=null; return; }
+    out.push({top:top, bot:bot});
+  });
+  if(pend) out.push(pend);
+  out.sort(function(a,b){ return a.top-b.top; });
+  return out;
+}
+function mmSegments(page){
+  var mmPerPx=210/MM_PAGE.W;
+  var cs=getComputedStyle(page);
+  var padTop=parseFloat(cs.paddingTop)||0, padBot=parseFloat(cs.paddingBottom)||0;
+  var usable=(297-MM_PAGE.MT-MM_PAGE.MB)/mmPerPx;
+  var docH=mmContentHeight(page);
+  var stop=Math.max(padTop, docH-padBot);
+  var blocks=mmBlocks(page);
+  if(!blocks.length) return [[padTop,stop]];
+  var cuts=mmSafeCuts(page);
+  var segs=[], y=padTop, i=0, guard=0;
+  while(i<blocks.length && guard++<120){
+    var limit=y+usable, j=i, end=y;
+    while(j<blocks.length && blocks[j].bot<=limit+0.5){ end=blocks[j].bot; j++; }
+    if(j===i){
+      var cut=mmPickCut(cuts, y, limit);
+      if(!cut || cut<=y+1) cut=limit;
+      segs.push([y,cut]);
+      if(cut>=blocks[i].bot-0.5) i++;
+      y=cut; continue;
+    }
+    segs.push([y,end]); y=end; i=j;
+  }
+  if(stop-y>5) segs.push([y,stop]);
+  return segs.length ? segs : [[padTop,stop]];
+}
+function mmDownload(url,name){
+  var a=document.createElement('a');
+  a.download=name; a.href=url;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+}
+function mmCloseSheet(){
+  var ov=document.getElementById('mm-save-ov');
+  if(ov) ov.classList.remove('show');
+}
+function mmOpenSheet(shots, base){
+  var prev=document.getElementById('mm-save-ov');
+  if(prev) prev.remove();
+  var ov=document.createElement('div');
+  ov.id='mm-save-ov';
+  var body='';
+  shots.forEach(function(url,i){
+    body+='<div class="mm-shot"><img src="'+url+'" alt="'+(i+1)+'쪽 미리보기"/>'
+        + '<button class="mm-shot-btn" data-i="'+i+'">🖼 '+(i+1)+'쪽 저장</button></div>';
+  });
+  ov.innerHTML =
+    '<div class="mm-sheet" role="dialog" aria-modal="true" aria-label="산정서 저장">'
+    + '<div class="mm-sheet-head"><div>'
+    +   '<div class="mm-sheet-title">산정서 저장 · 총 '+shots.length+'매</div>'
+    +   '<div class="mm-sheet-note">'+(shots.length>1?'브라우저가 연속 다운로드를 차단하므로 쪽별로 저장합니다.':'미리보기를 확인하고 저장하세요.')+'</div>'
+    + '</div><button class="btn-export mm-btn-close" id="mm-sheet-x">✕ 닫기</button></div>'
+    + '<div class="mm-sheet-body'+(shots.length>1?' multi':'')+'">'+body+'</div>'
+    + '<div class="mm-sheet-foot">'
+    +   '<button class="btn-export mm-btn-jpg" id="mm-save-all">🖼 전체 저장 ('+shots.length+'매)</button>'
+    + '</div></div>';
+  document.body.appendChild(ov);
+  ov.classList.add('show');
+  ov.querySelectorAll('.mm-shot-btn').forEach(function(b){
+    b.addEventListener('click',function(){
+      mmDownload(shots[+b.getAttribute('data-i')], base+'_'+(+b.getAttribute('data-i')+1)+'of'+shots.length+'.jpg');
+    });
+  });
+  document.getElementById('mm-sheet-x').addEventListener('click',mmCloseSheet);
+  ov.addEventListener('click',function(e){ if(e.target===ov) mmCloseSheet(); });
+  document.getElementById('mm-save-all').addEventListener('click',function(){
+    shots.forEach(function(url,i){
+      setTimeout(function(){ mmDownload(url, base+'_'+(i+1)+'of'+shots.length+'.jpg'); }, i*400);
+    });
+  });
+}
+
+window.exportA4Jpg = function(){
+  var el = document.getElementById('a4iso-content');
+  if(!el){ showToast('A4 미리보기 탭으로 이동 후 시도하세요'); return; }
+  var _r = getResultByType(previewSel.a4);
+  if(!_r){ showToast('⚠️ 먼저 검토를 실행하고 옹벽 형식을 선택하세요'); return; }
+  renderA4Iso(_r);
+  showToast('📸 JPG 생성 중...');
+  /* ⛔ 미리보기 축소 배율을 반드시 먼저 푼다(§16-17). 해제 → 리플로우 → 측정·캡처 → 복원 */
+  var scaleWrap = document.getElementById('a4iso-scale-wrap');
+  var prevTransform = scaleWrap ? scaleWrap.style.transform : '';
+  if(scaleWrap) scaleWrap.style.transform = 'none';
+  void el.offsetHeight;
+  var restoreScale = function(){ if(scaleWrap) scaleWrap.style.transform = prevTransform; };
+  markLongTables(el);
+  var segs = mmSegments(el);
+  var fullH = Math.max(mmContentHeight(el),1);
+  html2canvas(el, {
+    scale: 2, useCORS: true, allowTaint: false,
+    backgroundColor: '#ffffff', logging: false,
+    width: el.scrollWidth, height: fullH,
+    windowWidth: el.scrollWidth, windowHeight: fullH,
+    scrollX: 0, scrollY: 0
+  }).then(function(canvas){
+    restoreScale();
+    var now = new Date();
+    var ts = now.getFullYear()+''+String(now.getMonth()+1).padStart(2,'0')+String(now.getDate()).padStart(2,'0')
+      +'_'+String(now.getHours()).padStart(2,'0')+String(now.getMinutes()).padStart(2,'0');
+    var base = '옹벽안전성검토_MANMIN-Ver5.0_'+ts;
+    if(!segs || !segs.length){
+      mmDownload(canvas.toDataURL('image/jpeg',0.95), base+'.jpg');
+      showToast('✅ JPG 저장 완료!'); return;
+    }
+    /* 각 쪽을 A4 용지 비율(794×1123 · 1:1.414) 캔버스에 얹는다(§3-5-2). 윗여백 14mm 전 쪽 동일(§3-5-1). */
+    var S = canvas.width/el.scrollWidth;
+    var PAGE_W=MM_PAGE.W, PAGE_H=MM_PAGE.H, mmPerPx=210/PAGE_W;
+    var topPx = MM_PAGE.MT/mmPerPx;
+    var shots = segs.map(function(sg, idx){
+      var h=Math.max(1,Math.round((sg[1]-sg[0])*S));
+      var tmp=document.createElement('canvas');
+      tmp.width=Math.round(PAGE_W*S); tmp.height=Math.round(PAGE_H*S);
+      var ctx=tmp.getContext('2d');
+      ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,tmp.width,tmp.height);
+      ctx.drawImage(canvas,0,Math.round(sg[0]*S),canvas.width,h, 0,Math.round(topPx*S),canvas.width,h);
+      /* 쪽 번호 각인 — JPG 전용 규격(§3-5-5 · §18-12). 2쪽 이상일 때만. */
+      if(segs.length>1){
+        var fs=Math.round(9*S);
+        ctx.fillStyle='#9CA3AF';
+        ctx.font='700 '+fs+'px Orbitron, "JetBrains Mono", monospace';
+        ctx.textAlign='left'; ctx.textBaseline='alphabetic';
+        ctx.fillText((idx+1)+' / '+segs.length,
+                     Math.round(MM_PAGE.ML/mmPerPx*S),
+                     Math.round((MM_PAGE.H - MM_PAGE.MB/mmPerPx + fs/S*0.4)*S));
+      }
+      return tmp.toDataURL('image/jpeg',0.95);
+    });
+    mmOpenSheet(shots, base);
+    showToast(shots.length>1 ? '📄 '+shots.length+'매로 나눴습니다' : '📄 미리보기에서 저장하세요');
+  }).catch(function(err){
+    restoreScale();
+    showToast('❌ JPG 저장 실패: '+err.message);
+  });
+};
+</script>
+<script>
+/* v5.0-HDR — 요약 스트립 갱신. 계산 함수는 건드리지 않고 render*Result / reset* 을 감싸 선택 옹벽 result 를 읽기만 한다(§18-1) */
+(function(){
+  function setSum(){
+    var f=function(id,v){var e=document.getElementById(id);if(e)e.textContent=v;};
+    var r=(typeof getResultByType==='function')?getResultByType(previewSel.a4):null;
+    if(!r){['sb-type','sb-fso','sb-fss','sb-qmax','sb-e','sb-judge'].forEach(function(id){f(id,'—');});return;}
+    f('sb-type', r.type||'—');
+    f('sb-fso', r.Fs_o!=null?r.Fs_o.toFixed(3):'—'); f('sb-fss', r.Fs_s!=null?r.Fs_s.toFixed(3):'—');
+    f('sb-qmax', r.qmax!=null?r.qmax.toFixed(1)+' kPa':'—'); f('sb-e', r.e!=null?r.e.toFixed(3)+' m':'—');
+    f('sb-judge', r.allPass?'적합 (PASS)':'부적합 (NG)');
+  }
+  ['renderGravityResult','renderCantileverResult','renderAnchoredResult','resetGravity','resetCantilever','resetAnchored','selectPreviewWall'].forEach(function(n){
+    var o=window[n]; if(typeof o==='function'){ window[n]=function(){var r=o.apply(this,arguments);setSum();return r;}; }
+  });
+  setSum();
 })();
 </script>
 
