@@ -1,4 +1,5 @@
 /* ═══════════════════════════════════════════════════
+   S6 회차 2026-09-05 — R24①② 표 선 separate·mono 한글 폴백 소급 동반 캐시명 v5.0.5
    S5 회차 2026-09-04 — R23② JPG 엔진 행 나눔 소급 동반 캐시명 v5.0.4
    S3-0 회차 2026-09-04 — R27 html2canvas 클론 정화 동반 캐시명 v5.0.3
    S2 회차 2026-09-04 — index 소급(R1·R21·R26 등) 동반 캐시명 v5.0.2
@@ -35,7 +36,7 @@ const mmMatch = (req, opt) => caches.keys()
   .then((ks) => ks.reduce((p, k) => p.then((r) => r || caches.open(k).then((c) => c.match(req, opt))), Promise.resolve(undefined)))
   .then((r) => (r && r.type === 'opaque' && req && req.mode === 'cors') ? undefined : r);
 
-const CACHE  = 'retwall-v5.0.4';   /* 2026-09-03 v5.0 디자인 통일 */
+const CACHE  = 'retwall-v5.0.5';   /* 2026-09-03 v5.0 디자인 통일 */
 const ORPHAN = ['retwall-v2.0'];
 const ASSETS = [
   './',

@@ -565,6 +565,16 @@ table tr:nth-child(even) td{background:#f8fafd;}
 @media print{#dev-stamp,#dev-stamp-print,.dev-stamp{display:none!important;}}</style>
 <style id="mm-r24">/* R24 ③ (2026-09-04 · 지시서 §20-17 ③) — 원본 전역 table tr:last-child td{border-bottom:none} 이 A4 표에 새어 마지막 행 아래선이 사라진다 */
 .a4-page tr:last-child td{border-bottom:1px solid #e2e8f0;}</style>
+<style id="mm-r24b">/* R24 ①② (2026-09-05 · S10 3-B 소급 · 지시서 §21-1 R24) — 인쇄 시 collapse 표의 우측 세로선 소실 → separate + 셀 자체 선. 화면·JPG·PDF 동일 DOM(§2②). 선색은 기존 값 유지. */
+.a4-tbl{border-collapse:separate;border-spacing:0;border:0;}
+.a4-tbl th{border:0;border-right:1px solid #bbdefb;border-bottom:1px solid #bbdefb;}
+.a4-tbl th:first-child{border-left:1px solid #bbdefb;}
+.a4-tbl tr:first-child th{border-top:1px solid #bbdefb;}
+.a4-tbl td{border:0;border-right:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0;}
+.a4-tbl td:first-child{border-left:1px solid #e2e8f0;}
+.a4-tbl tr:first-child td{border-top:1px solid #e2e8f0;}
+.a4-tbl.teal th,.a4-tbl.teal th:first-child{border-color:#80cbc4;}
+</style>
 </head>
 <body>
 <div id="root-app">
