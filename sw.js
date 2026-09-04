@@ -1,4 +1,5 @@
 /* ═══════════════════════════════════════════════════
+   R25 회차 2026-09-04 — 자기 접두어 캐시 조회 · cors 프리캐시 · opaque 가드 · 캐시명 v5.0.1 (S10)
    토목옹벽 — 옹벽 구조물 안전성 검토 시스템  MANMIN Ver-5.0
    Service Worker — 오프라인 캐시 + 버전 업데이트
    ENGINEER KIM MANMIN
@@ -18,7 +19,20 @@
       SW 가 아예 안 붙는다 → allSettled + 개별 catch 로 감쌌다(§11-3).
 ═══════════════════════════════════════════════════ */
 const PREFIX = 'retwall-';
-const CACHE  = 'retwall-v5.0.0';   /* 2026-09-03 v5.0 디자인 통일 */
+/* ═ R25 (2026-09-04) — SW 캐시 origin 오염 차단 (S10 · 지시서 §21-1 R25)
+   전역 caches 의 match 는 origin 전체를 검색한다. manminkim-eng.github.io 는 34종이 한 origin 이라
+   다른 도구 캐시의 opaque 응답이 <script crossorigin>(cors) 요청에 돌아가 스크립트가 폐기됐다
+   (30 #root 빈 화면 · 40 html2canvas undefined). 자기 접두어 캐시만 조회하고, cross-origin
+   프리캐시는 cors 로 받으며, opaque↔cors 불일치 시 캐시를 쓰지 않는다. */
+const MM_EXCLUDE = [];   /* 내 접두어로 시작하지만 남의 캐시인 이름 (§17-1 충돌) */
+const mmOwn   = (k) => k.indexOf(PREFIX) === 0 && !MM_EXCLUDE.some((x) => k.indexOf(x) === 0);
+const mmReq   = (u) => (typeof u === 'string' && u.indexOf('http') === 0) ? new Request(u, { mode: 'cors' }) : u;
+const mmMatch = (req, opt) => caches.keys()
+  .then((ks) => ks.filter(mmOwn))
+  .then((ks) => ks.reduce((p, k) => p.then((r) => r || caches.open(k).then((c) => c.match(req, opt))), Promise.resolve(undefined)))
+  .then((r) => (r && r.type === 'opaque' && req && req.mode === 'cors') ? undefined : r);
+
+const CACHE  = 'retwall-v5.0.1';   /* 2026-09-03 v5.0 디자인 통일 */
 const ORPHAN = ['retwall-v2.0'];
 const ASSETS = [
   './',
@@ -45,7 +59,7 @@ self.addEventListener('install', e => {
   e.waitUntil(
     caches.open(CACHE)
       .then(c => Promise.allSettled(
-        ASSETS.map(u => c.add(u).catch(err => console.warn('[SW] precache skip:', u, err)))
+        ASSETS.map(u => c.add(mmReq(u)).catch(err => console.warn('[SW] precache skip:', u, err)))
       ))
       .then(() => self.skipWaiting())
   );
@@ -59,7 +73,7 @@ self.addEventListener('activate', e => {
         /* ⛔ 자기 접두어(+ORPHAN)만 지운다. caches.keys() 는 origin 전체를 반환하므로
            manminkim-eng.github.io 를 39종이 공유하는 이 구조에서 무조건 지우면
            나머지 38종의 캐시를 통째로 날린다(§17-1 · §18-7). */
-        keys.filter(k => k !== CACHE && (k.indexOf(PREFIX) === 0 || ORPHAN.indexOf(k) !== -1))
+        keys.filter(k => k !== CACHE && (mmOwn(k) || ORPHAN.indexOf(k) !== -1))
             .map(k => { console.log('[SW] 구버전 캐시 삭제:', k); return caches.delete(k); })
       ))
       .then(() => self.clients.claim())
@@ -82,14 +96,14 @@ self.addEventListener('fetch', e => {
           }
           return res;
         })
-        .catch(() => caches.match(e.request).then(c => c || caches.match('./index.html')))
+        .catch(() => mmMatch(e.request).then(c => c || mmMatch('./index.html')))
     );
     return;
   }
 
   /* ══ 정적 자산: Cache-First + 백그라운드 갱신 ══ */
   e.respondWith(
-    caches.match(e.request).then(cached => {
+    mmMatch(e.request).then(cached => {
       if (cached) {
         fetch(e.request).then(res => {
           if (res && res.status === 200) {
@@ -103,7 +117,7 @@ self.addEventListener('fetch', e => {
         const clone = res.clone();
         caches.open(CACHE).then(c => c.put(e.request, clone));
         return res;
-      }).catch(() => caches.match('./index.html'));
+      }).catch(() => Response.error());   /* R19 (2026-09-04): 정적 자산 실패 시 index.html 을 돌려주면 SyntaxError 빈 화면 (§20-10) */
     })
   );
 });
