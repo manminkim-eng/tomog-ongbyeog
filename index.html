@@ -1345,6 +1345,7 @@ function setStep(prefix, n, done, prev){
 ════════════════════════════════════════════ */
 function drawGravityDiagram(){
   var svg = document.getElementById('g-diagram');
+  if(!svg) return;   /* v5.1.0 — 결과 화면에서 다이어그램이 없을 때 오류 방지 */
   var H = Math.max(0.5, parseFloat(document.getElementById('g-H').value)||4);
   var B = Math.max(0.5, parseFloat(document.getElementById('g-B').value)||2.8);
   var a = Math.max(0.3, parseFloat(document.getElementById('g-a').value)||0.5);
@@ -1824,7 +1825,10 @@ function rwAdvice(r){
 }
 
 function renderGravityResult(r){
-  document.getElementById('g-result-panel').innerHTML = rwStabHtml(r, '');
+  document.getElementById('g-result-panel').innerHTML = rwStabHtml(r, '')
+    + '<div class="card"><div class="card-head"><div class="card-ico blue">📐</div><span class="card-tit">단면 다이어그램</span></div>'
+    + '<div class="card-body" style="padding:10px;"><svg id="g-diagram" viewBox="0 0 320 240" width="100%" style="max-width:320px;display:block;margin:0 auto;border:1px solid #e2e8f0;border-radius:8px;background:#f8fafd;"></svg></div></div>';
+  drawGravityDiagram();
   setStep('g', 4, true, true);
   G.result = r; previewSel.a4 = 'gravity'; previewSel.mob = 'gravity'; refreshPreviewSelBadges();
   renderA4Iso(r);
@@ -1914,7 +1918,9 @@ function resetGravity(){
   document.getElementById('g-beta').value='0';
   document.getElementById('g-Df').value='0.5';
   G.result=null;
-  document.getElementById('g-result-panel').innerHTML='<div class="nb blue"><div class="nb-tit">💡 사용 방법</div><div class="nb-txt">좌측 조건을 입력하고 안전성 검토 버튼을 눌러주세요.</div></div>';
+  document.getElementById('g-result-panel').innerHTML='<div class="nb blue"><div class="nb-tit">💡 사용 방법</div><div class="nb-txt">좌측 조건을 입력하고 안전성 검토 버튼을 눌러주세요.</div></div>'
+    + '<div class="card"><div class="card-head"><div class="card-ico blue">📐</div><span class="card-tit">단면 다이어그램</span></div>'
+    + '<div class="card-body" style="padding:10px;"><svg id="g-diagram" viewBox="0 0 320 240" width="100%" style="max-width:320px;display:block;margin:0 auto;border:1px solid #e2e8f0;border-radius:8px;background:#f8fafd;"></svg></div></div>';
   gUpdateSteps(); drawGravityDiagram();
   showToast('중력식 옹벽이 초기화되었습니다.');
 }

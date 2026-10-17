@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>옹벽 구조물 안전성 검토 시스템 사용자 매뉴얼 Ver-5.1 · MANMIN</title>
+<meta name="description" content="옹벽 구조물 안전성 검토 시스템 MANMIN Ver-5.1 사용자 매뉴얼 — KDS 11 80 05 · 11 60 00 기준 옹벽 안정 · 앵커 검토 해설">
+<meta name="author" content="김만민 건축사 · ㈜대성건축사사무소">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;600&family=Orbitron:wght@700;900&display=swap">
+<link rel="stylesheet" href="./assets/fonts/manmin-fonts.css">
+<style>
+:root{
+  --navy:#2D3A8C;--navy-d:#1F2A6B;--navy-l:#E9ECF8;--accent:#F4A261;--accent-d:#C97A3A;--accent-l:#FDF1E7;
+  --bg:#F8F9FA;--card:#FFFFFF;--text:#1A1A2E;--text2:#4A4F66;--line:#DDE1EA;--ok:#0F766E;--ng:#B42318;
+  --r:12px;--pad:24px;--shadow:0 4px 20px rgba(0,0,0,.08);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font-sans);font-size:16px;line-height:1.75;word-break:keep-all;overflow-wrap:anywhere}
+a{color:var(--navy)}a:hover{color:var(--accent-d)}
+code,kbd,.mono{font-family:var(--font-mono);font-size:.9em}
+code{background:var(--navy-l);color:var(--navy-d);padding:1px 6px;border-radius:5px}
+kbd{border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:0 6px;background:#fff}
+/* 상단 */
+.top{background:linear-gradient(135deg,var(--navy-d),var(--navy));color:#fff}
+.top-in{max-width:1240px;margin:0 auto;padding:44px 24px 36px}
+.eyebrow{font-family:var(--font-brand);font-weight:700;font-size:12px;letter-spacing:.18em;opacity:.85}
+.top h1{font-size:28px;font-weight:900;margin:8px 0 6px;line-height:1.35}
+.top .sub{opacity:.9;margin:0}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:4px 12px;font-size:13px}
+a.badge{color:#fff;text-decoration:none}a.badge:hover{background:rgba(255,255,255,.24);color:#fff}
+.badge.acc{background:var(--accent);border-color:var(--accent);color:#1A1A2E;font-weight:700}
+/* 레이아웃 */
+.wrap{max-width:1240px;margin:0 auto;padding:28px 24px 80px;display:grid;grid-template-columns:260px minmax(0,1fr);gap:32px}
+nav.toc{position:sticky;top:16px;align-self:start;max-height:calc(100vh - 32px);overflow:auto;background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:18px 16px;font-size:14px}
+nav.toc h2{font-size:13px;letter-spacing:.12em;color:var(--text2);margin:0 0 8px}
+nav.toc ol{list-style:none;margin:0;padding:0}
+nav.toc li a{display:block;padding:5px 8px;border-radius:8px;text-decoration:none;color:var(--text)}
+nav.toc li a:hover,nav.toc li a.on{background:var(--navy-l);color:var(--navy)}
+nav.toc li.sub a{padding-left:20px;font-size:13px;color:var(--text2)}
+main{min-width:0}
+section.ch{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:var(--pad) calc(var(--pad) + 8px);margin-bottom:28px}
+section.ch>h2{font-size:24px;font-weight:700;color:var(--navy);margin:0 0 4px;display:flex;align-items:baseline;gap:10px}
+section.ch>h2 .n{font-family:var(--font-brand);font-weight:700;font-size:14px;color:#fff;background:var(--navy);border-radius:8px;padding:2px 9px}
+section.ch>.lead{color:var(--text2);margin:0 0 18px}
+h3{font-size:19px;color:var(--navy-d);margin:34px 0 10px;padding-top:6px;border-top:1px solid var(--line)}
+h3:first-of-type{border-top:0}
+h4{font-size:16px;margin:22px 0 8px}
+p{margin:8px 0}
+ul,ol{padding-left:22px}
+.note,.tip,.warn{border-radius:10px;padding:12px 16px;margin:14px 0;font-size:15px}
+.note{background:var(--navy-l);border-left:4px solid var(--navy)}
+.tip{background:var(--accent-l);border-left:4px solid var(--accent)}
+.warn{background:#FEF3F2;border-left:4px solid var(--ng)}
+.note b:first-child,.tip b:first-child,.warn b:first-child{margin-right:6px}
+/* 표 */
+.tbl{overflow-x:auto;margin:12px 0;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:14px;background:#fff}
+th,td{border-bottom:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:var(--navy-l);color:var(--navy-d);font-weight:700;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right;font-family:var(--font-mono);white-space:nowrap}
+.ok{color:var(--ok);font-weight:700}.ng{color:var(--ng);font-weight:700}
+/* 그림 */
+figure.shot{margin:18px 0 26px}
+figure.shot .frame{position:relative;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff;cursor:zoom-in}
+figure.shot img{display:block;width:100%;height:auto}
+figure.narrow{max-width:420px}
+.pin{position:absolute;transform:translate(-50%,-50%);width:26px;height:26px;border-radius:50%;background:var(--accent);color:#1A1A2E;font:700 13px/26px var(--font-mono);text-align:center;box-shadow:0 0 0 3px #fff,0 2px 8px rgba(0,0,0,.35);pointer-events:none}
+figcaption{font-size:14px;color:var(--text2);margin-top:8px}
+.fno{font-family:var(--font-mono);font-size:11px;background:var(--navy);color:#fff;border-radius:6px;padding:1px 7px;margin-right:8px}
+ol.legend{list-style:none;padding:0;margin:10px 0 0;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:6px 16px;font-size:14px}
+ol.legend li{display:flex;gap:8px;align-items:flex-start}
+ol.legend b{flex:0 0 22px;height:22px;border-radius:50%;background:var(--accent);font:700 12px/22px var(--font-mono);text-align:center}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+/* 단계 */
+.steps{counter-reset:st;list-style:none;padding:0;margin:16px 0}
+.steps>li{counter-increment:st;position:relative;padding:4px 0 18px 54px;border-left:2px solid var(--line);margin-left:18px}
+.steps>li:last-child{border-left-color:transparent}
+.steps>li::before{content:counter(st);position:absolute;left:-19px;top:0;width:36px;height:36px;border-radius:50%;background:var(--navy);color:#fff;font:700 15px/36px var(--font-mono);text-align:center;box-shadow:0 0 0 4px var(--bg)}
+.steps>li>b.t{display:block;font-size:17px;color:var(--navy-d);margin-bottom:2px}
+/* 수식 */
+.eq{font-family:var(--font-mono);background:#0F1630;color:#E8ECFF;border-radius:10px;padding:14px 18px;margin:12px 0;overflow-x:auto;font-size:14px;line-height:1.9;white-space:pre}
+.eq .c{color:#9AA6D6}
+.svgbox{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px;margin:14px 0;overflow-x:auto}
+.svgbox svg{display:block;width:100%;min-width:640px;height:auto}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin:14px 0}
+.card{border:1px solid var(--line);border-radius:var(--r);padding:16px;background:#fff}
+.card h5{margin:0 0 4px;font-size:15px;color:var(--navy)}
+.card p{margin:0;font-size:14px;color:var(--text2)}
+footer.foot{max-width:1240px;margin:0 auto;padding:0 24px 40px;color:var(--text2);font-size:13px}
+/* 라이트박스 */
+#lb{position:fixed;inset:0;background:rgba(10,14,30,.88);display:none;align-items:center;justify-content:center;z-index:99;cursor:zoom-out;padding:16px}
+#lb.open{display:flex}#lb img{max-width:100%;max-height:100%;border-radius:8px;background:#fff}
+.totop{position:fixed;right:18px;bottom:18px;width:44px;height:44px;border-radius:50%;background:var(--navy);color:#fff;border:0;font-size:18px;box-shadow:var(--shadow);cursor:pointer}
+/* 반응형 5단계 */
+@media (max-width:1240px){.wrap{grid-template-columns:230px minmax(0,1fr);gap:24px}}
+@media (max-width:1024px){.wrap{grid-template-columns:1fr}nav.toc{position:static;max-height:none}nav.toc ol{columns:2}}
+@media (max-width:760px){.pair{grid-template-columns:1fr}section.ch{padding:20px 18px}.top h1{font-size:24px}}
+@media (max-width:640px){nav.toc ol{columns:1}body{font-size:15px}}
+@media (max-width:480px){.wrap,.top-in{padding-left:16px;padding-right:16px}.pin{width:22px;height:22px;font-size:11px;line-height:22px}}
+@media (max-width:400px){section.ch>h2{font-size:20px}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+/* A4 인쇄 */
+@page{size:A4;margin:14mm 12mm 14mm}
+@media print{
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{background:#fff;font-size:10.5pt}
+  nav.toc,.totop,#lb{display:none!important}
+  .wrap{display:block;padding:0}
+  section.ch{box-shadow:none;padding:0 0 8mm;margin:0;break-before:page}
+  main{padding-bottom:8mm}
+  section.ch:first-of-type{break-before:auto}
+  figure.shot,.tbl,.eq,.svgbox,.note,.tip,.warn,.steps>li{break-inside:avoid}
+  h3,h4{break-after:avoid}
+  .top{border-radius:0}
+  .pfoot{position:fixed;bottom:0;left:0;right:0;height:6mm;background:#fff;font-size:8pt;color:#666;border-top:1px solid #ccc;padding-top:1.5mm;display:flex;justify-content:space-between}
+}
+.pfoot{display:none}
+@media print{.pfoot{display:flex}}
+/* ── 좁은 화면 대응(r1 · 2026-10-12) : 화면 전용 — 인쇄·PDF에는 영향 없음 ── */
+@media screen and (max-width:640px){
+  .k1 td:first-child,.k1 th:first-child{white-space:normal}
+  /* 글 표(숫자 칸 없는 표) → 행마다 카드로 쌓기 */
+  .tbl.stack{border:0;border-radius:0;overflow:visible}
+  .tbl.stack table,.tbl.stack tbody,.tbl.stack tr,.tbl.stack td{display:block;width:auto}
+  .tbl.stack thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  .tbl.stack table{background:transparent}
+  .tbl.stack tr{border:1px solid var(--line);border-radius:10px;background:#fff;margin:0 0 10px;overflow:hidden}
+  .tbl.stack td{border-bottom:1px solid var(--line);padding:8px 12px}
+  .tbl.stack tr td:last-child{border-bottom:0}
+  .tbl.stack td:first-child{background:var(--navy-l);color:var(--navy-d);font-weight:700}
+  .tbl.stack td[data-th]:not(:first-child)::before{content:attr(data-th);display:block;font-size:12px;font-weight:700;color:var(--text2);margin-bottom:2px}
+  .tbl.stack.c2 td[data-th]:not(:first-child)::before{display:none}
+  .tbl.stack td:empty{display:none}
+  /* 숫자 표 → 표 모양 유지, 글자·여백 축소, 넘치면 좌우로 밀기(오른쪽 그림자로 표시) */
+  .tbl:not(.stack){background:linear-gradient(to right,#fff 30%,rgba(255,255,255,0)) left/40px 100% no-repeat local,linear-gradient(to left,#fff 30%,rgba(255,255,255,0)) right/40px 100% no-repeat local,radial-gradient(farthest-side at 100% 50%,rgba(26,26,46,.22),transparent) right/12px 100% no-repeat scroll,#fff}
+  .tbl:not(.stack) table{font-size:13px;background:transparent}
+  .tbl:not(.stack) th,.tbl:not(.stack) td{padding:7px 8px}
+  /* 수식 → 줄바꿈 허용 */
+  .eq{white-space:pre-wrap;word-break:keep-all;font-size:13px;line-height:1.75;padding:12px 14px}
+  .eq .c{display:block;padding-left:1em}
+  .svgbox{position:relative}
+  .svgbox::after{content:"← 좌우로 밀어서 보기 →";display:block;text-align:center;font-size:12px;color:var(--text2);margin-top:6px;position:sticky;left:0}
+  ol.legend{grid-template-columns:1fr}
+  .steps>li{padding-left:34px;margin-left:14px}
+}
+.rev{white-space:nowrap}
+@media print{.rev{display:none}}
+</style>
+</head><body>
+<header class="top"><div class="top-in">
+<div class="eyebrow">MANMIN ENGINEERING · USER MANUAL</div>
+<h1>옹벽 구조물 안전성 검토 시스템 사용자 매뉴얼</h1>
+<p class="sub">형식 → 단면 · 토압 · 기초 → 활동 · 전도 · 지지력 · 근입깊이 · 앵커 → A4 검토 보고서</p>
+<div class="badges"><span class="badge acc">매뉴얼 <span style="font-family:var(--font-brand)">Ver-5.1</span></span><a class="badge" href="../index.html">▶ 검토 시스템 열기</a><a class="badge" href="옹벽구조물안전성검토시스템_사용자매뉴얼_Ver-5.1.pdf" download>⤓ PDF</a><span class="badge">2026-10-17</span><span class="badge">김만민 건축사 · ㈜대성건축사사무소</span></div>
+</div></header>
+<div class="wrap"><nav class="toc" aria-label="목차"><h2>목차</h2><ol><li><a href="#ch0">0. 이 매뉴얼에 대하여</a></li><li><a href="#ch1">1. 한눈에 보기</a></li><li class="sub"><a href="#s1-1">화면 구성</a></li><li class="sub"><a href="#s1-2">탭 · 검토 항목</a></li><li><a href="#ch2">2. 1분 따라하기</a></li><li><a href="#ch3">3. 화면별 기능</a></li><li class="sub"><a href="#s3-1">머리 · 매뉴얼</a></li><li class="sub"><a href="#s3-2">중력식 — 기본 정보 · 단면</a></li><li class="sub"><a href="#s3-3">중력식 — 토압 · 기초 조건</a></li><li class="sub"><a href="#s3-4">중력식 결과</a></li><li class="sub"><a href="#s3-5">안정 검토 상세</a></li><li class="sub"><a href="#s3-6">사례 — 근입깊이 0.5 m</a></li><li class="sub"><a href="#s3-7">캔틸레버식 입력</a></li><li class="sub"><a href="#s3-8">캔틸레버식 결과 — 활동 부족</a></li><li class="sub"><a href="#s3-9">사례 — 저면폭 3.7 m</a></li><li class="sub"><a href="#s3-10">앵커식 입력</a></li><li class="sub"><a href="#s3-11">앵커식 결과</a></li><li class="sub"><a href="#s3-12">사례 — 인발 · 자유장 부족</a></li><li class="sub"><a href="#s3-13">A4 검토 보고서</a></li><li class="sub"><a href="#s3-14">도움말</a></li><li class="sub"><a href="#s3-15">휴대전화 화면</a></li><li><a href="#ch4">4. 기준 해설</a></li><li class="sub"><a href="#s4-1">근거 체계</a></li><li class="sub"><a href="#s4-2">안정검토 하중 · 기준안전율</a></li><li class="sub"><a href="#s4-3">토압 — Coulomb · Rankine</a></li><li class="sub"><a href="#s4-4">활동 · 전도</a></li><li class="sub"><a href="#s4-5">지지력 · 지반반력 분포</a></li><li class="sub"><a href="#s4-6">근입깊이 · 활동방지벽</a></li><li class="sub"><a href="#s4-7">앵커 — 인발 · 인장 · 길이</a></li><li class="sub"><a href="#s4-8">별도 검토 항목</a></li><li class="sub"><a href="#s4-9">v5.1.0 정정</a></li><li><a href="#ch5">5. 실무 작업 방법</a></li><li class="sub"><a href="#s5-1">검토 절차</a></li><li class="sub"><a href="#s5-2">문제 해결 · FAQ</a></li><li><a href="#ch6">부록</a></li><li class="sub"><a href="#a1">버전 변경 내역</a></li><li class="sub"><a href="#a2">용어</a></li></ol></nav><main><style>
+#fig-s22_help_law,#fig-s23_help_formula{max-width:640px}
+#fig-s20_a4page,#fig-s21_a4anchor{max-width:600px}
+#fig-s03_g_basic,#fig-s04_g_section,#fig-s05_g_soil,#fig-s09_c_input,#fig-s10_c_soil,#fig-s14_an_input,#fig-s15_an_cond{max-width:440px}
+.k1 td:first-child,.k1 th:first-child{white-space:nowrap}
+.pair>div{min-width:0}
+.tri{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;align-items:start}
+@media (max-width:760px){.tri{grid-template-columns:1fr}}
+@media print{
+  figure.shot{max-width:none!important}
+  figure.shot .frame{width:fit-content;max-width:100%}
+  figure.shot img{width:auto;height:auto;max-width:100%;max-height:118mm}
+  figure.narrow img{max-height:105mm}
+  #fig-s20_a4page img,#fig-s21_a4anchor img{max-height:200mm}
+  .pair{grid-template-columns:1fr 1fr}.tri{grid-template-columns:repeat(2,1fr)}
+  .brk .tbl{break-inside:auto}.brk tr{break-inside:avoid}.brk thead{display:table-header-group}
+}
+</style><section class="ch" id="ch0"><h2><span class="n">00</span>이 매뉴얼에 대하여</h2>
+<p class="lead">옹벽 구조물 안전성 검토 시스템은 중력식 · 캔틸레버식 콘크리트옹벽의 활동 · 전도 · 지지력 · 근입깊이와 앵커식 옹벽의 필요앵커력 · 허용인발력 · 허용인장력 · 자유장 · 정착장을 국가건설기준 조항대로 검토해 A4 검토 보고서로 정리하는 웹도구입니다.</p>
+<div class="k1"><div class="tbl"><table><thead><tr><th class="">항목</th><th class="">내용</th></tr></thead><tbody><tr><td class="">대상 프로그램</td><td class="">옹벽 구조물 안전성 검토 시스템 <b>MANMIN Ver-5.1</b>(v5.1.0)</td></tr><tr><td class="">접속 주소</td><td class=""><a href="https://manminkim-eng.github.io/tomog-ongbyeog/" target="_blank" rel="noopener">manminkim-eng.github.io/tomog-ongbyeog</a></td></tr><tr><td class="">매뉴얼 판</td><td class=""><b>Ver-5.1</b> (화면 표기와 같은 판 번호, 초판) · 2026-10-17 · 작성 김만민 건축사(㈜대성건축사사무소)</td></tr><tr><td class="">내려받기</td><td class=""><a href="옹벽구조물안전성검토시스템_사용자매뉴얼_Ver-5.1.pdf" download>PDF(A4)</a> · <a href="../index.html">검토 시스템 열기</a></td></tr><tr><td class="">근거</td><td class="">KDS 11 80 05 콘크리트옹벽 · KDS 11 60 00 앵커 설계기준 (2025. 12. 24. 개정) — 국가건설기준센터(kcsc.re.kr) 원문 대조(2026-10-17)</td></tr><tr><td class="">범위</td><td class="">평상시 외적 안정(활동 · 전도 · 지지력)과 근입깊이 · 앵커 내적 검토 — 전체안정성 · 침하 · 지진 시 · 수압 · 부재 단면설계는 따로 검토합니다</td></tr></tbody></table></div></div>
+<div class="note"><b>표기</b>그림 위 주황색 번호(①②…)는 그림 아래 범례 번호와 같습니다. 그림을 누르면 크게 볼 수 있습니다.</div>
+<div class="warn"><b>v5.0 사용자 주의</b>v5.0은 근거를 「KDS 11 80 10」(실제는 보강토옹벽) · 「KDS 11 50 15」(실제는 깊은기초)로 적었고, 중력식 단면 도심 · 상재하중 · 지반반력 계산에 오류가 있었으며 앵커 인발 안전율을 영구앵커 2.5 대신 2.0으로 판정했습니다. <b>v5.0으로 뽑은 검토서는 다시 검토하십시오</b>(<a href="#s4-9">4-9</a>).</div>
+<div class="warn"><b>책임 한계</b>설계 초기 검토용입니다. 지반정수는 지반조사 · 시험 결과를 쓰고, 최종 설계는 책임기술자가 확인하십시오.</div>
+</section>
+<section class="ch" id="ch1"><h2><span class="n">01</span>한눈에 보기</h2>
+<p class="lead">설치 없이 브라우저에서 바로 열리는 단일 페이지(PWA)입니다. 입력값은 브라우저 안에서만 계산하고 서버로 보내지 않습니다.</p>
+<h3 id="s1-1">1-1. 화면 구성</h3>
+<figure class="shot" id="fig-s01_overview"><div class="frame"><img src="images/s01_overview.webp" width="1440" height="900" loading="lazy" alt="첫 화면 — 왼쪽 입력 · 오른쪽 결과(예제 A 계산 후)"><span class="pin" style="left:6.93%;top:13.93%">1</span><span class="pin" style="left:87.88%;top:13.93%">2</span><span class="pin" style="left:5.26%;top:19.93%">3</span><span class="pin" style="left:2.76%;top:32.69%">4</span><span class="pin" style="left:34.29%;top:32.69%">5</span></div><figcaption><span class="fno">S01</span>첫 화면 — 왼쪽 입력 · 오른쪽 결과(예제 A 계산 후)</figcaption><ol class="legend"><li><b>1</b><span>형식 탭 3개 + A4</span></li><li><b>2</b><span>📘 매뉴얼</span></li><li><b>3</b><span>요약 바</span></li><li><b>4</b><span>입력</span></li><li><b>5</b><span>결과</span></li></ol></figure>
+<h3 id="s1-2">1-2. 탭 · 검토 항목</h3>
+<div class="k1"><div class="tbl"><table><thead><tr><th class="">탭</th><th class="">검토 내용</th></tr></thead><tbody><tr><td class="">🏛️ 중력식</td><td class="">자중으로 토압에 저항 — Coulomb 토압 · 활동 · 전도 · 지지력 · 근입깊이</td></tr><tr><td class="">🔲 캔틸레버식</td><td class="">역T형 — 뒷굽 끝 연직 가상배면 Rankine 토압 · 같은 4항목</td></tr><tr><td class="">⚓ 앵커식</td><td class="">지반앵커 — 필요앵커력 · 허용인발력 · 허용인장력 · 자유장 · 정착장 · 설치각</td></tr><tr><td class="">📄 A4 보고서</td><td class="">형식을 골라 검토 보고서를 인쇄 / PDF · JPG 저장</td></tr></tbody></table></div></div>
+</section>
+<section class="ch" id="ch2"><h2><span class="n">02</span>1분 따라하기</h2>
+<p class="lead">예제 A — 만민 아파트 신축공사 중력식 옹벽(입력값은 예시).</p>
+<ol class="steps">
+<li><b class="t">① 형식</b>「🏛️ 중력식」 탭.</li>
+<li><b class="t">② 단면</b>H = 4.0 m · 저면폭 B = 2.8 m · 상단폭 a = 0.5 m → 배면 경사 θ = 29.9° 자동 표시 · 콘크리트 γc = 23 kN/m³.</li>
+<li><b class="t">③ 토압</b>뒤채움 γs = 18 kN/m³ · φ = 30° · β = 0° · 상재하중 10 kN/m²(KDS 11 80 05 1.7.4(2)).</li>
+<li><b class="t">④ 기초</b>μ = 0.5 · 허용지지력 qa = 200 kPa(qu/3) · 근입깊이 Df = 1.0 m.</li>
+<li><b class="t">⑤ 검토</b>「안전성 검토 실행」 → 활동 1.630(≥ 1.5) · 전도 2.910(≥ 2.0) · qmax 183.8 kPa(≤ 200) · Df 1.0 m → <b>적합</b>.</li>
+<li><b class="t">⑥ A4 보고서</b>「📄 A4 보고서」 탭 → 「인쇄 / PDF 저장」 또는 「JPG 저장」.</li>
+</ol>
+</section>
+<section class="ch" id="ch3"><h2><span class="n">03</span>화면별 기능</h2>
+<h3 id="s3-1">3-1. 머리 · 매뉴얼</h3>
+<figure class="shot" id="fig-s02_header"><div class="frame"><img src="images/s02_header.webp" width="1440" height="182" loading="lazy" alt="머리 · 탭 막대"><span class="pin" style="left:6.84%;top:26.05%">1</span><span class="pin" style="left:86.69%;top:67.87%">2</span><span class="pin" style="left:81.56%;top:13.98%">3</span><span class="pin" style="left:5.19%;top:65.68%">4</span></div><figcaption><span class="fno">S02</span>머리 · 탭 막대</figcaption><ol class="legend"><li><b>1</b><span>도구 이름 · Ver-5.1</span></li><li><b>2</b><span>📘 매뉴얼 — 탭 막대 끝</span></li><li><b>3</b><span>KDS 11 80 05 · 11 60 00 (2025. 12. 24.)</span></li><li><b>4</b><span>형식 탭</span></li></ol></figure>
+<p>탭 막대 오른쪽 끝의 「📘 매뉴얼」은 이 문서를 새 창으로 엽니다(온라인 전용). 오른쪽 근거 블록은 적용 기준과 개정일 · 기준안전율입니다.</p>
+<h3 id="s3-2">3-2. 중력식 — 기본 정보 · 단면</h3>
+<div class="pair"><div><figure class="shot" id="fig-s03_g_basic"><div class="frame"><img src="images/s03_g_basic.webp" width="460" height="218" loading="lazy" alt="기본 정보"><span class="pin" style="left:5.83%;top:36.49%">1</span><span class="pin" style="left:51.38%;top:36.49%">2</span><span class="pin" style="left:5.83%;top:66.30%">3</span></div><figcaption><span class="fno">S03</span>기본 정보</figcaption><ol class="legend"><li><b>1</b><span>현장명</span></li><li><b>2</b><span>작성자</span></li><li><b>3</b><span>작성일</span></li></ol></figure><figure class="shot" id="fig-s04_g_section"><div class="frame"><img src="images/s04_g_section.webp" width="460" height="372" loading="lazy" alt="단면 제원"><span class="pin" style="left:5.83%;top:31.23%">1</span><span class="pin" style="left:51.38%;top:31.23%">2</span><span class="pin" style="left:5.83%;top:48.70%">3</span><span class="pin" style="left:51.38%;top:48.70%">4</span><span class="pin" style="left:5.83%;top:79.08%">5</span><span class="pin" style="left:51.38%;top:79.08%">6</span></div><figcaption><span class="fno">S04</span>단면 제원</figcaption><ol class="legend"><li><b>1</b><span>높이 H</span></li><li><b>2</b><span>저면폭 B</span></li><li><b>3</b><span>상단폭 a</span></li><li><b>4</b><span>배면 경사 θ — 자동</span></li><li><b>5</b><span>콘크리트 γc</span></li><li><b>6</b><span>fck — 단면설계 별도</span></li></ol></figure></div><div><div class="k1"><div class="tbl"><table><thead><tr><th class="">칸</th><th class="">쓰임</th></tr></thead><tbody><tr><td class="">현장명 · 작성자 · 작성일</td><td class="">A4 보고서 머리에 들어감</td></tr><tr><td class="">H · B · a</td><td class="">전면 연직 · 배면 경사 단면 — 상단폭 a에서 저면폭 B로 넓어짐</td></tr><tr><td class="">배면 경사 θ</td><td class="">atan((B − a)/H)로 자동 계산(입력 불가) — Coulomb 토압에 사용</td></tr><tr><td class="">γc</td><td class="">콘크리트 단위중량 — 자중(1.7.2)</td></tr><tr><td class="">fck</td><td class="">단면설계(KDS 14 20 00)용 — 안정 검토에는 쓰지 않음</td></tr></tbody></table></div></div></div></div>
+<h3 id="s3-3">3-3. 중력식 — 토압 · 기초 조건</h3>
+<div class="pair"><div><figure class="shot" id="fig-s05_g_soil"><div class="frame"><img src="images/s05_g_soil.webp" width="460" height="437" loading="lazy" alt="토압 조건 · 기초 조건"><span class="pin" style="left:5.83%;top:24.83%">1</span><span class="pin" style="left:51.38%;top:24.83%">2</span><span class="pin" style="left:5.83%;top:39.70%">3</span><span class="pin" style="left:51.38%;top:39.70%">4</span><span class="pin" style="left:5.83%;top:65.56%">5</span><span class="pin" style="left:51.38%;top:65.56%">6</span><span class="pin" style="left:5.83%;top:80.43%">7</span><span class="pin" style="left:51.38%;top:80.43%">8</span></div><figcaption><span class="fno">S05</span>토압 조건 · 기초 조건</figcaption><ol class="legend"><li><b>1</b><span>뒤채움 γs</span></li><li><b>2</b><span>φ</span></li><li><b>3</b><span>c — 특수설계</span></li><li><b>4</b><span>배면 경사 β</span></li><li><b>5</b><span>μ</span></li><li><b>6</b><span>qa = qu/3</span></li><li><b>7</b><span>상재하중 10 kN/m²</span></li><li><b>8</b><span>근입깊이 ≥ 1.0 m</span></li></ol></figure></div><div><div class="k1"><div class="tbl"><table><thead><tr><th class="">칸</th><th class="">쓰임</th></tr></thead><tbody><tr><td class="">γs · φ</td><td class="">뒤채움 단위중량 · 내부마찰각 — 지반조사 · 시험값</td></tr><tr><td class="">점착력 c</td><td class="">토압에 점착력을 고려하면 특수설계(4.3.1①) — 이 도구는 c를 계산에 넣지 않고 안내만</td></tr><tr><td class="">배면 경사 β</td><td class="">뒤채움 지표면 경사 — 토압계수에 반영(β ≥ φ면 계산 불가)</td></tr><tr><td class="">μ</td><td class="">저판과 지반의 마찰계수</td></tr><tr><td class="">qa</td><td class="">허용지지력 = 극한지지력 qu ÷ 3.0(표 4.4-1)</td></tr><tr><td class="">q · Df</td><td class="">상재하중(일시 하중 10 kN/m² 이상) · 저판 근입깊이(≥ 1.0 m)</td></tr></tbody></table></div></div></div></div>
+<h3 id="s3-4">3-4. 중력식 결과</h3>
+<figure class="shot" id="fig-s06_g_hero"><div class="frame"><img src="images/s06_g_hero.webp" width="938" height="355" loading="lazy" alt="결과 요약 — 예제 A"><span class="pin" style="left:3.39%;top:12.34%">1</span><span class="pin" style="left:1.50%;top:49.45%">2</span><span class="pin" style="left:34.34%;top:49.45%">3</span><span class="pin" style="left:67.21%;top:49.45%">4</span><span class="pin" style="left:1.50%;top:75.80%">5</span></div><figcaption><span class="fno">S06</span>결과 요약 — 예제 A</figcaption><ol class="legend"><li><b>1</b><span>전도 Fs</span></li><li><b>2</b><span>활동</span></li><li><b>3</b><span>전도</span></li><li><b>4</b><span>지반반력</span></li><li><b>5</b><span>근입깊이</span></li></ol></figure>
+<p>네 항목(활동 · 전도 · 지반반력 · 근입깊이)이 모두 ✓이면 「적합」입니다. 상단 요약 바에 전도 · 활동 · qmax · 편심 · 판정이 함께 표시됩니다.</p>
+<h3 id="s3-5">3-5. 안정 검토 상세</h3>
+<figure class="shot" id="fig-s07_g_detail"><div class="frame"><img src="images/s07_g_detail.webp" width="938" height="402" loading="lazy" alt="안정 검토 상세 표 — 예제 A"><span class="pin" style="left:3.17%;top:26.55%">1</span><span class="pin" style="left:3.17%;top:33.76%">2</span><span class="pin" style="left:3.17%;top:40.97%">3</span><span class="pin" style="left:3.17%;top:55.40%">4</span><span class="pin" style="left:3.17%;top:62.62%">5</span></div><figcaption><span class="fno">S07</span>안정 검토 상세 표 — 예제 A</figcaption><ol class="legend"><li><b>1</b><span>활동 1.5</span></li><li><b>2</b><span>전도 2.0</span></li><li><b>3</b><span>qmax ≤ qa</span></li><li><b>4</b><span>편심 — 참고</span></li><li><b>5</b><span>Coulomb Ka</span></li></ol></figure>
+<p>예제 A는 편심 e = 0.534 m로 B/6(0.467 m)을 넘어 지반반력을 <b>삼각형 분포</b>로 계산했습니다(qmin = 0). 편심은 판정이 아니라 분포 형태를 알려 주는 참고값입니다(<a href="#s4-5">4-5</a>).</p>
+<h3 id="s3-6">3-6. 사례 — 근입깊이 0.5 m</h3>
+<figure class="shot" id="fig-s08_g_df"><div class="frame"><img src="images/s08_g_df.webp" width="938" height="820" loading="lazy" alt="근입깊이 0.5 m — 부적합"><span class="pin" style="left:1.50%;top:32.33%">1</span><span class="pin" style="left:1.50%;top:92.77%">2</span></div><figcaption><span class="fno">S08</span>근입깊이 0.5 m — 부적합</figcaption><ol class="legend"><li><b>1</b><span>근입 0.5 m — NG</span></li><li><b>2</b><span>보완 권고</span></li></ol></figure>
+<p>안전율이 모두 ✓여도 근입깊이가 1.0 m 미만이면 부적합입니다(4.4.1(4) — 동결심도 이상, 최소 1.0 m).</p>
+<h3 id="s3-7">3-7. 캔틸레버식 입력</h3>
+<div class="pair"><div><figure class="shot" id="fig-s09_c_input"><div class="frame"><img src="images/s09_c_input.webp" width="460" height="600" loading="lazy" alt="기본 정보 · 단면 제원"><span class="pin" style="left:5.83%;top:42.63%">1</span><span class="pin" style="left:51.38%;top:42.63%">2</span><span class="pin" style="left:5.83%;top:53.47%">3</span><span class="pin" style="left:51.38%;top:53.47%">4</span><span class="pin" style="left:5.83%;top:64.30%">5</span><span class="pin" style="left:5.83%;top:85.97%">6</span></div><figcaption><span class="fno">S09</span>기본 정보 · 단면 제원</figcaption><ol class="legend"><li><b>1</b><span>벽체 높이 H</span></li><li><b>2</b><span>저면폭 B</span></li><li><b>3</b><span>앞굽 bt</span></li><li><b>4</b><span>저판 tf</span></li><li><b>5</b><span>벽체 tw</span></li><li><b>6</b><span>qa = qu/3</span></li></ol></figure></div><div><figure class="shot" id="fig-s10_c_soil"><div class="frame"><img src="images/s10_c_soil.webp" width="460" height="372" loading="lazy" alt="토압 · 기초 조건"><span class="pin" style="left:5.83%;top:31.23%">1</span><span class="pin" style="left:51.38%;top:31.23%">2</span><span class="pin" style="left:5.83%;top:61.60%">3</span><span class="pin" style="left:5.83%;top:79.08%">4</span></div><figcaption><span class="fno">S10</span>토압 · 기초 조건</figcaption><ol class="legend"><li><b>1</b><span>c</span></li><li><b>2</b><span>β — Rankine 반영</span></li><li><b>3</b><span>근입깊이</span></li><li><b>4</b><span>단면설계 별도</span></li></ol></figure><div class="k1"><div class="tbl"><table><thead><tr><th class="">칸</th><th class="">쓰임</th></tr></thead><tbody><tr><td class="">H</td><td class="">저판 윗면에서 벽체 꼭대기까지 — 토압 높이 H′ = H + tf + 뒷굽 × tanβ</td></tr><tr><td class="">bt · tw · tf</td><td class="">앞굽 길이 · 벽체 두께 · 저판 두께 — 뒷굽 = B − bt − tw</td></tr><tr><td class="">상재하중</td><td class="">뒷굽 위에만 연직력으로 더함</td></tr></tbody></table></div></div></div></div>
+<h3 id="s3-8">3-8. 캔틸레버식 결과 — 활동 부족</h3>
+<figure class="shot" id="fig-s11_c_ng"><div class="frame"><img src="images/s11_c_ng.webp" width="938" height="820" loading="lazy" alt="기본값(B = 3.5 m · Df = 1.0 m) — 활동 부족"><span class="pin" style="left:1.50%;top:20.92%">1</span><span class="pin" style="left:1.50%;top:92.77%">2</span></div><figcaption><span class="fno">S11</span>기본값(B = 3.5 m · Df = 1.0 m) — 활동 부족</figcaption><ol class="legend"><li><b>1</b><span>활동 1.446 — NG</span></li><li><b>2</b><span>shear key · 저판 확대</span></li></ol></figure>
+<p>활동 안전율 1.446로 1.5에 못 미칩니다. v5.0은 상재하중을 앞굽 · 벽체 위까지 연직력으로 더해 1.50으로 통과시켰습니다.</p>
+<h3 id="s3-9">3-9. 사례 — 저면폭 3.7 m</h3>
+<figure class="shot" id="fig-s12_c_ok"><div class="frame"><img src="images/s12_c_ok.webp" width="938" height="355" loading="lazy" alt="저면폭 3.7 m — 적합"><span class="pin" style="left:3.39%;top:12.34%">1</span><span class="pin" style="left:1.50%;top:49.45%">2</span><span class="pin" style="left:67.21%;top:49.45%">3</span></div><figcaption><span class="fno">S12</span>저면폭 3.7 m — 적합</figcaption><ol class="legend"><li><b>1</b><span>전도 Fs</span></li><li><b>2</b><span>활동 — B 3.7 m</span></li><li><b>3</b><span>지반반력</span></li></ol></figure>
+<figure class="shot" id="fig-s13_c_diagram"><div class="frame"><img src="images/s13_c_diagram.webp" width="938" height="351" loading="lazy" alt="단면 다이어그램 (역T형)"></div><figcaption><span class="fno">S13</span>단면 다이어그램 (역T형)</figcaption></figure>
+<h3 id="s3-10">3-10. 앵커식 입력</h3>
+<div class="pair"><div><figure class="shot" id="fig-s14_an_input"><div class="frame"><img src="images/s14_an_input.webp" width="460" height="535" loading="lazy" alt="기본 정보 · 앵커 제원"><span class="pin" style="left:51.38%;top:26.59%">1</span><span class="pin" style="left:51.38%;top:47.72%">2</span><span class="pin" style="left:5.83%;top:59.87%">3</span><span class="pin" style="left:51.38%;top:59.87%">4</span><span class="pin" style="left:5.83%;top:72.01%">5</span><span class="pin" style="left:51.38%;top:72.01%">6</span></div><figcaption><span class="fno">S14</span>기본 정보 · 앵커 제원</figcaption><ol class="legend"><li><b>1</b><span>앵커 형식</span></li><li><b>2</b><span>설치각 ≥ 10°</span></li><li><b>3</b><span>수평간격</span></li><li><b>4</b><span>연직간격</span></li><li><b>5</b><span>설계앵커력 T</span></li><li><b>6</b><span>정착장 La</span></li></ol></figure></div><div><figure class="shot" id="fig-s15_an_cond"><div class="frame"><img src="images/s15_an_cond.webp" width="460" height="561" loading="lazy" alt="토압 조건 · 앵커체 조건"><span class="pin" style="left:5.83%;top:31.10%">1</span><span class="pin" style="left:5.83%;top:51.25%">2</span><span class="pin" style="left:51.38%;top:51.25%">3</span><span class="pin" style="left:5.83%;top:62.83%">4</span><span class="pin" style="left:5.83%;top:74.42%">5</span><span class="pin" style="left:51.38%;top:74.42%">6</span><span class="pin" style="left:5.83%;top:84.94%">7</span></div><figcaption><span class="fno">S15</span>토압 조건 · 앵커체 조건</figcaption><ol class="legend"><li><b>1</b><span>상재하중</span></li><li><b>2</b><span>천공경 D</span></li><li><b>3</b><span>자유장 ≥ 4.0 m</span></li><li><b>4</b><span>τu</span></li><li><b>5</b><span>가설 / 영구</span></li><li><b>6</b><span>강연선 규격</span></li><li><b>7</b><span>가닥 수</span></li></ol></figure></div></div>
+<div class="k1"><div class="tbl"><table><thead><tr><th class="">칸</th><th class="">쓰임</th></tr></thead><tbody><tr><td class="">설계앵커력 T</td><td class="">앵커 1본에 줄 설계 힘 — 필요앵커력 이상, 허용앵커력 이하</td></tr><tr><td class="">사용기간</td><td class="">가설(2년 미만) · 영구(2년 이상) — 인발 안전율 1.5 / 2.5, 인장재 허용 비율이 바뀜</td></tr><tr><td class="">강연선 규격 · 개수</td><td class="">KS D 7002 SWPC7B 15.2 mm(Tu 261 · Ty 222 kN) · 12.7 mm(183 · 156 kN) — 제품 시험성적서 값 우선</td></tr><tr><td class="">D · τu</td><td class="">천공경 · 극한주면마찰력 — 극한인발력 Pu = π·D·La·τu(인발시험 확인)</td></tr><tr><td class="">지반 허용지지력 · 탄성계수</td><td class="">참고 칸 — 앵커 검토에는 쓰지 않음</td></tr></tbody></table></div></div>
+<h3 id="s3-11">3-11. 앵커식 결과</h3>
+<figure class="shot" id="fig-s16_an_hero"><div class="frame"><img src="images/s16_an_hero.webp" width="938" height="355" loading="lazy" alt="예제 D — T 100 kN · 정착장 8 m · 자유장 5 m"><span class="pin" style="left:3.39%;top:12.34%">1</span><span class="pin" style="left:1.50%;top:49.45%">2</span><span class="pin" style="left:34.34%;top:49.45%">3</span><span class="pin" style="left:67.21%;top:49.45%">4</span></div><figcaption><span class="fno">S16</span>예제 D — T 100 kN · 정착장 8 m · 자유장 5 m</figcaption><ol class="legend"><li><b>1</b><span>T / Ta</span></li><li><b>2</b><span>필요앵커력</span></li><li><b>3</b><span>허용인발력</span></li><li><b>4</b><span>허용인장력</span></li></ol></figure>
+<figure class="shot" id="fig-s17_an_detail"><div class="frame"><img src="images/s17_an_detail.webp" width="938" height="402" loading="lazy" alt="앵커 검토 상세"><span class="pin" style="left:3.17%;top:33.76%">1</span><span class="pin" style="left:3.17%;top:48.19%">2</span><span class="pin" style="left:3.17%;top:55.40%">3</span><span class="pin" style="left:3.17%;top:69.83%">4</span></div><figcaption><span class="fno">S17</span>앵커 검토 상세</figcaption><ol class="legend"><li><b>1</b><span>필요앵커력</span></li><li><b>2</b><span>Fs 2.5 (영구)</span></li><li><b>3</b><span>0.60Tu · 0.75Ty</span></li><li><b>4</b><span>자유장 4.0 m</span></li></ol></figure>
+<p>필요앵커력 88.3 kN ≤ T 100 kN ≤ 허용앵커력 150.8 kN(허용인발력 · 허용인장력 중 작은 값)이고 길이 · 각도 조건을 모두 만족해 적합입니다.</p>
+<h3 id="s3-12">3-12. 사례 — 인발 · 자유장 부족</h3>
+<figure class="shot" id="fig-s18_an_ng"><div class="frame"><img src="images/s18_an_ng.webp" width="938" height="904" loading="lazy" alt="기본값 — T 200 kN · 정착장 5 m · 자유장 3 m"><span class="pin" style="left:34.34%;top:19.06%">1</span><span class="pin" style="left:1.50%;top:29.41%">2</span><span class="pin" style="left:1.50%;top:84.24%">3</span><span class="pin" style="left:1.50%;top:93.51%">4</span></div><figcaption><span class="fno">S18</span>기본값 — T 200 kN · 정착장 5 m · 자유장 3 m</figcaption><ol class="legend"><li><b>1</b><span>인발 부족</span></li><li><b>2</b><span>자유장 3.0 m</span></li><li><b>3</b><span>보완 권고</span></li><li><b>4</b><span>전체 안정성 — 별도 해석</span></li></ol></figure>
+<p>허용인발력 94.2 kN이 T 200 kN에 못 미치고 자유장 3.0 m가 최소 4.0 m에 못 미칩니다. 정착장을 늘리면 인발력이 커지지만 10 m를 넘는 부분은 더하지 않습니다(4.1(7)).</p>
+<h3 id="s3-13">3-13. A4 검토 보고서</h3>
+<figure class="shot" id="fig-s19_a4bar"><div class="frame"><img src="images/s19_a4bar.webp" width="1440" height="900" loading="lazy" alt="A4 보고서 탭 — 형식 선택 · 출력"><span class="pin" style="left:2.76%;top:24.60%">1</span><span class="pin" style="left:8.43%;top:30.04%">2</span><span class="pin" style="left:17.78%;top:30.04%">3</span><span class="pin" style="left:22.83%;top:41.24%">4</span></div><figcaption><span class="fno">S19</span>A4 보고서 탭 — 형식 선택 · 출력</figcaption><ol class="legend"><li><b>1</b><span>형식 선택</span></li><li><b>2</b><span>인쇄 · PDF</span></li><li><b>3</b><span>JPG 저장</span></li><li><b>4</b><span>A4 보고서</span></li></ol></figure>
+<div class="tri"><div><figure class="shot" id="fig-s20_a4page"><div class="frame"><img src="images/s20_a4page.webp" width="814" height="1142" loading="lazy" alt="A4 보고서 — 중력식 예제 A"></div><figcaption><span class="fno">S20</span>A4 보고서 — 중력식 예제 A</figcaption></figure></div><div><figure class="shot" id="fig-s21_a4anchor"><div class="frame"><img src="images/s21_a4anchor.webp" width="814" height="1186" loading="lazy" alt="A4 보고서 — 앵커식 예제 D"></div><figcaption><span class="fno">S21</span>A4 보고서 — 앵커식 예제 D</figcaption></figure></div></div>
+<h3 id="s3-14">3-14. 도움말</h3>
+<div class="tri"><div><figure class="shot" id="fig-s22_help_law"><div class="frame"><img src="images/s22_help_law.webp" width="800" height="531" loading="lazy" alt="관련 법규 · 기준"></div><figcaption><span class="fno">S22</span>관련 법규 · 기준</figcaption></figure></div><div><figure class="shot" id="fig-s23_help_formula"><div class="frame"><img src="images/s23_help_formula.webp" width="800" height="461" loading="lazy" alt="계산식"></div><figcaption><span class="fno">S23</span>계산식</figcaption></figure></div></div>
+<p>오른쪽 아래 「설계기준」 버튼으로 엽니다.</p>
+<h3 id="s3-15">3-15. 휴대전화 화면</h3>
+<div class="tri"><div><figure class="shot narrow" id="fig-s24_mobile_main"><div class="frame"><img src="images/s24_mobile_main.webp" width="390" height="844" loading="lazy" alt="첫 화면"></div><figcaption><span class="fno">S24</span>첫 화면</figcaption></figure></div><div><figure class="shot narrow" id="fig-s25_mobile_result"><div class="frame"><img src="images/s25_mobile_result.webp" width="390" height="844" loading="lazy" alt="중력식 결과"></div><figcaption><span class="fno">S25</span>중력식 결과</figcaption></figure></div></div>
+</section>
+<section class="ch" id="ch4"><h2><span class="n">04</span>기준 해설</h2>
+<h3 id="s4-1">4-1. 근거 체계</h3>
+<div class="k1"><div class="tbl"><table><thead><tr><th class="">기준</th><th class="">이 도구에서 쓰는 조항</th></tr></thead><tbody><tr><td class="">KDS 11 80 05 콘크리트옹벽</td><td class="">2025. 12. 24. 개정 — 중력식 · 반중력식 · 캔틸레버식 · 부벽식(1.2) · 하중 · 토압(1.7) · 안전율(4.4) · 본체(4.6)</td></tr><tr><td class="">KDS 11 60 00 앵커 설계기준</td><td class="">2025. 12. 24. 개정 — 설계 원칙(4.1) · 안전율(4.2) · 내적안정(4.3)</td></tr><tr><td class="">KDS 11 70 05 쌓기·깎기</td><td class="">앵커보강 지반 전체 안정성의 기준안전율(표 4.3-1)</td></tr><tr><td class="">출처</td><td class="">국가건설기준센터 kcsc.re.kr 원문 대조(2026-10-17)</td></tr></tbody></table></div></div>
+<h3 id="s4-2">4-2. 안정검토 하중 · 기준안전율</h3>
+<p>안정검토(활동 · 전도 · 지지력 · 전체안정성 · 침하)는 하중계수를 곱하지 않은 사용하중으로 안전율을 확인하고, 단면설계는 강도설계법 계수하중으로 합니다(1.7.1(2)).</p>
+<div class="brk"><div class="k1"><div class="tbl"><table><thead><tr><th class="">검토항목</th><th class="">평상시</th><th class="">지진 시</th></tr></thead><tbody><tr><td class="">활동</td><td class="">1.5 (전면 수동토압을 넣으면 2.0)</td><td class="">1.2</td></tr><tr><td class="">전도</td><td class="">2.0</td><td class="">1.5</td></tr><tr><td class="">지지력</td><td class="">3.0</td><td class="">2.0</td></tr><tr><td class="">전체안정성</td><td class="">1.5</td><td class="">1.1</td></tr></tbody></table></div></div></div>
+<p class="small">KDS 11 80 05 표 4.4-1 — 이 도구는 평상시 활동 · 전도 · 지지력을 판정합니다.</p>
+<h3 id="s4-3">4-3. 토압 — Coulomb · Rankine</h3>
+<div class="eq">Rankine  Ka = cosβ·(cosβ − √(cos²β − cos²φ)) / (cosβ + √(cos²β − cos²φ))
+Coulomb  Ka = cos²(φ − θ) / [cos²θ · cos(δ + θ) · (1 + √S)²]
+         S = sin(φ + δ) · sin(φ − β) / (cos(δ + θ) · cos(θ − β))</div>
+<div class="k1"><div class="tbl"><table><thead><tr><th class="">구분</th><th class="">내용</th></tr></thead><tbody><tr><td class="">1.7.3(2)</td><td class="">일반적인 경우 Coulomb — 캔틸레버(역T · L형) · 부벽식처럼 뒷굽 연직 가상면에 토압이 작용하면 Rankine</td></tr><tr><td class="">중력식 (MANMIN 적용)</td><td class="">실제 배면(θ = 29.9°)에 Coulomb · 벽면마찰각 δ = 2/3φ · 합력은 배면 법선에서 δ 기울어 작용 → 수평분력 73.25 · 연직분력 86.99 kN/m(예제 A)</td></tr><tr><td class="">캔틸레버식</td><td class="">뒷굽 끝 연직 가상배면 · 높이 H′ · 합력은 β 방향 — 뒷굽 위 흙 무게는 연직력으로 더함</td></tr><tr><td class="">상재하중</td><td class="">토압 = Ka·q·H(중력식은 cosθ / cos(θ − β)를 곱한 등가 흙두께 — MANMIN 적용) · 일시 하중 10 kN/m²(1.7.4(2))</td></tr></tbody></table></div></div>
+<h3 id="s4-4">4-4. 활동 · 전도</h3>
+<div class="eq">활동 Fs = μ · ΣV / ΣH ≥ 1.5        전도 Fs = ΣMr / ΣMo ≥ 2.0 (앞굽 끝 기준)</div>
+<div class="k1"><div class="tbl"><table><thead><tr><th class="">조항</th><th class="">내용</th></tr></thead><tbody><tr><td class="">4.4.1(4)</td><td class="">전면 흙의 수동토압은 변위 · 세굴 · 되메움 강도 때문에 무시하는 것이 안전측 — 이 도구는 수동토압을 넣지 않음</td></tr><tr><td class="">4.4.3</td><td class="">전도는 앞굽을 중심으로 한 저항모멘트 ÷ 작용모멘트</td></tr><tr><td class="">상재하중 연직력</td><td class="">중력식은 벽체 위에 상재하중이 없고, 캔틸레버식은 뒷굽 위만 — v5.0은 저면폭 전체에 더했음</td></tr></tbody></table></div></div>
+<h3 id="s4-5">4-5. 지지력 · 지반반력 분포</h3>
+<div class="eq">x̄ = (ΣMr − ΣMo) / ΣV ,  e = B/2 − x̄
+|e| ≤ B/6 :  qmax = ΣV/B · (1 + 6|e|/B)
+|e| &gt; B/6 :  qmax = 2ΣV / 3(B/2 − |e|)   (삼각형 분포, qmin = 0)</div>
+<p>지지력 안전율 3.0(극한지지력 ÷ 지반반력)은 허용지지력 qa = qu/3와 qmax를 비교하는 것과 같습니다. KDS 11 80 05에는 「e ≤ B/6」 조항이 없습니다(4.4.3(3)의 하중저항계수설계법 간주 기준은 흙 B/4 · 암 3B/8). 그래서 편심은 분포 형태를 정하는 참고값으로만 표시합니다.</p>
+<h3 id="s4-6">4-6. 근입깊이 · 활동방지벽</h3>
+<div class="k1"><div class="tbl"><table><thead><tr><th class="">조항</th><th class="">내용</th></tr></thead><tbody><tr><td class="">4.4.1(4)</td><td class="">저판 설치깊이는 동결심도 이상, 지표면 아래 최소 1.0 m 이상</td></tr><tr><td class="">4.4.2(1)</td><td class="">활동방지벽(shear key) 높이는 저판높이의 2/3배 이상, 기초폭의 10 ~ 15 %</td></tr><tr><td class="">4.6.2(2)①</td><td class="">피복 — 노출면 · 흙 접촉면 50 mm, 흙 속 기초 슬래브 80 mm 이상</td></tr></tbody></table></div></div>
+<h3 id="s4-7">4-7. 앵커 — 인발 · 인장 · 길이</h3>
+<div class="eq">필요앵커력 = Ea · sh / (n · cosα)        Pu = π · D · La · τu (La ≤ 10 m)
+허용앵커력 Ta = min( Pu / Fs ,  가닥수 × min(fu·Tu, fy·Ty) )</div>
+<div class="brk"><div class="k1"><div class="tbl"><table><thead><tr><th class="">항목</th><th class="">가설(2년 미만)</th><th class="">영구 평상시</th><th class="">영구 지진 시</th></tr></thead><tbody><tr><td class="">극한인발력 안전율 (표 4.2-2)</td><td class="">1.5</td><td class="">2.5</td><td class="">1.5 ~ 2.0</td></tr><tr><td class="">허용인장력 (표 4.2-3)</td><td class="">0.65Tu · 0.80Ty</td><td class="">0.60Tu · 0.75Ty</td><td class="">0.75Tu · 0.90Ty</td></tr></tbody></table></div></div></div>
+<div class="k1"><div class="tbl"><table><thead><tr><th class="">조항</th><th class="">내용</th></tr></thead><tbody><tr><td class="">4.1(5)</td><td class="">정착부는 가상 활동파괴면 밖 · 자유장 = 가상활동면까지 + max(1.5 m, 0.15H), 최소 4.0 m</td></tr><tr><td class="">4.1(6) · (7)</td><td class="">마찰형 토사층 정착장 최소 4.0 m · 10 m 초과분은 극한인발력 증가 없음</td></tr><tr><td class="">4.1(8)</td><td class="">설치각은 수평면에 대해 10° 이상</td></tr><tr><td class="">4.3(3) · 4.4(2)</td><td class="">설계앵커력 = 최소 허용앵커력 · 파괴면 저항력은 허용인장력과 허용인발력 중 작은 값</td></tr></tbody></table></div></div>
+<h3 id="s4-8">4-8. 별도 검토 항목</h3>
+<div class="k1"><div class="tbl"><table><thead><tr><th class="">항목</th><th class="">내용</th></tr></thead><tbody><tr><td class="">전체안정성</td><td class="">옹벽 · 기초 아래 · 배면 지반을 포함한 원호활동 — 수정 Bishop · Janbu · Spencer 등(4.4.5) · 앵커보강 지반은 비탈면 안전율(장기 건기 1.5 · 우기 1.3)</td></tr><tr><td class="">지진 시</td><td class="">내진설계 대상(4.3.5 — 2종 시설물 규모 등)은 KDS 11 90 00과 표 4.4-1 지진 시 안전율</td></tr><tr><td class="">수압 · 부력</td><td class="">배수되지 않는 경우(1.7.5) — 배수공 2 ~ 4 ㎡당 1개소 · 내경 60 ~ 100 mm(4.6.3)</td></tr><tr><td class="">부재 단면</td><td class="">벽체 · 앞굽 · 뒷굽 강도설계(4.6.1 · KDS 14 20 00)</td></tr><tr><td class="">제2종시설물</td><td class="">노출높이 5 m 이상인 부분의 합이 100 m 이상인 옹벽(시설물의 안전 및 유지관리에 관한 특별법 시행령 별표 1 제8호)</td></tr></tbody></table></div></div>
+<h3 id="s4-9">4-9. v5.1.0 정정 (2026-10-17)</h3>
+<div class="brk"><div class="k1"><div class="tbl"><table><thead><tr><th class="">항목</th><th class="">기존(v5.0)</th><th class="">정정(v5.1.0)</th></tr></thead><tbody><tr><td class="">옹벽 기준</td><td class="">KDS 11 80 10 (2016) 「옹벽 설계기준」</td><td class="">KDS 11 80 05 콘크리트옹벽 (2025. 12. 24.) — 11 80 10은 보강토옹벽</td></tr><tr><td class="">앵커 기준</td><td class="">KDS 11 50 15 (2019)</td><td class="">KDS 11 60 00 (2025. 12. 24.) — 11 50 15는 깊은기초</td></tr><tr><td class="">기타 표기</td><td class="">KDS 14 20 54 철근 · KDS 11 10 05 편심 B/6 · 건설기술진흥법 시행규칙 제60조 5 m</td><td class="">삭제 — 각각 콘크리트용 앵커 · 해당 조항 없음 · 안전관리비 조항</td></tr><tr><td class="">중력식 토압</td><td class="">Rankine · 배면 무시</td><td class="">Coulomb · δ = 2/3φ · 연직분력</td></tr><tr><td class="">중력식 도심</td><td class="">배면 삼각형 a + (B − a)×2/3</td><td class="">a + (B − a)/3</td></tr><tr><td class="">상재하중 연직력</td><td class="">저면폭 전체</td><td class="">중력식 제외 · 캔틸레버 뒷굽 위만</td></tr><tr><td class="">지반반력</td><td class="">e &gt; B/6에도 사다리꼴식</td><td class="">삼각형 분포 · 편심은 참고</td></tr><tr><td class="">근입깊이</td><td class="">입력만</td><td class="">≥ 1.0 m 판정</td></tr><tr><td class="">앵커</td><td class="">인발 2.0 · 전체안정 간이식 1.2</td><td class="">가설 1.5 / 영구 2.5 · 허용인장력 · 자유장 · 정착장 · 설치각 · 전체안정은 별도 해석</td></tr></tbody></table></div></div></div>
+<p>예제 A(기본 단면 · Df 1.0 m)의 전도 안전율은 v5.0 2.93 → v5.1.0 2.910입니다. 규칙을 파이썬으로 따로 옮긴 계산과 앱 엔진을 무작위 · 경계값 21,000건으로 대조해 불일치 0, 일부러 넣은 오류 4종을 모두 검출했습니다(<code>manual/_tools/verify_rw.py</code>).</p>
+</section>
+<section class="ch" id="ch5"><h2><span class="n">05</span>실무 작업 방법</h2>
+<h3 id="s5-1">5-1. 검토 절차</h3>
+<ol class="steps">
+<li><b class="t">① 지반정수</b>지반조사 · 시험으로 γ · φ · 허용지지력(qu/3) · 앵커 주면마찰력을 정함 — 높이 8 m 초과는 뒤채움 역학시험(2.1.1).</li>
+<li><b class="t">② 형식</b>높이 · 공간 · 지반에 맞춰 중력식 → 캔틸레버식 → 부벽식 순으로 검토(1.6.1).</li>
+<li><b class="t">③ 안정</b>활동 · 전도 · 지지력 · 근입깊이 — ✗는 저면폭 · 뒷굽 · 활동방지벽 · 근입깊이로 조정.</li>
+<li><b class="t">④ 별도 검토</b>전체안정성 · 침하 · 지진 시 · 수압 · 부재 단면(<a href="#s4-8">4-8</a>).</li>
+<li><b class="t">⑤ 상세</b>배수공 · 신축이음(중력식 10 m · 캔틸레버 15 ~ 20 m 이하) · 피복 · 수축이음(4.6.2 · 4.6.3).</li>
+<li><b class="t">⑥ 기록</b>A4 검토 보고서를 설계도서 · 검토 자료에 첨부.</li>
+</ol>
+<h3 id="s5-2">5-2. 문제 해결 · FAQ</h3>
+<div class="k1"><div class="tbl"><table><thead><tr><th class="">증상</th><th class="">해결</th></tr></thead><tbody><tr><td class="">예전 결과와 안전율이 달라요</td><td class="">v5.1.0에서 계산을 원문대로 바꿨습니다(<a href="#s4-9">4-9</a>) — 다시 검토하십시오</td></tr><tr><td class="">안전율은 다 OK인데 부적합이에요</td><td class="">근입깊이 1.0 m 미만인지 확인(4.4.1(4))</td></tr><tr><td class="">배면 경사 θ를 못 바꿔요</td><td class="">B · a · H로 정해지는 값이라 자동 표시입니다</td></tr><tr><td class="">편심이 B/6을 넘었는데 판정은 OK예요</td><td class="">편심은 기준 조항이 아니라 분포 형태 참고값 — 지반반력은 삼각형 분포로 계산합니다</td></tr><tr><td class="">앵커 전체안정 판정이 없어졌어요</td><td class="">출처 없는 간이식이라 삭제 — 사면안정해석 프로그램으로 따로 검토하십시오</td></tr><tr><td class="">화면이 예전 판이에요</td><td class="">새로 고침(Ctrl+F5) — v5.1.0부터 캐시 이름이 retwall-v5.1.0입니다</td></tr></tbody></table></div></div>
+</section>
+<section class="ch" id="ch6"><h2><span class="n">부록</span></h2>
+<h3 id="a1">A1. 버전 변경 내역</h3>
+<div class="k1"><div class="tbl"><table><thead><tr><th class="">버전</th><th class="">내용</th></tr></thead><tbody><tr><td class="">Ver-5.1 · v5.1.0 (2026-10-17)</td><td class="">KDS 11 80 05 · 11 60 00 원문 대조 엔진 RWENG · Coulomb 토압 · 지반반력 분포 · 근입깊이 · 앵커 가설 / 영구 · 「📘 매뉴얼」 · sw v5.1.0</td></tr><tr><td class="">Ver-5.0 (2026-09-03 ~ 09-05)</td><td class="">MANMIN 디자인 통일 · A4 규격 · JPG 저장 · sw 정비</td></tr><tr><td class="">Ver-2.0</td><td class="">초판 PWA</td></tr></tbody></table></div></div>
+<h3 id="a2">A2. 용어</h3>
+<div class="brk"><div class="k1"><div class="tbl"><table><thead><tr><th class="">용어</th><th class="">뜻</th></tr></thead><tbody><tr><td class="">주동토압</td><td class="">벽체가 흙에서 멀어지는 쪽으로 움직일 때 작용하는 토압</td></tr><tr><td class="">가상배면</td><td class="">캔틸레버 옹벽 뒷굽 끝에서 연직으로 세운 면 — Rankine 토압 작용면</td></tr><tr><td class="">벽면마찰각 δ</td><td class="">배면과 흙 사이 마찰각 — 이 도구는 2/3φ</td></tr><tr><td class="">편심 e</td><td class="">저판 중심에서 연직 합력 작용점까지 거리</td></tr><tr><td class="">자유장 · 정착장</td><td class="">긴장력을 전달만 하는 구간 · 지반에 앵커력을 전달하는 구간(KDS 11 60 00 1.4)</td></tr><tr><td class="">허용앵커력</td><td class="">허용인발력과 허용인장력 중 작은 값 — 설계앵커력의 상한</td></tr></tbody></table></div></div></div>
+</section></main></div>
+<footer class="foot">© 2026 김만민 건축사 · ㈜대성건축사사무소 · 옹벽 구조물 안전성 검토 시스템 사용자 매뉴얼 Ver-5.1 · KDS 11 80 05 · KDS 11 60 00 (2025. 12. 24. 개정) <span class="rev">· 화면 대응 개정 2026-10-17</span></footer>
+<div class="pfoot"><span>옹벽 구조물 안전성 검토 시스템 사용자 매뉴얼 Ver-5.1</span><span>2026-10-17</span></div>
+<div id="lb" role="dialog" aria-label="그림 확대"><img alt=""></div>
+<button class="totop" aria-label="맨 위로">↑</button>
+<script>
+(function(){
+  var lb=document.getElementById('lb'),li=lb.querySelector('img');
+  document.querySelectorAll('figure.shot .frame').forEach(function(f){f.addEventListener('click',function(){li.src=f.querySelector('img').src;li.alt=f.querySelector('img').alt;lb.classList.add('open');});});
+  lb.addEventListener('click',function(){lb.classList.remove('open');li.removeAttribute('src');});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')lb.classList.remove('open');});
+  document.querySelector('.totop').addEventListener('click',function(){window.scrollTo(0,0);});
+  var links=[].slice.call(document.querySelectorAll('nav.toc a'));
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id);});}});},{rootMargin:'0px 0px -70% 0px'});
+    document.querySelectorAll('section.ch,h3[id]').forEach(function(s){io.observe(s);});
+  }
+})();
+/* 좁은 화면 표 쌓기 준비: 숫자 칸이 없는 표에 stack 표시, 각 칸에 머리글(data-th) 복사 */
+(function(){document.querySelectorAll('.tbl').forEach(function(t){var tb=t.querySelector('table');if(!tb||!tb.tHead)return;
+ if(tb.querySelector('td.num,th.num'))return;var hs=[].map.call(tb.tHead.rows[0].cells,function(c){return c.textContent.trim()});
+ [].forEach.call(tb.tBodies[0].rows,function(r){[].forEach.call(r.cells,function(c,i){if(hs[i])c.setAttribute('data-th',hs[i])})});t.classList.add('stack');if(hs.length===2)t.classList.add('c2')})})();
+</script>
+</body></html>
