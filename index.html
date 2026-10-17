@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
-<title>옹벽 구조물 안전성 검토 시스템 · MANMIN Ver-5.0</title>
-<meta name="description" content="KDS 11 80 10 / KDS 11 10 05 / 구조물기초설계기준 기반 옹벽 안전성 자동 검토 — CIVIL ENGINEER KIM MANMIN"/>
+<title>옹벽 구조물 안전성 검토 시스템 · MANMIN Ver-5.1</title>
+<meta name="description" content="KDS 11 80 05 콘크리트옹벽 · KDS 11 60 00 앵커 설계기준(2025. 12. 24.) 기반 옹벽 안정 자동 검토 — CIVIL ENGINEER KIM MANMIN"/>
 <meta name="theme-color" content="#b45309"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
@@ -110,6 +110,7 @@ input[type="number"]{-moz-appearance:textfield;}
   transition:all .15s;display:flex;align-items:center;gap:5px;
   white-space:nowrap;flex-shrink:0;-webkit-tap-highlight-color:transparent;}
 .tb:hover{color:#fff;background:rgba(255,255,255,.09);}
+.tb.tb-manual{margin-left:auto;text-decoration:none;color:rgba(255,255,255,.85);}  /* v5.1.0 — 매뉴얼 버튼 탭 막대 끝 */
 .tb.active{color:#fff;background:#b45309;border-bottom-color:#fcd34d;}
 /* v5.0-HDR — 요약 스트립 (헤더 3층) */
 .sum-bar-wrap{background:#0f172a;padding:10px 0;}
@@ -320,6 +321,8 @@ table tr:nth-child(even) td{background:#f8fafd;}
 .a4-sub.amber{color:#f57c00;border-left-color:#ffa726;}
 .a4-sub.grn{color:#2e7d32;border-left-color:#43a047;}
 .a4-sub.red{color:#c62828;border-left-color:#ef5350;}
+.a4-tbl.a4-law td{white-space:normal;word-break:keep-all;}  /* v5.1.0 — 적용 기준 조항 표 줄바꿈 */
+.a4-tbl.a4-law td:last-child{text-align:left;}
 .a4-tbl .mono{font-family:'JetBrains Mono','Noto Sans KR Local',monospace;}
 .a4-tbl .pass-cell{color:#2e7d32;font-weight:900;background:#e8f5e9!important;}
 .a4-tbl .fail-cell{color:#c62828;font-weight:900;background:#ffebee!important;}
@@ -587,17 +590,17 @@ table tr:nth-child(even) td{background:#f8fafd;}
     <div class="brand-logo">
       <div class="brand-texts">
         <!-- v5.0-HDR — 375px 1줄 유지(≤40자) -->
-        <div class="hdr-eyebrow">Retaining Wall Stability · KDS 11 80 10</div>
+        <div class="hdr-eyebrow">Retaining Wall Stability · KDS 11 80 05</div>
         <h1 class="hdr-h1">옹벽 구조물 안전성 검토 시스템</h1>
         <div class="hdr-sub">
-          중력식 · 캔틸레버식 · 앵커식 옹벽 전도 · 활동 · 지지력 · 편심 안전율 자동 검토
-          <span class="hdr-manmin">MANMIN · Ver-5.0</span>
+          중력식 · 캔틸레버식 · 앵커식 옹벽 활동 · 전도 · 지지력 · 앵커력 자동 검토
+          <span class="hdr-manmin">MANMIN · Ver-5.1</span>
         </div>
       </div>
     </div>
     <div class="hdr-right-wrap">
-      <!-- v5.0-HDR — 마스터 4줄(13/11/11/10). KDS 표기는 현행 유지(kcsc 로그인 필수로 개정 미확인 · MIN 2026-09-03) -->
-      <div class="hdr-right"><strong>옹벽 설계기준</strong><br/>KDS 11 80 10 · KDS 11 10 05<br/>구조물기초설계기준 · KDS 11 50 15<br/><em>[전도 ≥2.0 · 활동 ≥1.5 · 지지력 ≥3.0]</em></div>
+      <!-- v5.1.0 — KDS 11 80 05 · 11 60 00 (2025. 12. 24.) kcsc 원문 대조 2026-10-17 -->
+      <div class="hdr-right"><strong>옹벽 설계기준</strong><br/>KDS 11 80 05 콘크리트옹벽<br/>KDS 11 60 00 앵커 (2025. 12. 24.)<br/><em>[활동 ≥1.5 · 전도 ≥2.0 · 지지력 ≥3.0]</em></div>
       <!-- v5.0 : 헤더 버튼 없음. 설치는 PWA 배너가, 초기화는 우측 하단 FAB 이 담당한다(§3-1 · §18-1). -->
     </div>
   </div>
@@ -610,6 +613,7 @@ table tr:nth-child(even) td{background:#f8fafd;}
     <button class="tb" onclick="switchTab('cantilever')" id="tab-cantilever">🔲 캔틸레버식</button>
     <button class="tb" onclick="switchTab('anchored')" id="tab-anchored">⚓ 앵커식</button>
     <button class="tb" onclick="switchTab('a4preview')" id="tab-a4preview">📄 A4 보고서</button>
+    <a class="tb tb-manual" id="mm-manual-btn" href="https://manminkim-eng.github.io/tomog-ongbyeog/manual/" target="_blank" rel="noopener" onclick="if(navigator.onLine===false){event.preventDefault();var t=document.createElement('div');t.textContent='매뉴얼은 인터넷 연결 시 열립니다';t.style.cssText='position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#0d1f3c;color:#fff;padding:10px 18px;border-radius:10px;font-size:13px;font-weight:700;z-index:9999';document.body.appendChild(t);setTimeout(function(){t.remove();},2200);}">📘 매뉴얼</a>
   </div>
 </nav>
 </div><!-- /.hdr-shell -->
@@ -678,8 +682,8 @@ table tr:nth-child(even) td{background:#f8fafd;}
               <div class="input-sfx"><input class="finput" type="number" id="g-a" value="0.5" step="0.05" min="0.3" oninput="gUpdateSteps()"/><span class="sfx">m</span></div>
             </div>
             <div class="fgrp">
-              <label class="flbl">배면경사 α (°)</label>
-              <div class="input-sfx"><input class="finput" type="number" id="g-alpha" value="0" step="1" min="0" max="20" oninput="gUpdateSteps()"/><span class="sfx">°</span></div>
+              <label class="flbl">배면 경사 θ (°, 자동)</label>
+              <div class="input-sfx"><input class="finput" type="number" id="g-alpha" value="29.9" step="0.1" readonly tabindex="-1" style="background:#eef2f7;color:#546e7a;"/><span class="sfx">°</span></div>
             </div>
           </div>
           <div class="fdivider"></div>
@@ -690,7 +694,7 @@ table tr:nth-child(even) td{background:#f8fafd;}
               <div class="input-sfx"><input class="finput" type="number" id="g-gc" value="23.0" step="0.5" min="20" oninput="gUpdateSteps()"/><span class="sfx">kN/m³</span></div>
             </div>
             <div class="fgrp">
-              <label class="flbl">fck (MPa)</label>
+              <label class="flbl">fck (MPa · 단면설계 별도)</label>
               <div class="input-sfx"><input class="finput" type="number" id="g-fck" value="21" step="1" min="18" oninput="gUpdateSteps()"/><span class="sfx">MPa</span></div>
             </div>
           </div>
@@ -730,7 +734,7 @@ table tr:nth-child(even) td{background:#f8fafd;}
               <input class="finput" type="number" id="g-mu" value="0.5" step="0.05" min="0.3" max="0.8" oninput="gUpdateSteps()"/>
             </div>
             <div class="fgrp">
-              <label class="flbl">허용지지력 qa (kN/m²)</label>
+              <label class="flbl">허용지지력 qa = qu/3 (kN/m²)</label>
               <div class="input-sfx"><input class="finput" type="number" id="g-qa" value="200" step="10" min="50" oninput="gUpdateSteps()"/><span class="sfx">kPa</span></div>
             </div>
           </div>
@@ -753,7 +757,7 @@ table tr:nth-child(even) td{background:#f8fafd;}
       <div id="g-result-panel">
         <div class="nb blue">
           <div class="nb-tit">💡 사용 방법</div>
-          <div class="nb-txt">좌측 조건을 입력하고 <b>안전성 검토</b> 버튼을 눌러주세요.<br/>KDS 11 80 10 기준에 따라 전도·활동·지지력·편심 안전율을 자동 계산합니다.</div>
+          <div class="nb-txt">좌측 조건을 입력하고 <b>안전성 검토</b> 버튼을 눌러주세요.<br/>KDS 11 80 05 표 4.4-1에 따라 활동 · 전도 · 지지력 · 근입깊이를 검토합니다 (중력식 = Coulomb 토압).</div>
         </div>
         <!-- 옹벽 단면 SVG 다이어그램 -->
         <div class="card">
@@ -816,7 +820,7 @@ table tr:nth-child(even) td{background:#f8fafd;}
             <div class="fgrp"><label class="flbl">마찰계수 μ</label><input class="finput" type="number" id="c-mu" value="0.5" step="0.05"/></div>
           </div>
           <div class="frow">
-            <div class="fgrp"><label class="flbl">허용지지력 (kN/m²)</label><div class="input-sfx"><input class="finput" type="number" id="c-qa" value="200" step="10"/><span class="sfx">kPa</span></div></div>
+            <div class="fgrp"><label class="flbl">허용지지력 qa = qu/3 (kN/m²)</label><div class="input-sfx"><input class="finput" type="number" id="c-qa" value="200" step="10"/><span class="sfx">kPa</span></div></div>
             <div class="fgrp"><label class="flbl">상재하중 q (kN/m²)</label><div class="input-sfx"><input class="finput" type="number" id="c-q" value="10" step="1"/><span class="sfx">kPa</span></div></div>
           </div>
         </div>
@@ -837,15 +841,15 @@ table tr:nth-child(even) td{background:#f8fafd;}
             <div class="fgrp"><label class="flbl">콘크리트 γc (kN/m³)</label><div class="input-sfx"><input class="finput" type="number" id="c-gc" value="23.0" step="0.5" min="20"/><span class="sfx">kN/m³</span></div></div>
           </div>
           <div class="frow">
-            <div class="fgrp"><label class="flbl">fck (MPa)</label><div class="input-sfx"><input class="finput" type="number" id="c-fck" value="24" step="1" min="21"/><span class="sfx">MPa</span></div></div>
-            <div class="fgrp"><label class="flbl">주철근 fy (MPa)</label><div class="input-sfx"><input class="finput" type="number" id="c-fy" value="400" step="50" min="300"/><span class="sfx">MPa</span></div></div>
+            <div class="fgrp"><label class="flbl">fck (MPa · 단면설계 별도)</label><div class="input-sfx"><input class="finput" type="number" id="c-fck" value="24" step="1" min="21"/><span class="sfx">MPa</span></div></div>
+            <div class="fgrp"><label class="flbl">주철근 fy (MPa · 단면설계 별도)</label><div class="input-sfx"><input class="finput" type="number" id="c-fy" value="400" step="50" min="300"/><span class="sfx">MPa</span></div></div>
           </div>
         </div>
       </div>
     </div>
     <div>
       <div id="c-result-panel">
-        <div class="nb teal"><div class="nb-tit">💡 캔틸레버식 옹벽</div><div class="nb-txt">역T형 단면으로 배면 뒷채움 토사의 중량을 이용하여 안정을 확보합니다.<br/>KDS 14 20 54 기준에 따라 철근 배근 및 안전성을 검토합니다.</div></div>
+        <div class="nb teal"><div class="nb-tit">💡 캔틸레버식 옹벽</div><div class="nb-txt">역T형 단면으로 배면 뒷채움 토사의 중량을 이용하여 안정을 확보합니다.<br/>뒷굽 끝 연직 가상배면에 Rankine 토압을 적용해 안정을 검토합니다 (KDS 11 80 05 1.7.3(2)). 단면설계는 KDS 14 20 00 별도.</div></div>
         <!-- 캔틸레버 단면 SVG 다이어그램 -->
         <div class="card">
           <div class="card-head"><div class="card-ico teal">📐</div><span class="card-tit">단면 다이어그램 (역T형)</span></div>
@@ -899,7 +903,7 @@ table tr:nth-child(even) td{background:#f8fafd;}
             <div class="fgrp"><label class="flbl">앵커 수직간격 (m)</label><div class="input-sfx"><input class="finput" type="number" id="an-sv" value="2.0" step="0.1" min="1" oninput="drawAnchoredDiagram()"/><span class="sfx">m</span></div></div>
           </div>
           <div class="frow">
-            <div class="fgrp"><label class="flbl">앵커 설계하중 (kN)</label><div class="input-sfx"><input class="finput" type="number" id="an-T" value="200" step="10" min="50"/><span class="sfx">kN</span></div></div>
+            <div class="fgrp"><label class="flbl">설계앵커력 T (kN/본)</label><div class="input-sfx"><input class="finput" type="number" id="an-T" value="200" step="10" min="50"/><span class="sfx">kN</span></div></div>
             <div class="fgrp"><label class="flbl">앵커 정착장 (m)</label><div class="input-sfx"><input class="finput" type="number" id="an-La" value="5.0" step="0.5" min="2" oninput="drawAnchoredDiagram()"/><span class="sfx">m</span></div></div>
           </div>
           <div class="frow">
@@ -919,24 +923,32 @@ table tr:nth-child(even) td{background:#f8fafd;}
           </div>
           <div class="frow">
             <div class="fgrp"><label class="flbl">상재하중 q (kN/m²)</label><div class="input-sfx"><input class="finput" type="number" id="an-q" value="10" step="1" min="0" oninput="drawAnchoredDiagram()"/><span class="sfx">kPa</span></div></div>
-            <div class="fgrp"><label class="flbl">지반 허용지지력 (kPa)</label><div class="input-sfx"><input class="finput" type="number" id="an-qa" value="150" step="10" min="50"/><span class="sfx">kPa</span></div></div>
+            <div class="fgrp"><label class="flbl">지반 허용지지력 (kPa · 참고)</label><div class="input-sfx"><input class="finput" type="number" id="an-qa" value="150" step="10" min="50"/><span class="sfx">kPa</span></div></div>
           </div>
           <div class="fdivider"></div>
           <div class="sec-title teal">🔩 앵커체 조건</div>
           <div class="frow">
             <div class="fgrp"><label class="flbl">앵커 직경 D (mm)</label><div class="input-sfx"><input class="finput" type="number" id="an-D" value="150" step="10" min="100" oninput="drawAnchoredDiagram()"/><span class="sfx">mm</span></div></div>
-            <div class="fgrp"><label class="flbl">앵커 자유장 Lf (m)</label><div class="input-sfx"><input class="finput" type="number" id="an-Lf" value="3.0" step="0.5" min="1" oninput="drawAnchoredDiagram()"/><span class="sfx">m</span></div></div>
+            <div class="fgrp"><label class="flbl">앵커 자유장 Lf (m · 최소 4.0)</label><div class="input-sfx"><input class="finput" type="number" id="an-Lf" value="3.0" step="0.5" min="1" oninput="drawAnchoredDiagram()"/><span class="sfx">m</span></div></div>
           </div>
           <div class="frow">
             <div class="fgrp"><label class="flbl">극한주면마찰력 τu (kPa)</label><div class="input-sfx"><input class="finput" type="number" id="an-tau" value="100" step="10" min="50"/><span class="sfx">kPa</span></div></div>
-            <div class="fgrp"><label class="flbl">앵커재 탄성계수 (GPa)</label><div class="input-sfx"><input class="finput" type="number" id="an-E" value="200" step="10" min="100"/><span class="sfx">GPa</span></div></div>
+            <div class="fgrp"><label class="flbl">앵커재 탄성계수 (GPa · 참고)</label><div class="input-sfx"><input class="finput" type="number" id="an-E" value="200" step="10" min="100"/><span class="sfx">GPa</span></div></div>
+          </div>
+          <div class="frow">
+            <div class="fgrp"><label class="flbl">사용기간 (KDS 11 60 00 표 4.2-2)</label><select class="fselect" id="an-use"><option value="perm" selected>영구앵커 (2년 이상)</option><option value="temp">가설앵커 (2년 미만)</option></select></div>
+            <div class="fgrp"><label class="flbl">강연선 규격 (KS D 7002 SWPC7B)</label><select class="fselect" id="an-strand"><option value="15.2|261|222" selected>15.2 mm (Tu 261 · Ty 222 kN)</option><option value="12.7|183|156">12.7 mm (Tu 183 · Ty 156 kN)</option></select></div>
+          </div>
+          <div class="frow">
+            <div class="fgrp"><label class="flbl">강연선 개수 (가닥/본)</label><div class="input-sfx"><input class="finput" type="number" id="an-nstr" value="4" step="1" min="1"/><span class="sfx">가닥</span></div></div>
+            <div class="fgrp"></div>
           </div>
         </div>
       </div>
     </div>
     <div>
       <div id="an-result-panel">
-        <div class="nb amber"><div class="nb-tit">💡 앵커식 옹벽</div><div class="nb-txt">어스앵커 또는 소일네일을 이용하여 토압에 저항합니다.<br/>KDS 11 50 15 기준에 따라 앵커 내력 및 전체 안정성을 검토합니다.</div></div>
+        <div class="nb amber"><div class="nb-tit">💡 앵커식 옹벽</div><div class="nb-txt">지반앵커로 토압에 저항합니다.<br/>KDS 11 60 00에 따라 필요앵커력 · 허용인발력 · 허용인장력 · 자유장 · 정착장을 검토합니다. 전체 안정성은 별도 사면안정해석.</div></div>
         <!-- 앵커식 단면 SVG 다이어그램 -->
         <div class="card">
           <div class="card-head"><div class="card-ico amber">📐</div><span class="card-tit">단면 다이어그램 (앵커식)</span></div>
@@ -1011,7 +1023,7 @@ table tr:nth-child(even) td{background:#f8fafd;}
       <div class="master-modal-head">
         <div>
           <div class="master-modal-tit">📐 옹벽 안전성 검토 도움말</div>
-          <div class="master-modal-sub">KDS 11 80 10 · KDS 11 10 05 · 구조물기초설계기준 · MANMIN Ver-5.0</div>
+          <div class="master-modal-sub">KDS 11 80 05 · KDS 11 60 00 (2025. 12. 24.) · MANMIN Ver-5.1</div>
         </div>
         <button class="master-modal-cls" onclick="toggleHelp()">✕</button>
       </div>
@@ -1038,7 +1050,7 @@ table tr:nth-child(even) td{background:#f8fafd;}
           <div class="help-step"><div class="help-num">4</div><div class="help-txt"><b>토압 조건 입력</b>: 뒷채움 단위중량, 내부마찰각(φ), 점착력(c), 상재하중을 입력합니다.</div></div>
         </div>
         <div class="help-item">
-          <div class="help-step"><div class="help-num">5</div><div class="help-txt"><b>안전성 검토 실행</b>: 하단 <b>안전성 검토 실행</b> 버튼을 클릭하면 전도·활동·지지력·편심 안전율을 자동 계산합니다.</div></div>
+          <div class="help-step"><div class="help-num">5</div><div class="help-txt"><b>안전성 검토 실행</b>: 하단 <b>안전성 검토 실행</b> 버튼을 클릭하면 활동 · 전도 · 지지력 · 근입깊이(앵커식은 앵커력 · 길이)를 자동 검토합니다.</div></div>
         </div>
         <div class="help-item">
           <div class="help-step"><div class="help-num">6</div><div class="help-txt"><b>📄 A4 보고서</b>: A4 보고서 탭에서 옹벽 형식을 선택해 ISO A4 검토보고서를 확인하고 <b>인쇄 / PDF 저장 · JPG 저장</b>합니다. JPG 는 A4 용지 비율로 쪽 단위 분할되어 미리보기 시트에서 저장합니다.</div></div>
@@ -1050,61 +1062,52 @@ table tr:nth-child(even) td{background:#f8fafd;}
       <!-- 관련 법규 -->
       <div class="help-tab-panel" id="help-law">
         <div class="law-item">
-          <div class="law-code">KDS 11 80 10</div>
-          <div class="law-desc">옹벽 설계기준 (한국토목설계기준). 전도·활동·지지력 안전율 규정.</div>
-          <span class="law-limit">전도 Fs ≥ 2.0 / 활동 Fs ≥ 1.5 / 지지력 Fs ≥ 3.0</span>
+          <div class="law-code">KDS 11 80 05 콘크리트옹벽 (2025. 12. 24.)</div>
+          <div class="law-desc">중력식 · 반중력식 · 캔틸레버식 · 부벽식 콘크리트옹벽의 안정해석 — 사용하중 · 기준안전율(표 4.4-1).</div>
+          <span class="law-limit">평상시 활동 1.5 · 전도 2.0 · 지지력 3.0 · 전체 1.5 / 지진 시 1.2 · 1.5 · 2.0 · 1.1</span>
         </div>
         <div class="law-item">
-          <div class="law-code">KDS 11 10 05</div>
-          <div class="law-desc">기초구조 설계기준. 기초의 안정성 및 지반거동 검토 기준.</div>
-          <span class="law-limit">편심 e ≤ B/6 (합력위치 기준)</span>
+          <div class="law-code">KDS 11 80 05 1.7.3 · 1.7.4 · 4.4.1(4)</div>
+          <div class="law-desc">토압 — 일반 Coulomb, 캔틸레버 · 부벽식은 뒷굽 연직 가상배면 Rankine. 일시 상재하중 10 kN/m². 저판 설치깊이 동결심도 이상 · 최소 1.0 m.</div>
+          <span class="law-limit">Df ≥ 1.0 m</span>
         </div>
         <div class="law-item">
-          <div class="law-code">KDS 14 20 54</div>
-          <div class="law-desc">콘크리트 구조 설계기준 (철근콘크리트). 캔틸레버식 옹벽 철근 설계 기준.</div>
-          <span class="law-limit">최소 철근비 ρmin ≥ 0.002</span>
+          <div class="law-code">KDS 11 60 00 앵커 설계기준 (2025. 12. 24.)</div>
+          <div class="law-desc">극한인발력 안전율(표 4.2-2) · 허용인장력(표 4.2-3) · 자유장 · 정착장 최소 4.0 m · 설치각 10° 이상 · 설계앵커력 = 최소 허용앵커력.</div>
+          <span class="law-limit">인발 Fs 가설 1.5 · 영구 2.5 / 인장 영구 0.60Tu · 0.75Ty</span>
         </div>
         <div class="law-item">
-          <div class="law-code">KDS 11 50 15</div>
-          <div class="law-desc">앵커 설계기준. 어스앵커·소일네일 내력 및 안정성 검토.</div>
-          <span class="law-limit">인발 Fs ≥ 2.0 / 전체안정 Fs ≥ 1.2</span>
+          <div class="law-code">KDS 11 70 05 쌓기·깎기 (2025. 12. 24.)</div>
+          <div class="law-desc">앵커보강 지반의 전체 안정성은 비탈면 기준안전율로 별도 해석(KDS 11 60 00 표 4.2-1).</div>
+          <span class="law-limit">장기 건기 1.5 · 우기 1.3</span>
         </div>
         <div class="law-item">
-          <div class="law-code">구조물기초설계기준 (2021)</div>
-          <div class="law-desc">국토교통부 고시. 기초 지지력 산정 및 안전율 적용.</div>
-          <span class="law-limit">극한 지지력 Fs ≥ 3.0</span>
-        </div>
-        <div class="law-item">
-          <div class="law-code">건설기술진흥법 시행규칙</div>
-          <div class="law-desc">높이 5m 이상 옹벽 구조안전 확인서 제출 의무 규정.</div>
-          <span class="law-limit">H ≥ 5m: 전문가 검토 필수</span>
+          <div class="law-code">시설물의 안전 및 유지관리에 관한 특별법 시행령 별표 1 제8호</div>
+          <div class="law-desc">지면으로부터 노출된 높이 5 m 이상인 부분의 합이 100 m 이상인 옹벽 = 제2종시설물 (내진설계 대상 판단 — KDS 11 80 05 4.3.5).</div>
+          <span class="law-limit">노출높이 5 m 이상 · 합계 100 m 이상</span>
         </div>
       </div>
       <!-- 계산식 -->
       <div class="help-tab-panel" id="help-formula">
         <div class="law-item">
-          <div class="law-code">랭킨 토압계수 (Rankine)</div>
-          <div class="law-desc">Ka = tan²(45° - φ/2) · (수동) Kp = tan²(45° + φ/2)</div>
+          <div class="law-code">토압계수</div>
+          <div class="law-desc">Rankine Ka = cosβ·(cosβ − √(cos²β − cos²φ)) / (cosβ + √(cos²β − cos²φ)) (β = 0 → tan²(45° − φ/2))<br/>Coulomb Ka = cos²(φ − θ) / [cos²θ·cos(δ + θ)·(1 + √(sin(φ + δ)·sin(φ − β) / (cos(δ + θ)·cos(θ − β))))²]</div>
         </div>
         <div class="law-item">
-          <div class="law-code">수평토압 (Ea)</div>
-          <div class="law-desc">Ea = ½·Ka·γs·H² + Ka·q·H (kN/m)</div>
+          <div class="law-code">토압 합력</div>
+          <div class="law-desc">Pa = ½·Ka·γs·H² + Ka·q·H (중력식은 상재하중 항에 cosθ / cos(θ − β)) — 중력식은 배면 법선에서 δ 기울어 작용, 캔틸레버는 β 방향</div>
         </div>
         <div class="law-item">
-          <div class="law-code">전도 안전율 (Fs₀)</div>
-          <div class="law-desc">Fs₀ = ΣMr / ΣMo ≥ 2.0<br/>ΣMr: 저항모멘트 / ΣMo: 전도모멘트</div>
+          <div class="law-code">활동 · 전도</div>
+          <div class="law-desc">활동 Fs = μ·ΣV / ΣH ≥ 1.5 · 전도 Fs = ΣMr / ΣMo ≥ 2.0 (발끝 기준)</div>
         </div>
         <div class="law-item">
-          <div class="law-code">활동 안전율 (Fs₅)</div>
-          <div class="law-desc">Fs₅ = μ·ΣV / ΣH ≥ 1.5<br/>μ: 마찰계수, ΣV: 연직합력, ΣH: 수평합력</div>
+          <div class="law-code">지반반력</div>
+          <div class="law-desc">x̄ = (ΣMr − ΣMo) / ΣV · e = B/2 − x̄<br/>|e| ≤ B/6 : qmax = ΣV/B·(1 + 6e/B) · |e| &gt; B/6 : qmax = 2ΣV / 3(B/2 − |e|) — qmax ≤ qa (= qu/3)</div>
         </div>
         <div class="law-item">
-          <div class="law-code">합력위치 / 편심</div>
-          <div class="law-desc">x̄ = (ΣMr - ΣMo) / ΣV<br/>편심 e = B/2 - x̄ ≤ B/6</div>
-        </div>
-        <div class="law-item">
-          <div class="law-code">최대 지반반력 (qmax)</div>
-          <div class="law-desc">qmax = ΣV/B · (1 + 6e/B) ≤ qa<br/>qa: 허용 지지력 (kPa)</div>
+          <div class="law-code">앵커</div>
+          <div class="law-desc">필요앵커력 = Ea·sh / (n·cosα) · 극한인발력 Pu = π·D·La·τu (La 10 m 한도) · 허용앵커력 Ta = min(Pu / Fs, n·min(fu·Tu, fy·Ty))</div>
         </div>
       </div>
     </div><!-- /master-modal-body -->
@@ -1116,6 +1119,110 @@ table tr:nth-child(even) td{background:#f8fafd;}
 
 </div><!-- /root-app -->
 
+<script>
+/* RWENG v5.1.0 — 옹벽 안정 검토 순수 엔진 (DOM 무관)
+   근거 : KDS 11 80 05 콘크리트옹벽 (2025-12-24) · KDS 11 60 00 앵커 설계기준 (2025-12-24) — kcsc.re.kr 원문 대조 2026-10-17
+   - 안정검토는 사용하중 · 기준안전율(표 4.4-1 평상시) : 활동 1.5 · 전도 2.0 · 지지력 3.0(허용지지력 qa = qu/3로 입력)
+   - 토압 : 중력식 Coulomb(실제 배면 · δ = 2/3φ) · 캔틸레버 뒷굽 연직 가상배면 Rankine (1.7.3(2))
+   - 앵커 : 극한인발력 안전율 가설 1.5 · 영구 2.5 (표 4.2-2) · 허용인장력 (표 4.2-3) · 설계앵커력 = 최소 허용앵커력 (4.3(3)) */
+(function(root){
+  var D2R = Math.PI / 180;
+  function kaRankine(phi, beta){
+    var b = (beta || 0) * D2R, f = phi * D2R, cb = Math.cos(b), cf = Math.cos(f);
+    if(beta >= phi) return NaN;
+    var s = Math.sqrt(cb * cb - cf * cf);
+    return cb * (cb - s) / (cb + s);
+  }
+  function kaCoulomb(phi, delta, theta, beta){   // theta : 배면의 연직 경사각(뒤채움 쪽으로 기울면 +)
+    var f = phi * D2R, d = delta * D2R, t = theta * D2R, b = (beta || 0) * D2R;
+    if(beta >= phi) return NaN;
+    var num = Math.pow(Math.cos(f - t), 2);
+    var root = Math.sqrt(Math.sin(f + d) * Math.sin(f - b) / (Math.cos(d + t) * Math.cos(t - b)));
+    return num / (Math.pow(Math.cos(t), 2) * Math.cos(d + t) * Math.pow(1 + root, 2));
+  }
+  function bearing(SV, Mr, Mo, B){
+    var xR = (Mr - Mo) / SV, e = B / 2 - xR, ae = Math.abs(e), qmax, qmin, tri = false;
+    if(xR <= 0 || xR >= B){ qmax = Infinity; qmin = 0; tri = true; }
+    else if(ae <= B / 6){ qmax = SV / B * (1 + 6 * ae / B); qmin = SV / B * (1 - 6 * ae / B); }
+    else { qmax = 2 * SV / (3 * (B / 2 - ae)); qmin = 0; tri = true; }   // 삼각형 분포(B/6 초과)
+    return {xR: xR, e: e, qmax: qmax, qmin: qmin, tri: tri};
+  }
+  var FS = {slide: 1.5, over: 2.0, bear: 3.0, Df: 1.0};   // KDS 11 80 05 표 4.4-1 평상시 · 4.4.1(4)
+
+  function finish(r){
+    r.Fs_o = r.Mr / r.Mo; r.Fs_s = r.mu * r.SV / r.SH;
+    var b = bearing(r.SV, r.Mr, r.Mo, r.B);
+    r.xR = b.xR; r.e = b.e; r.qmax = b.qmax; r.qmin = b.qmin; r.tri = b.tri;
+    r.e_allow = r.B / 6; r.e_ok = Math.abs(r.e) <= r.B / 6;   // 참고 — 전면 압축 여부
+    r.pass_o = r.Fs_o >= FS.over; r.pass_s = r.Fs_s >= FS.slide;
+    r.pass_b = isFinite(r.qmax) && r.qmax <= r.qa; r.pass_d = r.Df >= FS.Df;
+    r.allPass = r.pass_o && r.pass_s && r.pass_b && r.pass_d;
+    r.special = r.c > 0;   // 점착력 고려 = 특수설계(4.3.1①)
+    return r;
+  }
+
+  /* 중력식 — 전면 연직 · 배면 경사(상단폭 a → 저면폭 B) · 발끝 기준 */
+  function gravity(p){
+    var H = p.H, B = p.B, a = p.a, th = Math.atan((B - a) / H) / D2R, dl = 2 / 3 * p.phi;
+    var Ka = kaCoulomb(p.phi, dl, th, p.beta), psi = (dl + th) * D2R;
+    var cq = Math.cos(th * D2R) / Math.cos((th - (p.beta || 0)) * D2R);
+    var Ps = 0.5 * Ka * p.gs * H * H, Pq = Ka * p.q * H * cq;   // 상재하중 = 등가 흙두께(MANMIN 적용)
+    var Phs = Ps * Math.cos(psi), Pvs = Ps * Math.sin(psi), Phq = Pq * Math.cos(psi), Pvq = Pq * Math.sin(psi);
+    var xs = B - (B - a) / 3, xq = B - (B - a) / 2;               // 배면 위 작용점(H/3 · H/2)
+    var Ar = a * H, At = 0.5 * (B - a) * H, Ww = p.gc * (Ar + At);
+    var xw = (Ar * a / 2 + At * (a + (B - a) / 3)) / (Ar + At);   // 삼각형 도심 a + (B−a)/3
+    var r = {kind: 'gravity', H: H, B: B, a: a, gc: p.gc, gs: p.gs, phi: p.phi, beta: p.beta || 0, c: p.c || 0, mu: p.mu, qa: p.qa, q: p.q, Df: p.Df,
+      theory: 'Coulomb', theta: th, delta: dl, Ka: Ka, Pa: Ps + Pq, Ea: Phs + Phq, Pv: Pvs + Pvq, Ww: Ww, xw: xw};
+    r.SV = Ww + Pvs + Pvq; r.SH = Phs + Phq;
+    r.Mr = Ww * xw + Pvs * xs + Pvq * xq; r.Mo = Phs * H / 3 + Phq * H / 2;
+    r.ya = r.Mo / r.SH;
+    return finish(r);
+  }
+
+  /* 캔틸레버식(역T형) — 뒷굽 끝 연직 가상배면 Rankine · 상재하중은 뒷굽 위만 */
+  function cantilever(p){
+    var H = p.H, B = p.B, bt = p.bt, tf = p.tf, tw = p.tw, fw = B - bt - tw, tb = Math.tan((p.beta || 0) * D2R);
+    var Hv = H + tf + fw * tb, Ka = kaRankine(p.phi, p.beta), cb = Math.cos((p.beta || 0) * D2R), sb = Math.sin((p.beta || 0) * D2R);
+    var Ps = 0.5 * Ka * p.gs * Hv * Hv, Pq = Ka * p.q * Hv;
+    var W = [
+      ['기초판', p.gc * B * tf, B / 2],
+      ['벽체', p.gc * tw * H, bt + tw / 2],
+      ['뒷굽 위 흙', p.gs * fw * H, bt + tw + fw / 2],
+      ['경사 흙', 0.5 * p.gs * fw * fw * tb, bt + tw + 2 * fw / 3],
+      ['상재하중(뒷굽)', p.q * fw, bt + tw + fw / 2],
+      ['토압 연직분력', (Ps + Pq) * sb, B]
+    ];
+    var SV = 0, Mr = 0; W.forEach(function(w){ SV += w[1]; Mr += w[1] * w[2]; });
+    var Phs = Ps * cb, Phq = Pq * cb;
+    var r = {kind: 'cantilever', H: H, B: B, bt: bt, tf: tf, tw: tw, fw: fw, Hv: Hv, gc: p.gc, gs: p.gs, phi: p.phi, beta: p.beta || 0, c: p.c || 0, mu: p.mu, qa: p.qa, q: p.q, Df: p.Df,
+      theory: 'Rankine', Ka: Ka, Pa: Ps + Pq, Ea: Phs + Phq, Pv: (Ps + Pq) * sb, W: W};
+    r.SV = SV; r.SH = Phs + Phq; r.Mr = Mr; r.Mo = Phs * Hv / 3 + Phq * Hv / 2; r.ya = r.Mo / r.SH;
+    return finish(r);
+  }
+
+  /* 앵커식 — 앵커 1본 기준 · 설계앵커력 T 를 필요앵커력 · 허용인발력 · 허용인장력과 비교 */
+  var USE = {temp: {nm: '가설앵커(2년 미만)', fsp: 1.5, fu: 0.65, fy: 0.80}, perm: {nm: '영구앵커(2년 이상)', fsp: 2.5, fu: 0.60, fy: 0.75}};
+  function anchored(p){
+    var u = USE[p.use] || USE.perm, Ka = kaRankine(p.phi, p.beta), cb = Math.cos((p.beta || 0) * D2R);
+    var Pa = 0.5 * Ka * p.gs * p.H * p.H + Ka * p.q * p.H, Ea = Pa * cb;
+    var n = Math.max(1, Math.floor(p.H / p.sv)), ca = Math.cos(p.ang * D2R);
+    var Treq = Ea * p.sh / (n * ca);
+    var Le = Math.min(p.La, 10), Pu = Math.PI * p.D / 1000 * Le * p.tau;   // 정착장 10 m 초과분은 인발력 증가 없음
+    var Tpull = Pu / u.fsp, Tten = p.nstr * Math.min(u.fu * p.Tu1, u.fy * p.Ty1), Ta = Math.min(Tpull, Tten);
+    var r = {kind: 'anchored', H: p.H, ang: p.ang, sh: p.sh, sv: p.sv, T: p.T, La: p.La, Lf: p.Lf, D: p.D, tau: p.tau, gs: p.gs, phi: p.phi, beta: p.beta || 0, q: p.q,
+      use: p.use, useNm: u.nm, fsp: u.fsp, fu: u.fu, fy: u.fy, nstr: p.nstr, Tu1: p.Tu1, Ty1: p.Ty1,
+      Ka: Ka, Pa: Pa, Ea: Ea, n_rows: n, Treq: Treq, Le: Le, Pu: Pu, Tpull: Tpull, Tten: Tten, Ta: Ta,
+      Th: p.T * ca, Tv: p.T * Math.sin(p.ang * D2R)};
+    r.pass_req = Treq <= p.T; r.pass_pull = p.T <= Tpull; r.pass_ten = p.T <= Tten;
+    r.pass_Lf = p.Lf >= 4.0; r.pass_La = p.La >= 4.0; r.pass_ang = p.ang >= 10;
+    r.allPass = r.pass_req && r.pass_pull && r.pass_ten && r.pass_Lf && r.pass_La && r.pass_ang;
+    r.Lf_need = Math.max(1.5, 0.15 * p.H);   // 가상활동면에서 더할 길이(도면에서 확인)
+    return r;
+  }
+  root.RWENG = {version: '5.1.0', kaRankine: kaRankine, kaCoulomb: kaCoulomb, bearing: bearing, FS: FS, USE: USE,
+    gravity: gravity, cantilever: cantilever, anchored: anchored};
+})(typeof window !== 'undefined' ? window : globalThis);
+</script>
 <script>
 /* ════════════════════════════════════════════
    전역 상태
@@ -1184,7 +1291,7 @@ function refreshPreviewSelBadges(){
 function switchTab(name){
   currentTab = name;
   document.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.remove('active'); });
-  document.querySelectorAll('.tb').forEach(function(b){ b.classList.remove('active'); });
+  document.querySelectorAll('.tb:not(.tb-manual)').forEach(function(b){ b.classList.remove('active'); });
   document.getElementById('panel-' + name).classList.add('active');
   var tb = document.getElementById('tab-' + name);
   if(tb) tb.classList.add('active');
@@ -1210,6 +1317,7 @@ function updateCalcBtn(){
    STEP 상태 업데이트 (중력식)
 ════════════════════════════════════════════ */
 function gUpdateSteps(){
+  rwSyncAlpha();
   var H = parseFloat(document.getElementById('g-H').value)||0;
   var B = parseFloat(document.getElementById('g-B').value)||0;
   var phi = parseFloat(document.getElementById('g-phi').value)||0;
@@ -1612,403 +1720,152 @@ function drawAnchoredDiagram(){
   svg.appendChild(txt(Math.min(ox+wThick+hPx*0.45+8, W-22), oy+hPx*0.5, '지반', 8,'#5d4037','start'));
 }
 
-/* ════════════════════════════════════════════
-   중력식 안전성 계산 (KDS 11 80 10)
-════════════════════════════════════════════ */
+function rwV(id, d){ var el = document.getElementById(id); if(!el) return d; var v = parseFloat(el.value); return isNaN(v) ? d : v; }
+function rwS(id, d){ var el = document.getElementById(id); return el && el.value ? el.value : d; }
+/* v5.1.0 — 중력식 배면 경사 θ 는 B · a · H 로 정해지므로 자동 표시(입력 불가) */
+function rwSyncAlpha(){
+  var H = rwV('g-H', 4), B = rwV('g-B', 2.8), a = rwV('g-a', 0.5), el = document.getElementById('g-alpha');
+  if(el && H > 0) el.value = (Math.atan(Math.max(0, B - a) / H) * 180 / Math.PI).toFixed(1);
+}
+function rwFs(n){ return isFinite(n) ? n.toFixed(3) : '∞'; }
+function rwOk(v){ return v ? '<span class="td-pass">OK ✓</span>' : '<span class="td-fail">NG ✗</span>'; }
+function rwBox(pass, ico, val, lbl, txt){
+  return '<div class="sbox ' + (pass === null ? '' : (pass ? 'pass' : 'fail')) + '"><div class="sico">' + ico + '</div><div class="sval' + (pass === null ? '' : (pass ? ' grn' : ' red')) + '">' + val + '</div><div class="slbl">' + lbl + '</div>'
+    + (txt ? '<div class="spass ' + (pass ? 'ok' : 'ng') + '">' + txt + '</div>' : '') + '</div>';
+}
+function rwQmax(r){ return isFinite(r.qmax) ? r.qmax.toFixed(1) : '전도'; }
+
+/* ════ 중력식 안정 계산 (KDS 11 80 05 — Coulomb 토압 · 표 4.4-1) ════ */
 function calcGravity(){
-  var H  = parseFloat(document.getElementById('g-H').value)||4;
-  var B  = parseFloat(document.getElementById('g-B').value)||2.8;
-  var a  = parseFloat(document.getElementById('g-a').value)||0.5;
-  var gc = parseFloat(document.getElementById('g-gc').value)||23;
-  var gs = parseFloat(document.getElementById('g-gs').value)||18;
-  var phi= parseFloat(document.getElementById('g-phi').value)||30;
-  var c  = parseFloat(document.getElementById('g-c').value)||0;
-  var mu = parseFloat(document.getElementById('g-mu').value)||0.5;
-  var qa = parseFloat(document.getElementById('g-qa').value)||200;
-  var q  = parseFloat(document.getElementById('g-q').value)||10;
-  var beta= parseFloat(document.getElementById('g-beta').value)||0;
-  var proj= document.getElementById('g-projname').value||'';
-  var author= document.getElementById('g-author').value||'';
-  var date= document.getElementById('g-date').value||'';
+  rwSyncAlpha();
+  var r = RWENG.gravity({H: rwV('g-H', 4), B: rwV('g-B', 2.8), a: rwV('g-a', 0.5), gc: rwV('g-gc', 23), gs: rwV('g-gs', 18), phi: rwV('g-phi', 30),
+    c: rwV('g-c', 0), beta: rwV('g-beta', 0), mu: rwV('g-mu', 0.5), qa: rwV('g-qa', 200), q: rwV('g-q', 10), Df: rwV('g-Df', 0.5)});
+  r.proj = rwS('g-projname', ''); r.author = rwS('g-author', ''); r.date = rwS('g-date', ''); r.type = '중력식 옹벽';
+  return r;
+}
+/* ════ 캔틸레버식 안정 계산 (뒷굽 가상배면 Rankine) ════ */
+function calcCantilever(){
+  var r = RWENG.cantilever({H: rwV('c-H', 5), B: rwV('c-B', 3.5), bt: rwV('c-bt', 0.8), tf: rwV('c-tf', 0.5), tw: rwV('c-tw', 0.35), gs: rwV('c-gs', 18),
+    phi: rwV('c-phi', 30), mu: rwV('c-mu', 0.5), qa: rwV('c-qa', 200), q: rwV('c-q', 10), c: rwV('c-c', 0), beta: rwV('c-beta', 0), Df: rwV('c-Df', 0.5), gc: rwV('c-gc', 23)});
+  r.proj = rwS('c-projname', ''); r.author = rwS('c-author', ''); r.date = rwS('c-date', ''); r.type = '캔틸레버식 옹벽';
+  return r;
+}
+/* ════ 앵커식 (KDS 11 60 00 — 표 4.2-2 · 4.2-3 · 4.3(3)) ════ */
+function calcAnchored(){
+  var st = rwS('an-strand', '15.2').split('|');
+  var r = RWENG.anchored({H: rwV('an-H', 6), ang: rwV('an-ang', 15), sh: rwV('an-sh', 2), sv: rwV('an-sv', 2), T: rwV('an-T', 200), La: rwV('an-La', 5), Lf: rwV('an-Lf', 3),
+    D: rwV('an-D', 150), tau: rwV('an-tau', 100), gs: rwV('an-gs', 18), phi: rwV('an-phi', 30), beta: rwV('an-beta', 0), q: rwV('an-q', 10),
+    use: rwS('an-use', 'perm'), nstr: rwV('an-nstr', 4), Tu1: parseFloat(st[1]) || 261, Ty1: parseFloat(st[2]) || 222});
+  r.strand = st[0]; r.proj = rwS('an-projname', ''); r.author = rwS('an-author', ''); r.date = rwS('an-date', '');
+  r.atype = rwS('an-type', '어스앵커'); r.type = '앵커식 옹벽 (' + r.atype + ')';
+  return r;
+}
 
-  // 랭킨 토압계수
-  var phiR = phi * Math.PI / 180;
-  var betaR = beta * Math.PI / 180;
-  var Ka = Math.pow(Math.tan(Math.PI/4 - phiR/2), 2);
-
-  // 토압 (삼각형 + 상재하중 직사각형)
-  var Ea_tri = 0.5 * Ka * gs * H * H; // 삼각형 토압 (kN/m)
-  var Ea_rect= Ka * q * H;             // 상재하중 토압 (kN/m)
-  var Ea = Ea_tri + Ea_rect;           // 총 수평토압
-
-  // 수평토압 작용점
-  var ya_tri = H / 3;
-  var ya_rect = H / 2;
-  var ya = (Ea_tri * ya_tri + Ea_rect * ya_rect) / Ea;
-
-  // 옹벽 자중 (사다리꼴 단면: 전면수직, 배면경사)
-  // 사다리꼴 = 직사각형(a×H) + 직각삼각형((B-a)×H)
-  var A_rect = a * H;       // 직사각형 면적
-  var A_tri  = 0.5*(B-a)*H; // 삼각형 면적
-  var Aw = A_rect + A_tri;  // 전체 단면적
-  var Ww = gc * Aw;
-  // 발끝(전면 하단)에서 각 도심 x 거리
-  var xw_rect = a / 2;              // 직사각형 도심
-  var xw_tri  = a + (B-a)*2/3;     // 삼각형 도심 (발끝 기준)
-  var xw = (A_rect*xw_rect + A_tri*xw_tri) / Aw;
-  if(isNaN(xw)||xw<=0) xw = (a+2*B)/3/(a+B)*B; // fallback: 사다리꼴 도심
-
-  // 뒷채움 상재하중 (저면 전체에 분포)
-  var Wq = q * B; // kN/m (상재하중 수직력)
-  var xq = B / 2; // 도심 x (발끝 기준)
-
-  // 토압 작용점 수정: 발끝에서 배면까지 B 위치 기준
-  var ya_total = ya; // 저면에서 토압 작용높이
-
-  // 총 수직력 ΣV
-  var SV = Ww + Wq;
-  var SH = Ea;
-
-  // 저항모멘트 (전면 발끝 기준) — 토압은 배면(x=B)에서 발생
-  var Mr_wall = Ww * xw;
-  var Mr_q    = Wq * xq;
-  var Mr = Mr_wall + Mr_q;
-
-  // 전도모멘트 (발끝 기준, 수평토압×작용높이)
-  var Mo = SH * ya_total;
-
-  // 전도 안전율
-  var Fs_o = Mr / Mo;
-
-  // 활동 안전율
-  var Fs_s = (mu * SV) / SH;
-
-  // 합력 위치
-  var xR = (Mr - Mo) / SV;
-  var e  = B / 2 - xR;  // 편심
-
-  // 지반반력
-  var qmax = SV / B * (1 + 6 * Math.abs(e) / B);
-  var qmin = SV / B * (1 - 6 * Math.abs(e) / B);
-
-  // 지반 안전율
-  var Fs_b = qa / qmax;
-
-  // 편심 허용치
-  var e_allow = B / 6;
-  var e_ok = Math.abs(e) <= e_allow;
-
-  // 합격 판정
-  var pass_o = Fs_o >= 2.0;
-  var pass_s = Fs_s >= 1.5;
-  var pass_b = qmax <= qa;
-  var pass_e = e_ok;
-  var allPass = pass_o && pass_s && pass_b && pass_e;
-
-  var result = {
-    H:H, B:B, a:a, gc:gc, gs:gs, phi:phi, c:c, mu:mu, qa:qa, q:q,
-    Ka:Ka, Ea:Ea, Ea_tri:Ea_tri, Ea_rect:Ea_rect, ya:ya,
-    Ww:Ww, SV:SV, SH:SH, Mr:Mr, Mo:Mo,
-    Fs_o:Fs_o, Fs_s:Fs_s, Fs_b:Fs_b,
-    xR:xR, e:e, e_allow:e_allow, qmax:qmax, qmin:qmin,
-    pass_o:pass_o, pass_s:pass_s, pass_b:pass_b, pass_e:pass_e, allPass:allPass,
-    proj:proj, author:author, date:date, type:'중력식 옹벽'
-  };
-  return result;
+/* 중력식 · 캔틸레버 공통 결과 */
+function rwStabHtml(r, tblCls){
+  var html = '';
+  html += '<div class="result-hero ' + (r.allPass ? 'grn' : 'red') + '">';
+  html += '<div class="rh-label">' + (r.kind === 'gravity' ? '중력식' : '캔틸레버식') + ' 옹벽 안정 검토 — KDS 11 80 05 표 4.4-1 (평상시)</div>';
+  html += '<div class="rh-num">' + rwFs(r.Fs_o) + '</div>';
+  html += '<div class="rh-unit">전도 Fs / 기준 2.00 · 활동 Fs ' + rwFs(r.Fs_s) + ' / 기준 1.50</div>';
+  html += '<div class="rh-badge">' + (r.allPass ? '✅ 안정 (ALL PASS)' : '⚠️ 불안정 (검토 요망)') + '</div></div>';
+  html += '<div class="stat-grid">';
+  html += rwBox(r.pass_s, '↔️', rwFs(r.Fs_s), '활동 안전율', r.pass_s ? '✓ OK (≥1.5)' : '✗ NG (&lt;1.5)');
+  html += rwBox(r.pass_o, '🔄', rwFs(r.Fs_o), '전도 안전율', r.pass_o ? '✓ OK (≥2.0)' : '✗ NG (&lt;2.0)');
+  html += rwBox(r.pass_b, '🏗️', rwQmax(r), '최대지반반력 (kPa)', r.pass_b ? '✓ OK (≤' + r.qa + ')' : '✗ NG (&gt;' + r.qa + ')');
+  html += rwBox(r.pass_d, '⛏️', r.Df.toFixed(2), '근입깊이 Df (m)', r.pass_d ? '✓ OK (≥1.0)' : '✗ NG (&lt;1.0)');
+  html += rwBox(null, '⬇️', r.SV.toFixed(1), '연직합력 ΣV (kN/m)');
+  html += rwBox(null, '➡️', r.SH.toFixed(1), '수평력 ΣH (kN/m)');
+  html += '</div>';
+  html += '<div class="card"><div class="card-head"><div class="card-ico ' + (r.kind === 'gravity' ? 'blue' : 'teal') + '">📊</div><span class="card-tit">안정 검토 상세 (KDS 11 80 05)</span></div>';
+  html += '<div class="card-body"><div class="tbl-wrap"><table' + (tblCls ? ' class="' + tblCls + '"' : '') + '><thead><tr><th>검토항목</th><th>산정값</th><th>기준</th><th>판정</th></tr></thead><tbody>';
+  html += '<tr><td>활동 Fs = μ·ΣV / ΣH</td><td class="mono">' + rwFs(r.Fs_s) + '</td><td>≥ 1.50 (4.4.1)</td><td>' + rwOk(r.pass_s) + '</td></tr>';
+  html += '<tr><td>전도 Fs = ΣMr / ΣMo</td><td class="mono">' + rwFs(r.Fs_o) + '</td><td>≥ 2.00 (4.4.3)</td><td>' + rwOk(r.pass_o) + '</td></tr>';
+  html += '<tr><td>최대지반반력 qmax (kPa)</td><td class="mono">' + (isFinite(r.qmax) ? r.qmax.toFixed(2) : '합력 저면 밖') + '</td><td>≤ qa ' + r.qa + ' (qu/3 · 4.4.4)</td><td>' + rwOk(r.pass_b) + '</td></tr>';
+  html += '<tr><td>근입깊이 Df (m)</td><td class="mono">' + r.Df.toFixed(2) + '</td><td>≥ 1.0 · 동결심도 이상 (4.4.1(4))</td><td>' + rwOk(r.pass_d) + '</td></tr>';
+  html += '<tr><td>편심 e (m) — 참고</td><td class="mono">' + r.e.toFixed(4) + '</td><td>B/6 = ' + r.e_allow.toFixed(4) + (r.tri ? ' 초과 → 삼각형 분포' : ' 이내 → 사다리꼴') + '</td><td>참고</td></tr>';
+  html += '<tr><td>토압계수 Ka (' + r.theory + ')</td><td class="mono">' + (isFinite(r.Ka) ? r.Ka.toFixed(4) : '—') + '</td><td>' + (r.kind === 'gravity' ? 'θ = ' + r.theta.toFixed(1) + '° · δ = ' + r.delta.toFixed(1) + '°' : '가상배면 H′ = ' + r.Hv.toFixed(3) + ' m') + '</td><td>-</td></tr>';
+  html += '<tr><td>토압 수평 · 연직분력 (kN/m)</td><td class="mono">' + r.Ea.toFixed(2) + ' · ' + r.Pv.toFixed(2) + '</td><td>-</td><td>-</td></tr>';
+  html += '<tr><td>저항 · 전도모멘트 (kN·m/m)</td><td class="mono">' + r.Mr.toFixed(2) + ' · ' + r.Mo.toFixed(2) + '</td><td>발끝 기준</td><td>-</td></tr>';
+  html += '<tr><td>최소지반반력 qmin (kPa)</td><td class="mono">' + r.qmin.toFixed(2) + '</td><td>-</td><td>-</td></tr>';
+  html += '</tbody></table></div></div></div>';
+  html += rwAdvice(r);
+  return html;
+}
+function rwAdvice(r){
+  var h = '';
+  if(r.kind === 'anchored'){
+    if(!r.allPass){
+      h += '<div class="nb red"><div class="nb-tit">⚠️ 보완 권고사항</div><div class="nb-txt">';
+      if(!r.pass_req) h += '• 필요앵커력 초과: 설계앵커력 T 상향 또는 수평 · 연직 간격 축소<br/>';
+      if(!r.pass_pull) h += '• 허용인발력 부족: 정착장(10 m 이내) · 천공경 증가 또는 주면마찰 시험값 확인<br/>';
+      if(!r.pass_ten) h += '• 허용인장력 부족: 강연선 개수 · 규격 상향<br/>';
+      if(!r.pass_Lf) h += '• 자유장 4.0 m 미만: 가상활동면 밖 정착 + max(1.5 m, 0.15H) 확보 (4.1(5))<br/>';
+      if(!r.pass_La) h += '• 정착장 4.0 m 미만: 토사층 마찰형 최소 4.0 m (4.1(6))<br/>';
+      if(!r.pass_ang) h += '• 설치각 10° 미만: 수평면에 대해 10° 이상 (4.1(8))<br/>';
+      h += '</div></div>';
+    }
+    h += '<div class="nb amber"><div class="nb-tit">📌 별도 검토</div><div class="nb-txt">앵커보강 지반구조물의 <b>전체 안정성</b>은 사면안정해석(KDS 11 60 00 표 4.2-1 → KDS 11 70 05 표 4.3-1 장기 건기 1.5 · 우기 1.3)으로 따로 검토합니다. 소일네일 · 록볼트는 KDS 11 70 15 비탈면 보강공법을 따릅니다.</div></div>';
+    return h;
+  }
+  if(!r.allPass){
+    h += '<div class="nb red"><div class="nb-tit">⚠️ 보완 권고사항</div><div class="nb-txt">';
+    if(!r.pass_s) h += '• 활동 부족: 활동방지벽(shear key — 저판높이의 2/3 이상, 기초폭의 10 ~ 15 %) 또는 저판 확대 (4.4.2)<br/>';
+    if(!r.pass_o) h += '• 전도 부족: 저면폭 B 증가 또는 뒷굽 연장<br/>';
+    if(!r.pass_b) h += '• 지반반력 초과: 기초 저면적 확대 · 지반 개량 또는 말뚝기초 검토<br/>';
+    if(!r.pass_d) h += '• 근입깊이 부족: 저판 설치깊이 1.0 m 이상 · 동결심도 이상 (4.4.1(4))<br/>';
+    h += '</div></div>';
+  } else {
+    h += '<div class="nb grn"><div class="nb-tit">✅ 안정</div><div class="nb-txt">활동 · 전도 · 지지력 · 근입깊이가 KDS 11 80 05 표 4.4-1 평상시 기준을 만족합니다.</div></div>';
+  }
+  if(r.special) h += '<div class="nb amber"><div class="nb-tit">📌 점착력 c 입력</div><div class="nb-txt">주동토압에 점착력을 고려하는 경우는 특수설계(4.3.1①)입니다. 이 도구는 c를 토압 · 활동 저항에 넣지 않습니다.</div></div>';
+  h += '<div class="nb blue"><div class="nb-tit">📌 별도 검토</div><div class="nb-txt">전체안정성(1.5) · 침하 · 지진 시(활동 1.2 · 전도 1.5 · 지지력 2.0 · 전체 1.1) · 수압 · 부재 단면설계(KDS 14 20 00)는 따로 검토합니다.</div></div>';
+  return h;
 }
 
 function renderGravityResult(r){
-  var heroClass = r.allPass ? 'grn' : 'red';
-  var heroIcon = r.allPass ? '✅' : '⚠️';
-  var heroTxt = r.allPass ? '안전 (ALL PASS)' : '불안전 (검토 요망)';
-
-  function fs(n){ return n.toFixed(3); }
-  function ok(v){ return v ? '<span class="td-pass">OK ✓</span>' : '<span class="td-fail">NG ✗</span>'; }
-
-  var html = '';
-
-  // 판정 히어로
-  html += '<div class="result-hero ' + heroClass + '">';
-  html += '<div class="rh-label">최소 안전율 (전도 기준)</div>';
-  html += '<div class="rh-num">' + fs(r.Fs_o) + '</div>';
-  html += '<div class="rh-unit">Fs (전도) / 기준: 2.00</div>';
-  html += '<div class="rh-badge">' + heroIcon + ' ' + heroTxt + '</div>';
-  html += '</div>';
-
-  // 안전율 스탯 그리드
-  html += '<div class="stat-grid">';
-  html += '<div class="sbox ' + (r.pass_o ? 'pass' : 'fail') + '">';
-  html += '<div class="sico">🔄</div><div class="sval ' + (r.pass_o ? 'grn' : 'red') + '">' + fs(r.Fs_o) + '</div>';
-  html += '<div class="slbl">전도 안전율</div><div class="spass ' + (r.pass_o ? 'ok' : 'ng') + '">' + (r.pass_o ? '✓ OK (≥2.0)' : '✗ NG (<2.0)') + '</div></div>';
-
-  html += '<div class="sbox ' + (r.pass_s ? 'pass' : 'fail') + '">';
-  html += '<div class="sico">↔️</div><div class="sval ' + (r.pass_s ? 'grn' : 'red') + '">' + fs(r.Fs_s) + '</div>';
-  html += '<div class="slbl">활동 안전율</div><div class="spass ' + (r.pass_s ? 'ok' : 'ng') + '">' + (r.pass_s ? '✓ OK (≥1.5)' : '✗ NG (<1.5)') + '</div></div>';
-
-  html += '<div class="sbox ' + (r.pass_b ? 'pass' : 'fail') + '">';
-  html += '<div class="sico">🏗️</div><div class="sval ' + (r.pass_b ? 'grn' : 'red') + '">' + r.qmax.toFixed(1) + '</div>';
-  html += '<div class="slbl">최대지반반력 (kPa)</div><div class="spass ' + (r.pass_b ? 'ok' : 'ng') + '">' + (r.pass_b ? '✓ OK (≤'+r.qa+')' : '✗ NG (>'+r.qa+')') + '</div></div>';
-
-  html += '<div class="sbox ' + (r.pass_e ? 'pass' : 'fail') + '">';
-  html += '<div class="sico">📏</div><div class="sval ' + (r.pass_e ? 'grn' : 'red') + '">' + r.e.toFixed(3) + '</div>';
-  html += '<div class="slbl">편심 e (m)</div><div class="spass ' + (r.pass_e ? 'ok' : 'ng') + '">' + (r.pass_e ? '✓ OK (≤'+r.e_allow.toFixed(3)+')' : '✗ NG') + '</div></div>';
-
-  html += '<div class="sbox"><div class="sico">⬇️</div><div class="sval">' + r.SV.toFixed(1) + '</div><div class="slbl">합계 수직력 ΣV (kN/m)</div></div>';
-  html += '<div class="sbox"><div class="sico">➡️</div><div class="sval">' + r.Ea.toFixed(1) + '</div><div class="slbl">수평토압 Ea (kN/m)</div></div>';
-  html += '</div>';
-
-  // 상세 결과표
-  html += '<div class="card"><div class="card-head"><div class="card-ico blue">📊</div><span class="card-tit">안전성 검토 상세 (KDS 11 80 10)</span></div>';
-  html += '<div class="card-body"><div class="tbl-wrap"><table>';
-  html += '<thead><tr><th>검토항목</th><th>산정값</th><th>허용기준</th><th>판정</th></tr></thead><tbody>';
-  html += '<tr><td>전도 안전율 Fs₀</td><td class="mono">' + fs(r.Fs_o) + '</td><td>≥ 2.00</td><td>' + ok(r.pass_o) + '</td></tr>';
-  html += '<tr><td>활동 안전율 Fs₅</td><td class="mono">' + fs(r.Fs_s) + '</td><td>≥ 1.50</td><td>' + ok(r.pass_s) + '</td></tr>';
-  html += '<tr><td>최대지반반력 qmax (kPa)</td><td class="mono">' + r.qmax.toFixed(2) + '</td><td>≤ ' + r.qa + '</td><td>' + ok(r.pass_b) + '</td></tr>';
-  html += '<tr><td>편심 e (m)</td><td class="mono">' + r.e.toFixed(4) + '</td><td>≤ ' + r.e_allow.toFixed(4) + ' (B/6)</td><td>' + ok(r.pass_e) + '</td></tr>';
-  html += '<tr><td>랭킨 토압계수 Ka</td><td class="mono">' + r.Ka.toFixed(4) + '</td><td>-</td><td>-</td></tr>';
-  html += '<tr><td>수평토압 Ea (kN/m)</td><td class="mono">' + r.Ea.toFixed(3) + '</td><td>-</td><td>-</td></tr>';
-  html += '<tr><td>저항모멘트 ΣMr (kN·m/m)</td><td class="mono">' + r.Mr.toFixed(3) + '</td><td>-</td><td>-</td></tr>';
-  html += '<tr><td>전도모멘트 ΣMo (kN·m/m)</td><td class="mono">' + r.Mo.toFixed(3) + '</td><td>-</td><td>-</td></tr>';
-  html += '<tr><td>최소지반반력 qmin (kPa)</td><td class="mono">' + r.qmin.toFixed(2) + '</td><td>> 0 (인장없음)</td><td>' + ok(r.qmin >= 0) + '</td></tr>';
-  html += '</tbody></table></div></div></div>';
-
-  // 안전 권고
-  if(!r.allPass){
-    html += '<div class="nb red"><div class="nb-tit">⚠️ 보완 권고사항</div><div class="nb-txt">';
-    if(!r.pass_o) html += '• 전도 안전율 부족: 저면폭 B 증가 또는 뒷굽 연장 검토<br/>';
-    if(!r.pass_s) html += '• 활동 안전율 부족: 활동방지 key 설치 또는 마찰계수 개선 검토<br/>';
-    if(!r.pass_b) html += '• 지반반력 초과: 기초 면적 확대 또는 지반 보강 검토<br/>';
-    if(!r.pass_e) html += '• 편심 과다: 단면 형상 수정 또는 배면 경사 조정 검토<br/>';
-    html += '</div></div>';
-  } else {
-    html += '<div class="nb grn"><div class="nb-tit">✅ 구조 안전</div><div class="nb-txt">모든 안전율 기준을 만족합니다. KDS 11 80 10 기준 적합.</div></div>';
-  }
-
-  // 결과 패널에 삽입
-  document.getElementById('g-result-panel').innerHTML = html;
-  // 스텝 완료
+  document.getElementById('g-result-panel').innerHTML = rwStabHtml(r, '');
   setStep('g', 4, true, true);
-  // 전역 저장 + 미리보기 자동 선택
-  G.result = r;
-  previewSel.a4  = 'gravity';
-  previewSel.mob = 'gravity';
-  refreshPreviewSelBadges();
-  // A4 갱신 (v5.0 — 모바일 미리보기 삭제)
+  G.result = r; previewSel.a4 = 'gravity'; previewSel.mob = 'gravity'; refreshPreviewSelBadges();
   renderA4Iso(r);
 }
-
-/* ════════════════════════════════════════════
-   캔틸레버식 계산
-════════════════════════════════════════════ */
-function calcCantilever(){
-  var H  = parseFloat(document.getElementById('c-H').value)||5;
-  var B  = parseFloat(document.getElementById('c-B').value)||3.5;
-  var bt = parseFloat(document.getElementById('c-bt').value)||0.8;
-  var tf = parseFloat(document.getElementById('c-tf').value)||0.5;
-  var tw = parseFloat(document.getElementById('c-tw').value)||0.35;
-  var gs = parseFloat(document.getElementById('c-gs').value)||18;
-  var phi= parseFloat(document.getElementById('c-phi').value)||30;
-  var mu = parseFloat(document.getElementById('c-mu').value)||0.5;
-  var qa = parseFloat(document.getElementById('c-qa').value)||200;
-  var q  = parseFloat(document.getElementById('c-q').value)||10;
-  var c_val = parseFloat(document.getElementById('c-c')?document.getElementById('c-c').value:0)||0;
-  var beta  = parseFloat(document.getElementById('c-beta')?document.getElementById('c-beta').value:0)||0;
-  var Df = parseFloat(document.getElementById('c-Df')?document.getElementById('c-Df').value:0.5)||0.5;
-  var gc = parseFloat(document.getElementById('c-gc')?document.getElementById('c-gc').value:23)||23;
-
-  var phiR = phi * Math.PI / 180;
-  var Ka = Math.pow(Math.tan(Math.PI/4 - phiR/2), 2);
-
-  // 유효높이: 기초 저면에서 옹벽 상단까지
-  var He = H + tf;
-  // 토압 (삼각+상재 직사각)
-  var Ea_tri  = 0.5 * Ka * gs * He * He;
-  var Ea_rect = Ka * q * He;
-  var Ea = Ea_tri + Ea_rect;
-  // 토압 합력 작용점 (저면에서)
-  var ya = (Ea_tri*(He/3) + Ea_rect*(He/2)) / Ea;
-
-  // 부재 자중 (발끝 기준 x 도심)
-  var W_base = gc * B * tf;                 // 기초판
-  var x_base = B / 2;
-  var H_stem = H;                           // 벽체: 기초판 상면~옹벽 상단
-  var W_stem = gc * tw * H_stem;
-  var x_stem = bt + tw / 2;                // 전면돌출+벽체 중심
-  var fill_w = B - bt - tw;                 // 뒷채움 폭 (뒷굽)
-  var W_fill = gs * fill_w * H_stem;        // 뒷채움 (기초판 위)
-  var x_fill = bt + tw + fill_w / 2;
-  var W_q    = q * B;                       // 상재하중 수직력
-  var x_q    = B / 2;
-
-  var SV = W_base + W_stem + W_fill + W_q;
-  var SH = Ea;
-
-  // 저항모멘트 (발끝 기준)
-  var Mr = W_base*x_base + W_stem*x_stem + W_fill*x_fill + W_q*x_q;
-  // 전도모멘트 (발끝 기준)
-  var Mo = Ea * ya;
-
-  var Fs_o = Mr / Mo;
-  var Fs_s = (mu * SV) / SH;
-  var xR = (Mr - Mo) / SV;
-  var e = B/2 - xR;
-  var e_allow = B/6;
-  var qmax = SV/B*(1+6*Math.abs(e)/B);
-  var qmin = SV/B*(1-6*Math.abs(e)/B);
-
-  var pass_o = Fs_o >= 2.0;
-  var pass_s = Fs_s >= 1.5;
-  var pass_b = qmax <= qa;
-  var pass_e = Math.abs(e) <= e_allow;
-  var allPass = pass_o && pass_s && pass_b && pass_e;
-
-  var proj= document.getElementById('c-projname').value||'';
-  var author= document.getElementById('c-author').value||'';
-  var date= document.getElementById('c-date').value||'';
-
-  return {H:H,B:B,tw:tw,tf:tf,bt:bt,gs:gs,phi:phi,mu:mu,qa:qa,q:q,gc:gc,
-    Ka:Ka,Ea:Ea,ya:ya,SV:SV,SH:SH,Mr:Mr,Mo:Mo,
-    Fs_o:Fs_o,Fs_s:Fs_s,qmax:qmax,qmin:qmin,xR:xR,e:e,e_allow:e_allow,
-    pass_o:pass_o,pass_s:pass_s,pass_b:pass_b,pass_e:pass_e,allPass:allPass,
-    proj:proj,author:author,date:date,type:'캔틸레버식 옹벽'};
-}
 function renderCantileverResult(r){
-  function fs(n){ return n.toFixed(3); }
-  function ok(v){ return v ? '<span class="td-pass">OK ✓</span>' : '<span class="td-fail">NG ✗</span>'; }
-  var heroClass = r.allPass ? 'grn' : 'red';
-  var html='';
-  html += '<div class="result-hero '+heroClass+'">';
-  html += '<div class="rh-label">전도 안전율 Fs₀</div>';
-  html += '<div class="rh-num">'+fs(r.Fs_o)+'</div>';
-  html += '<div class="rh-unit">기준: ≥ 2.00</div>';
-  html += '<div class="rh-badge">'+(r.allPass?'✅ 안전':'⚠️ 불안전')+'</div></div>';
-  html += '<div class="stat-grid">';
-  html += '<div class="sbox '+(r.pass_o?'pass':'fail')+'"><div class="sico">🔄</div><div class="sval '+(r.pass_o?'grn':'red')+'">'+fs(r.Fs_o)+'</div><div class="slbl">전도</div><div class="spass '+(r.pass_o?'ok':'ng')+'">'+(r.pass_o?'✓ OK':'✗ NG')+'</div></div>';
-  html += '<div class="sbox '+(r.pass_s?'pass':'fail')+'"><div class="sico">↔️</div><div class="sval '+(r.pass_s?'grn':'red')+'">'+fs(r.Fs_s)+'</div><div class="slbl">활동</div><div class="spass '+(r.pass_s?'ok':'ng')+'">'+(r.pass_s?'✓ OK':'✗ NG')+'</div></div>';
-  html += '<div class="sbox '+(r.pass_b?'pass':'fail')+'"><div class="sico">🏗️</div><div class="sval '+(r.pass_b?'grn':'red')+'">'+r.qmax.toFixed(1)+'</div><div class="slbl">최대지반반력</div><div class="spass '+(r.pass_b?'ok':'ng')+'">'+(r.pass_b?'✓ OK':'✗ NG')+'</div></div>';
-  html += '<div class="sbox '+(r.pass_e?'pass':'fail')+'"><div class="sico">📏</div><div class="sval '+(r.pass_e?'grn':'red')+'">'+r.e.toFixed(3)+'</div><div class="slbl">편심 e (m)</div><div class="spass '+(r.pass_e?'ok':'ng')+'">'+(r.pass_e?'✓ OK':'✗ NG')+'</div></div>';
-  html += '<div class="sbox"><div class="sico">⬇️</div><div class="sval">'+r.SV.toFixed(1)+'</div><div class="slbl">ΣV (kN/m)</div></div>';
-  html += '<div class="sbox"><div class="sico">➡️</div><div class="sval">'+r.Ea.toFixed(1)+'</div><div class="slbl">Ea (kN/m)</div></div>';
-  html += '</div>';
-  html += '<div class="card"><div class="card-head"><div class="card-ico teal">📊</div><span class="card-tit">안전성 검토 상세 (캔틸레버식)</span></div>';
-  html += '<div class="card-body"><div class="tbl-wrap"><table class="teal"><thead><tr><th>검토항목</th><th>산정값</th><th>기준</th><th>판정</th></tr></thead><tbody>';
-  html += '<tr><td>전도 Fs₀</td><td class="mono">'+fs(r.Fs_o)+'</td><td>≥2.0</td><td>'+ok(r.pass_o)+'</td></tr>';
-  html += '<tr><td>활동 Fs₅</td><td class="mono">'+fs(r.Fs_s)+'</td><td>≥1.5</td><td>'+ok(r.pass_s)+'</td></tr>';
-  html += '<tr><td>qmax (kPa)</td><td class="mono">'+r.qmax.toFixed(2)+'</td><td>≤'+r.qa+'</td><td>'+ok(r.pass_b)+'</td></tr>';
-  html += '<tr><td>편심 e (m)</td><td class="mono">'+r.e.toFixed(4)+'</td><td>≤'+r.e_allow.toFixed(4)+'</td><td>'+ok(r.pass_e)+'</td></tr>';
-  html += '</tbody></table></div></div></div>';
-  C_RES.result = r;
-  previewSel.a4  = 'cantilever';
-  previewSel.mob = 'cantilever';
-  refreshPreviewSelBadges();
-  document.getElementById('c-result-panel').innerHTML = html
+  C_RES.result = r; previewSel.a4 = 'cantilever'; previewSel.mob = 'cantilever'; refreshPreviewSelBadges();
+  document.getElementById('c-result-panel').innerHTML = rwStabHtml(r, 'teal')
     + '<div class="card"><div class="card-head"><div class="card-ico teal">📐</div><span class="card-tit">단면 다이어그램 (역T형)</span></div>'
     + '<div class="card-body" style="padding:10px;"><svg id="c-diagram" viewBox="0 0 320 260" width="100%" style="max-width:320px;display:block;margin:0 auto;border:1px solid #e2e8f0;border-radius:8px;background:#f8fafd;"></svg></div></div>';
   drawCantileverDiagram();
   renderA4Iso(r);
 }
-
-/* ════════════════════════════════════════════
-   앵커식 계산
-════════════════════════════════════════════ */
-function calcAnchored(){
-  var H   = parseFloat(document.getElementById('an-H').value)||6;
-  var ang = parseFloat(document.getElementById('an-ang').value)||15;
-  var sh  = parseFloat(document.getElementById('an-sh').value)||2;
-  var sv  = parseFloat(document.getElementById('an-sv').value)||2;
-  var T   = parseFloat(document.getElementById('an-T').value)||200;
-  var La  = parseFloat(document.getElementById('an-La').value)||5;
-  var phi = parseFloat(document.getElementById('an-phi').value)||30;
-  var gs  = parseFloat(document.getElementById('an-gs').value)||18;
-  var q_an = parseFloat(document.getElementById('an-q')?document.getElementById('an-q').value:10)||10;
-  var qa_an= parseFloat(document.getElementById('an-qa')?document.getElementById('an-qa').value:150)||150;
-  var D_mm = parseFloat(document.getElementById('an-D')?document.getElementById('an-D').value:150)||150;
-  var tau  = parseFloat(document.getElementById('an-tau')?document.getElementById('an-tau').value:100)||100;
-
-  var phiR = phi * Math.PI / 180;
-  var angR = ang * Math.PI / 180;
-  var Ka = Math.pow(Math.tan(Math.PI/4 - phiR/2), 2);
-
-  // 수평토압 (삼각형 + 상재하중 직사각형)
-  var Ea_tri  = 0.5 * Ka * gs * H * H;
-  var Ea_rect = Ka * q_an * H;
-  var Ea = Ea_tri + Ea_rect;
-  var ya_an = (Ea_tri*(H/3) + Ea_rect*(H/2)) / Ea; // 합력 작용높이
-
-  // 앵커 열수 (정수)
-  var n_rows = Math.max(1, Math.floor(H / sv));
-  // 앵커 1본의 수평·수직 분력
-  var Th = T * Math.cos(angR);
-  var Tv = T * Math.sin(angR);
-
-  // 단위폭당 앵커 수평저항력 합계 (kN/m)
-  var R_h_total = (Th / sh) * n_rows;
-
-  // 앵커 내력 안전율: 총저항 / 총토압
-  var Fs_anchor = (Ea > 0) ? R_h_total / Ea : 999;
-
-  // 전체안정 안전율 (간이 원호활동 — 테르자기 개략식)
-  // Fs = (c'·L + N·tanφ) / T_drive ; 여기선 점착력 0 가정, 쐐기 기반
-  var theta_f = Math.PI/4 + phiR/2;           // 파괴면 경사각
-  var Nc = Math.cos(phiR)/Math.sin(theta_f);  // 법선력 계수
-  var W_wedge = 0.5 * gs * H * H / Math.tan(theta_f); // 쐐기 자중
-  var driving = Ea;                            // 구동력 = 수평토압
-  var resist  = W_wedge * Math.tan(phiR) + R_h_total * Math.cos(angR);
-  var Fs_global = (driving > 0) ? resist / driving : 999;
-  Fs_global = Math.min(Fs_global, 9.99); // 상한 캡
-
-  // 인발 안전율
-  var D_m = D_mm / 1000;
-  var Pu = Math.PI * D_m * La * tau;
-  var Fs_pull = (T > 0) ? Pu / T : 999;
-
-  var pass_anc = Fs_anchor >= 1.5;
-  var pass_pull = Fs_pull >= 2.0;
-  var pass_glob = Fs_global >= 1.2;
-  var allPass = pass_anc && pass_pull && pass_glob;
-
-  var proj= document.getElementById('an-projname').value||'';
-  var author= document.getElementById('an-author').value||'';
-  var date= document.getElementById('an-date').value||'';
-  var atype= document.getElementById('an-type').value||'어스앵커';
-
-  return {H:H,ang:ang,sh:sh,sv:sv,T:T,La:La,phi:phi,gs:gs,Ka:Ka,Ea:Ea,
-    n_rows:n_rows, Th:Th, Tv:Tv, R_total:R_h_total, Pu:Pu,
-    ya:ya_an, q:q_an, qa:qa_an,
-    Fs_anchor:Fs_anchor, Fs_pull:Fs_pull, Fs_global:Fs_global,
-    pass_anc:pass_anc, pass_pull:pass_pull, pass_glob:pass_glob, allPass:allPass,
-    proj:proj, author:author, date:date, type:'앵커식 옹벽 ('+atype+')'};
-}
 function renderAnchoredResult(r){
-  function fs(n){ return n.toFixed(3); }
-  function ok(v){ return v ? '<span class="td-pass">OK ✓</span>' : '<span class="td-fail">NG ✗</span>'; }
-  var heroClass = r.allPass ? 'grn' : 'red';
-  var html='';
-  html += '<div class="result-hero '+heroClass+'">';
-  html += '<div class="rh-label">앵커 내력 안전율</div>';
-  html += '<div class="rh-num">'+fs(r.Fs_anchor)+'</div>';
-  html += '<div class="rh-unit">기준: ≥ 1.50</div>';
-  html += '<div class="rh-badge">'+(r.allPass?'✅ 안전':'⚠️ 검토 요망')+'</div></div>';
+  var html = '';
+  html += '<div class="result-hero ' + (r.allPass ? 'grn' : 'red') + '">';
+  html += '<div class="rh-label">설계앵커력 T / 허용앵커력 Ta — KDS 11 60 00 (' + r.useNm + ')</div>';
+  html += '<div class="rh-num">' + r.T.toFixed(0) + ' / ' + r.Ta.toFixed(1) + '</div>';
+  html += '<div class="rh-unit">kN/본 · 필요앵커력 ' + r.Treq.toFixed(1) + ' kN/본</div>';
+  html += '<div class="rh-badge">' + (r.allPass ? '✅ 적합' : '⚠️ 검토 요망') + '</div></div>';
   html += '<div class="stat-grid">';
-  html += '<div class="sbox '+(r.pass_anc?'pass':'fail')+'"><div class="sico">⚓</div><div class="sval '+(r.pass_anc?'grn':'red')+'">'+fs(r.Fs_anchor)+'</div><div class="slbl">앵커 내력</div><div class="spass '+(r.pass_anc?'ok':'ng')+'">'+(r.pass_anc?'✓ OK (≥1.5)':'✗ NG')+'</div></div>';
-  html += '<div class="sbox '+(r.pass_pull?'pass':'fail')+'"><div class="sico">🔩</div><div class="sval '+(r.pass_pull?'grn':'red')+'">'+fs(r.Fs_pull)+'</div><div class="slbl">인발 안전율</div><div class="spass '+(r.pass_pull?'ok':'ng')+'">'+(r.pass_pull?'✓ OK (≥2.0)':'✗ NG')+'</div></div>';
-  html += '<div class="sbox '+(r.pass_glob?'pass':'fail')+'"><div class="sico">🏔️</div><div class="sval '+(r.pass_glob?'grn':'red')+'">'+fs(r.Fs_global)+'</div><div class="slbl">전체안정</div><div class="spass '+(r.pass_glob?'ok':'ng')+'">'+(r.pass_glob?'✓ OK (≥1.2)':'✗ NG')+'</div></div>';
-  html += '<div class="sbox"><div class="sico">➡️</div><div class="sval">'+r.Ea.toFixed(1)+'</div><div class="slbl">수평토압 Ea</div></div>';
-  html += '<div class="sbox"><div class="sico">⬆️</div><div class="sval">'+r.n_rows+'</div><div class="slbl">앵커 열수</div></div>';
-  html += '<div class="sbox"><div class="sico">💪</div><div class="sval">'+r.Th.toFixed(1)+'</div><div class="slbl">앵커 수평분력</div></div>';
+  html += rwBox(r.pass_req, '⚓', r.Treq.toFixed(1), '필요앵커력 (kN/본)', r.pass_req ? '✓ ≤ T' : '✗ &gt; T');
+  html += rwBox(r.pass_pull, '🔩', r.Tpull.toFixed(1), '허용인발력 (kN)', r.pass_pull ? '✓ ≥ T' : '✗ &lt; T');
+  html += rwBox(r.pass_ten, '🧵', r.Tten.toFixed(1), '허용인장력 (kN)', r.pass_ten ? '✓ ≥ T' : '✗ &lt; T');
+  html += rwBox(r.pass_Lf, '📏', r.Lf.toFixed(1), '자유장 Lf (m)', r.pass_Lf ? '✓ ≥ 4.0' : '✗ &lt; 4.0');
+  html += rwBox(r.pass_La, '📐', r.La.toFixed(1), '정착장 La (m)', r.pass_La ? '✓ ≥ 4.0' : '✗ &lt; 4.0');
+  html += rwBox(r.pass_ang, '↗️', r.ang.toFixed(0) + '°', '설치각', r.pass_ang ? '✓ ≥ 10°' : '✗ &lt; 10°');
   html += '</div>';
-  html += '<div class="card"><div class="card-head"><div class="card-ico amber">📊</div><span class="card-tit">안전성 검토 상세 (KDS 11 50 15)</span></div>';
+  html += '<div class="card"><div class="card-head"><div class="card-ico amber">📊</div><span class="card-tit">앵커 검토 상세 (KDS 11 60 00)</span></div>';
   html += '<div class="card-body"><div class="tbl-wrap"><table><thead><tr><th>검토항목</th><th>산정값</th><th>기준</th><th>판정</th></tr></thead><tbody>';
-  html += '<tr><td>앵커 내력 Fs</td><td class="mono">'+fs(r.Fs_anchor)+'</td><td>≥1.5</td><td>'+ok(r.pass_anc)+'</td></tr>';
-  html += '<tr><td>인발 안전율 Fs</td><td class="mono">'+fs(r.Fs_pull)+'</td><td>≥2.0</td><td>'+ok(r.pass_pull)+'</td></tr>';
-  html += '<tr><td>전체안정 Fs</td><td class="mono">'+fs(r.Fs_global)+'</td><td>≥1.2</td><td>'+ok(r.pass_glob)+'</td></tr>';
-  html += '<tr><td>수평토압 Ea (kN/m)</td><td class="mono">'+r.Ea.toFixed(2)+'</td><td>-</td><td>-</td></tr>';
-  html += '<tr><td>정착부 극한내력 Pu (kN)</td><td class="mono">'+r.Pu.toFixed(1)+'</td><td>-</td><td>-</td></tr>';
+  html += '<tr><td>수평토압 Ea (kN/m)</td><td class="mono">' + r.Ea.toFixed(2) + '</td><td>Rankine Ka = ' + (isFinite(r.Ka) ? r.Ka.toFixed(4) : '—') + '</td><td>-</td></tr>';
+  html += '<tr><td>필요앵커력 Ea·sh / (n·cosα)</td><td class="mono">' + r.Treq.toFixed(2) + ' kN</td><td>≤ T ' + r.T + ' kN (n = ' + r.n_rows + '단)</td><td>' + rwOk(r.pass_req) + '</td></tr>';
+  html += '<tr><td>극한인발력 Pu = π·D·La·τu</td><td class="mono">' + r.Pu.toFixed(2) + ' kN</td><td>La 적용 ' + r.Le.toFixed(1) + ' m (10 m 초과분 제외)</td><td>-</td></tr>';
+  html += '<tr><td>허용인발력 Pu / Fs</td><td class="mono">' + r.Tpull.toFixed(2) + ' kN</td><td>Fs ' + r.fsp + ' (표 4.2-2) · ≥ T</td><td>' + rwOk(r.pass_pull) + '</td></tr>';
+  html += '<tr><td>허용인장력 n·min(' + r.fu + 'Tu, ' + r.fy + 'Ty)</td><td class="mono">' + r.Tten.toFixed(2) + ' kN</td><td>표 4.2-3 · ' + r.nstr + '가닥 ' + r.strand + ' mm · ≥ T</td><td>' + rwOk(r.pass_ten) + '</td></tr>';
+  html += '<tr><td>허용앵커력 Ta = min</td><td class="mono">' + r.Ta.toFixed(2) + ' kN</td><td>설계앵커력 = 최소 허용앵커력 (4.3(3))</td><td>-</td></tr>';
+  html += '<tr><td>자유장 Lf</td><td class="mono">' + r.Lf.toFixed(2) + ' m</td><td>≥ 4.0 m · 가상활동면 + ' + r.Lf_need.toFixed(2) + ' m (4.1(5))</td><td>' + rwOk(r.pass_Lf) + '</td></tr>';
+  html += '<tr><td>정착장 La</td><td class="mono">' + r.La.toFixed(2) + ' m</td><td>토사 마찰형 ≥ 4.0 m (4.1(6))</td><td>' + rwOk(r.pass_La) + '</td></tr>';
+  html += '<tr><td>설치각 α</td><td class="mono">' + r.ang.toFixed(1) + '°</td><td>≥ 10° (4.1(8))</td><td>' + rwOk(r.pass_ang) + '</td></tr>';
   html += '</tbody></table></div></div></div>';
-  AN_RES.result = r;
-  previewSel.a4  = 'anchored';
-  previewSel.mob = 'anchored';
-  refreshPreviewSelBadges();
+  html += rwAdvice(r);
+  AN_RES.result = r; previewSel.a4 = 'anchored'; previewSel.mob = 'anchored'; refreshPreviewSelBadges();
   document.getElementById('an-result-panel').innerHTML = html
     + '<div class="card"><div class="card-head"><div class="card-ico amber">📐</div><span class="card-tit">단면 다이어그램 (앵커식)</span></div>'
     + '<div class="card-body" style="padding:10px;"><svg id="an-diagram" viewBox="0 0 320 260" width="100%" style="max-width:320px;display:block;margin:0 auto;border:1px solid #e2e8f0;border-radius:8px;background:#f8fafd;"></svg></div></div>';
@@ -2083,7 +1940,7 @@ function resetAnchored(){
     'an-H':'6.0','an-ang':'15','an-sh':'2.0','an-sv':'2.0',
     'an-T':'200','an-La':'5.0','an-phi':'30','an-gs':'18.0',
     'an-c':'0','an-beta':'0','an-q':'10','an-qa':'150',
-    'an-D':'150','an-Lf':'3.0','an-tau':'100','an-E':'200'
+    'an-D':'150','an-Lf':'3.0','an-tau':'100','an-E':'200','an-nstr':'4','an-use':'perm','an-strand':'15.2|261|222'
   };
   Object.keys(defaults).forEach(function(id){
     var el=document.getElementById(id); if(el) el.value=defaults[id];
@@ -2150,147 +2007,101 @@ function showToast(msg){
 function renderA4Iso(r){
   var el = document.getElementById('a4iso-content');
   if(!el) return;
-  // r이 명시적으로 전달되지 않으면 선택된 옹벽 결과 사용
   if(r === undefined) r = getResultByType(previewSel.a4);
   var today = new Date();
   var ymd = today.getFullYear()+'.'+(today.getMonth()+1).toString().padStart(2,'0')+'.'+today.getDate().toString().padStart(2,'0');
-
   if(!r){
     el.innerHTML='<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:600px;color:#90a4ae;"><div style="font-size:56px;margin-bottom:16px;">📄</div><div style="font-size:16px;font-weight:800;color:#546e7a;">위 탭에서 옹벽을 선택하세요</div><div style="font-size:12px;margin-top:8px;color:#b0bec5;">해당 옹벽의 검토를 먼저 실행해주세요.</div></div>';
     return;
   }
-  function fv(n,d){ return (n||0).toFixed(d!=null?d:3); }
-  var passClass = r.allPass ? 'pass' : 'fail';
-  var passLabel = r.allPass ? '✅  안전 (ALL PASS)' : '⚠️  불안전 (재검토 필요)';
-
+  function fv(n,d){ return isFinite(n) ? (n||0).toFixed(d!=null?d:3) : '—'; }
+  function cell(k,v){ return '<div class="a4iso-cell"><span class="a4iso-cell-k">'+k+'</span><span class="a4iso-cell-v">'+v+'</span></div>'; }
+  function row(k,v,lim,src,p){ return '<tr><td>'+k+'</td><td class="mono" style="font-weight:800;">'+v+'</td><td>'+lim+'</td><td>'+src+'</td><td class="'+(p===null?'':(p?'pass-cell':'fail-cell'))+'">'+(p===null?'참고':(p?'✓ OK':'✗ NG'))+'</td></tr>'; }
+  var anc = r.kind === 'anchored';
+  var passLabel = r.allPass ? '✅  적합 (ALL PASS)' : '⚠️  부적합 (재검토 필요)';
   var html = '';
-  // ── 헤더 ──
-  /* v5.0 §3-4 — .a4-tit 중앙 + .a4-head2 2단(좌 현장명 · 우 근거·작성일·작성자·형식) */
   html += '<div class="a4-tit">옹벽 구조물 안전성 검토 보고서</div>';
   html += '<div class="a4-head2">';
   html += '<div class="a4-proj">현장명 : '+(r.proj||'-')+'</div>';
-  html += '<div class="a4-meta">근거 : KDS 11 80 10 · KDS 11 10 05 · 구조물기초설계기준 (2021)<br/>작성일 : '+ymd+' &nbsp;·&nbsp; 작성자 : '+(r.author||'-')+'<br/>옹벽 형식 : '+r.type+'</div>';
+  html += '<div class="a4-meta">근거 : '+(anc?'KDS 11 60 00 앵커 설계기준':'KDS 11 80 05 콘크리트옹벽')+' (2025. 12. 24.)<br/>작성일 : '+ymd+' &nbsp;·&nbsp; 작성자 : '+(r.author||'-')+'<br/>옹벽 형식 : '+r.type+'</div>';
   html += '</div>';
-
-  // ── 종합 판정 ──
-  html += '<div class="a4iso-judge '+passClass+'">';
+  html += '<div class="a4iso-judge '+(r.allPass?'pass':'fail')+'">';
   html += '<div><div class="a4iso-judge-main">'+passLabel+'</div>';
-  html += '<div class="a4iso-judge-sub">KDS 11 80 10 기준 안전성 종합 판정</div></div>';
-  if(r.Fs_o !== undefined){
-    html += '<div style="text-align:right;"><div style="font-size:10px;opacity:.7;margin-bottom:2px;">전도 안전율 Fs₀</div>';
-    html += '<div class="a4iso-judge-fs">'+fv(r.Fs_o)+'</div>';
-    html += '<div style="font-size:10px;opacity:.7;margin-top:2px;">기준 ≥ 2.000</div></div>';
+  html += '<div class="a4iso-judge-sub">'+(anc?'KDS 11 60 00 표 4.2-2 · 4.2-3 · 4.1 앵커 검토 종합 판정':'KDS 11 80 05 표 4.4-1 (평상시) 안정 검토 종합 판정')+'</div></div>';
+  html += '<div style="text-align:right;"><div style="font-size:10px;opacity:.7;margin-bottom:2px;">'+(anc?'설계앵커력 T / 허용앵커력 Ta':'전도 안전율 Fs')+'</div>';
+  html += '<div class="a4iso-judge-fs">'+(anc?(r.T.toFixed(0)+' / '+fv(r.Ta,1)):fv(r.Fs_o))+'</div>';
+  html += '<div style="font-size:10px;opacity:.7;margin-top:2px;">'+(anc?'kN/본 · '+r.useNm:'기준 ≥ 2.000 · 활동 '+fv(r.Fs_s)+' (≥ 1.500)')+'</div></div>';
+  html += '</div>';
+
+  html += '<div class="a4-sub">① 설계 조건</div><div class="a4iso-grid4">';
+  html += cell('옹벽 높이 H', r.H+' m');
+  if(anc){
+    html += cell('설치각 α', r.ang+'°') + cell('간격 sh × sv', r.sh+' × '+r.sv+' m') + cell('설계앵커력 T', r.T+' kN/본');
+    html += cell('정착장 La · 자유장 Lf', r.La+' · '+r.Lf+' m') + cell('천공경 D · τu', r.D+' mm · '+r.tau+' kPa') + cell('인장재', r.nstr+' × '+r.strand+' mm') + cell('사용기간', r.useNm);
+  } else {
+    html += cell('저면폭 B', r.B+' m');
+    if(r.kind==='gravity') html += cell('상단폭 a · 배면 θ', r.a+' m · '+fv(r.theta,1)+'°');
+    else html += cell('앞굽 · 벽체 · 저판', r.bt+' · '+r.tw+' · '+r.tf+' m');
+    html += cell('근입깊이 Df', r.Df+' m') + cell('마찰계수 μ', r.mu) + cell('허용지지력 qa', r.qa+' kPa') + cell('콘크리트 γc', r.gc+' kN/m³');
+  }
+  html += cell('내부마찰각 φ', r.phi+'°') + cell('단위중량 γs', r.gs+' kN/m³') + cell('배면 경사 β', r.beta+'°') + cell('상재하중 q', r.q+' kPa');
+  html += '</div>';
+
+  html += '<div class="a4-sub amber">② '+(anc?'토압 · 앵커력 산정 (Rankine)':'토압 산정 ('+(r.kind==='gravity'?'Coulomb — 실제 배면 · δ = 2/3φ':'Rankine — 뒷굽 연직 가상배면')+' · KDS 11 80 05 1.7.3)')+'</div><div class="a4iso-grid4">';
+  html += cell('토압계수 Ka', fv(r.Ka,4)) + cell('수평토압 ΣH', fv(r.Ea,2)+' kN/m');
+  if(anc){
+    html += cell('앵커 단수 n', r.n_rows+'단') + cell('필요앵커력', fv(r.Treq,2)+' kN') + cell('극한인발력 Pu', fv(r.Pu,2)+' kN') + cell('허용인발력', fv(r.Tpull,2)+' kN') + cell('허용인장력', fv(r.Tten,2)+' kN') + cell('허용앵커력 Ta', fv(r.Ta,2)+' kN');
+  } else {
+    html += cell('연직분력 Pv', fv(r.Pv,2)+' kN/m') + cell('연직합력 ΣV', fv(r.SV,2)+' kN/m') + cell('저항모멘트 ΣMr', fv(r.Mr,2)+' kN·m') + cell('전도모멘트 ΣMo', fv(r.Mo,2)+' kN·m') + cell('합력위치 x̄', fv(r.xR,3)+' m') + cell('편심 e', fv(r.e,3)+' m');
   }
   html += '</div>';
 
-  // ── 설계 조건 ──
-  html += '<div class="a4-sub">① 설계 조건</div>';
-  if(r.H !== undefined){
-    html += '<div class="a4iso-grid4">';
-    html += '<div class="a4iso-cell"><span class="a4iso-cell-k">옹벽 높이 H</span><span class="a4iso-cell-v">'+r.H+' m</span></div>';
-    html += '<div class="a4iso-cell"><span class="a4iso-cell-k">저면폭 B</span><span class="a4iso-cell-v">'+r.B+' m</span></div>';
-    if(r.phi) html += '<div class="a4iso-cell"><span class="a4iso-cell-k">내부마찰각 φ</span><span class="a4iso-cell-v">'+r.phi+'°</span></div>';
-    if(r.gs) html += '<div class="a4iso-cell"><span class="a4iso-cell-k">단위중량 γs</span><span class="a4iso-cell-v">'+r.gs+' kN/m³</span></div>';
-    if(r.mu) html += '<div class="a4iso-cell"><span class="a4iso-cell-k">마찰계수 μ</span><span class="a4iso-cell-v">'+r.mu+'</span></div>';
-    if(r.qa) html += '<div class="a4iso-cell"><span class="a4iso-cell-k">허용지지력 qa</span><span class="a4iso-cell-v">'+r.qa+' kPa</span></div>';
-    if(r.q!=null) html += '<div class="a4iso-cell"><span class="a4iso-cell-k">상재하중 q</span><span class="a4iso-cell-v">'+r.q+' kPa</span></div>';
-    if(r.gc) html += '<div class="a4iso-cell"><span class="a4iso-cell-k">콘크리트 γc</span><span class="a4iso-cell-v">'+r.gc+' kN/m³</span></div>';
-    html += '</div>';
-  }
-
-  // ── 토압 계산 ──
-  if(r.Ka !== undefined){
-    html += '<div class="a4-sub amber">② 토압 산정 (Rankine 이론)</div>';
-    html += '<div class="a4iso-grid4">';
-    html += '<div class="a4iso-cell"><span class="a4iso-cell-k">토압계수 Ka</span><span class="a4iso-cell-v">'+fv(r.Ka,4)+'</span></div>';
-    html += '<div class="a4iso-cell"><span class="a4iso-cell-k">수평토압 Ea</span><span class="a4iso-cell-v">'+fv(r.Ea,2)+' kN/m</span></div>';
-    html += '<div class="a4iso-cell"><span class="a4iso-cell-k">작용위치 ya</span><span class="a4iso-cell-v">'+fv(r.ya||0,3)+' m</span></div>';
-    if(r.SV) html += '<div class="a4iso-cell"><span class="a4iso-cell-k">연직합력 ΣV</span><span class="a4iso-cell-v">'+fv(r.SV,2)+' kN/m</span></div>';
-    if(r.Mr) html += '<div class="a4iso-cell"><span class="a4iso-cell-k">저항모멘트 Mr</span><span class="a4iso-cell-v">'+fv(r.Mr,2)+' kN·m</span></div>';
-    if(r.Mo) html += '<div class="a4iso-cell"><span class="a4iso-cell-k">전도모멘트 Mo</span><span class="a4iso-cell-v">'+fv(r.Mo,2)+' kN·m</span></div>';
-    if(r.e!=null) html += '<div class="a4iso-cell"><span class="a4iso-cell-k">합력위치 x̄</span><span class="a4iso-cell-v">'+fv(r.xR||0,3)+' m</span></div>';
-    if(r.qmax) html += '<div class="a4iso-cell"><span class="a4iso-cell-k">최대지반반력</span><span class="a4iso-cell-v">'+fv(r.qmax,2)+' kPa</span></div>';
-    html += '</div>';
-  }
-
-  // ── 안전성 검토 결과표 ──
-  html += '<div class="a4-sub '+(r.allPass?'grn':'red')+'">③ 안전성 검토 결과 (KDS 11 80 10)</div>';
-  html += '<table class="a4-tbl"><thead><tr>';
-  html += '<th>검토 항목</th><th>산정값</th><th>허용 기준</th><th>안전율 기준</th><th>판정</th>';
-  html += '</tr></thead><tbody>';
-
-  if(r.Fs_o !== undefined){
-    html += '<tr><td>전도 안전율 Fs₀</td>';
-    html += '<td class="mono" style="font-weight:800;">'+fv(r.Fs_o)+'</td>';
-    html += '<td>≥ 2.000</td><td>KDS 11 80 10</td>';
-    html += '<td class="'+(r.pass_o?'pass-cell':'fail-cell')+'">'+(r.pass_o?'✓ OK':'✗ NG')+'</td></tr>';
-
-    html += '<tr><td>활동 안전율 Fs₅</td>';
-    html += '<td class="mono" style="font-weight:800;">'+fv(r.Fs_s)+'</td>';
-    html += '<td>≥ 1.500</td><td>KDS 11 80 10</td>';
-    html += '<td class="'+(r.pass_s?'pass-cell':'fail-cell')+'">'+(r.pass_s?'✓ OK':'✗ NG')+'</td></tr>';
-
-    html += '<tr><td>최대 지반반력 qmax</td>';
-    html += '<td class="mono" style="font-weight:800;">'+fv(r.qmax,2)+' kPa</td>';
-    html += '<td>≤ '+r.qa+' kPa</td><td>구조물기초설계기준</td>';
-    html += '<td class="'+(r.pass_b?'pass-cell':'fail-cell')+'">'+(r.pass_b?'✓ OK':'✗ NG')+'</td></tr>';
-
-    html += '<tr><td>편심 e (합력위치)</td>';
-    html += '<td class="mono" style="font-weight:800;">'+fv(r.e,4)+' m</td>';
-    html += '<td>≤ '+fv(r.e_allow,4)+' m (B/6)</td><td>KDS 11 10 05</td>';
-    html += '<td class="'+(r.pass_e?'pass-cell':'fail-cell')+'">'+(r.pass_e?'✓ OK':'✗ NG')+'</td></tr>';
-
-    html += '<tr><td>최소 지반반력 qmin</td>';
-    html += '<td class="mono">'+fv(r.qmin,2)+' kPa</td>';
-    html += '<td>≥ 0 kPa (인장없음)</td><td>-</td>';
-    html += '<td class="'+((r.qmin>=0)?'pass-cell':'fail-cell')+'">'+((r.qmin>=0)?'✓ OK':'✗ NG')+'</td></tr>';
-  }
-  if(r.Fs_anchor !== undefined){
-    html += '<tr><td>앵커 내력 안전율</td><td class="mono">'+fv(r.Fs_anchor)+'</td><td>≥ 1.500</td><td>KDS 11 50 15</td><td class="'+(r.pass_anc?'pass-cell':'fail-cell')+'">'+(r.pass_anc?'✓ OK':'✗ NG')+'</td></tr>';
-    html += '<tr><td>인발 안전율</td><td class="mono">'+fv(r.Fs_pull)+'</td><td>≥ 2.000</td><td>KDS 11 50 15</td><td class="'+(r.pass_pull?'pass-cell':'fail-cell')+'">'+(r.pass_pull?'✓ OK':'✗ NG')+'</td></tr>';
-    html += '<tr><td>전체안정 안전율</td><td class="mono">'+fv(r.Fs_global)+'</td><td>≥ 1.200</td><td>KDS 11 50 15</td><td class="'+(r.pass_glob?'pass-cell':'fail-cell')+'">'+(r.pass_glob?'✓ OK':'✗ NG')+'</td></tr>';
+  html += '<div class="a4-sub '+(r.allPass?'grn':'red')+'">③ 안전성 검토 결과</div>';
+  html += '<table class="a4-tbl"><thead><tr><th>검토 항목</th><th>산정값</th><th>기준</th><th>근거</th><th>판정</th></tr></thead><tbody>';
+  if(anc){
+    html += row('필요앵커력', fv(r.Treq,2)+' kN', '≤ T '+r.T+' kN', 'KDS 11 60 00 4.4(2)', r.pass_req);
+    html += row('허용인발력 (Fs '+r.fsp+')', fv(r.Tpull,2)+' kN', '≥ T', '표 4.2-2', r.pass_pull);
+    html += row('허용인장력 ('+r.fu+'Tu · '+r.fy+'Ty)', fv(r.Tten,2)+' kN', '≥ T', '표 4.2-3', r.pass_ten);
+    html += row('자유장 Lf', fv(r.Lf,2)+' m', '≥ 4.0 m', '4.1(5)', r.pass_Lf);
+    html += row('정착장 La', fv(r.La,2)+' m', '≥ 4.0 m (토사)', '4.1(6)', r.pass_La);
+    html += row('설치각 α', fv(r.ang,1)+'°', '≥ 10°', '4.1(8)', r.pass_ang);
+  } else {
+    html += row('활동 Fs', fv(r.Fs_s), '≥ 1.500', 'KDS 11 80 05 표 4.4-1', r.pass_s);
+    html += row('전도 Fs', fv(r.Fs_o), '≥ 2.000', '표 4.4-1', r.pass_o);
+    html += row('최대 지반반력 qmax', (isFinite(r.qmax)?fv(r.qmax,2)+' kPa':'합력 저면 밖'), '≤ qa '+r.qa+' kPa (qu/3)', '표 4.4-1 · 4.4.4', r.pass_b);
+    html += row('근입깊이 Df', fv(r.Df,2)+' m', '≥ 1.0 m · 동결심도 이상', '4.4.1(4)', r.pass_d);
+    html += row('편심 e', fv(r.e,4)+' m', 'B/6 = '+fv(r.e_allow,4)+' m', '지반반력 분포', null);
   }
   html += '<tr style="background:#f8fafd;font-weight:900;"><td colspan="4" style="text-align:right;font-weight:900;color:#0d47a1;">종 합 판 정</td>';
   html += '<td class="'+(r.allPass?'pass-cell':'fail-cell')+'" style="font-size:13px;">'+(r.allPass?'✅ 적합':'⚠️ 부적합')+'</td></tr>';
   html += '</tbody></table>';
 
-  // ── 보완 권고 ──
-  if(!r.allPass){
-    html += '<div class="a4-sub red">④ 보완 권고사항</div>';
-    html += '<div style="background:#fff8e1;border:1px solid #ffe082;border-radius:6px;padding:10px 14px;font-size:10.5px;line-height:1.9;color:#795548;">';
-    if(r.pass_o===false) html += '▸ <b>전도 안전율 부족</b>: 저면폭 B 증가 또는 뒷굽(heel) 연장 검토<br/>';
-    if(r.pass_s===false) html += '▸ <b>활동 안전율 부족</b>: 활동 방지키(key) 설치 또는 기초 콘크리트 마찰면 개선<br/>';
-    if(r.pass_b===false) html += '▸ <b>지반반력 초과</b>: 기초 저면적 확대 또는 지반 개량·보강 공법 적용<br/>';
-    if(r.pass_e===false) html += '▸ <b>편심 과다</b>: 단면 형상 재조정 또는 뒷채움 하중 재분배 검토<br/>';
-    html += '</div>';
+  html += '<div class="a4-sub">④ 적용 기준 조항</div>';
+  html += '<table class="a4-tbl a4-law"><thead><tr><th>기준</th><th>조항</th><th>적용 내용</th></tr></thead><tbody>';
+  if(anc){
+    html += '<tr><td>KDS 11 60 00 앵커 설계기준</td><td>표 4.2-2</td><td>극한인발력 안전율 — 가설(2년 미만) 1.5 · 영구 2.5 · 지진 시 1.5 ~ 2.0</td></tr>';
+    html += '<tr><td>KDS 11 60 00</td><td>표 4.2-3</td><td>허용인장력 — 가설 0.65Tu · 0.80Ty / 영구 0.60Tu · 0.75Ty</td></tr>';
+    html += '<tr><td>KDS 11 60 00</td><td>4.1(5) ~ (8) · 4.3(3)</td><td>자유장 최소 4.0 m · 토사 정착장 최소 4.0 m · 정착장 10 m 초과분 인발력 증가 없음 · 설치각 10° 이상 · 설계앵커력 = 최소 허용앵커력</td></tr>';
+    html += '<tr><td>KDS 11 70 05 쌓기·깎기</td><td>표 4.3-1</td><td>앵커보강 지반 전체 안정성 — 장기 건기 1.5 · 우기 1.3 (별도 사면안정해석)</td></tr>';
+  } else {
+    html += '<tr><td>KDS 11 80 05 콘크리트옹벽</td><td>1.7.2 · 1.7.3</td><td>자중 · 토압 — 일반 Coulomb, 캔틸레버 뒷굽 연직 가상배면 Rankine</td></tr>';
+    html += '<tr><td>KDS 11 80 05</td><td>1.7.4(2)</td><td>일시 상재하중 10 kN/m² 고려</td></tr>';
+    html += '<tr><td>KDS 11 80 05</td><td>표 4.4-1</td><td>평상시 활동 1.5(수동토압 포함 시 2.0) · 전도 2.0 · 지지력 3.0 · 전체안정성 1.5 / 지진 시 1.2 · 1.5 · 2.0 · 1.1</td></tr>';
+    html += '<tr><td>KDS 11 80 05</td><td>4.4.1(4)</td><td>저판 설치깊이 동결심도 이상 · 최소 1.0 m</td></tr>';
   }
+  html += '</tbody></table>';
 
-  // ── 적용 기준 ──
-  html += '<div class="a4-sub">⑤ 적용 설계 기준</div>';
-  html += '<div style="background:#f8fafd;border:1px solid #e2e8f0;border-radius:6px;padding:10px 14px;font-size:10.5px;line-height:2;color:#334155;">';
-  html += '• KDS 11 80 10 (2016) — 옹벽 설계기준 (전도·활동·지지력 안전율)<br/>';
-  html += '• KDS 11 10 05 (2021) — 기초구조 설계기준 (편심 허용범위, B/6 이내)<br/>';
-  html += '• 구조물기초설계기준 (2021, 국토교통부) — 극한지지력 안전율 ≥ 3.0<br/>';
-  if(r.type && r.type.indexOf('캔틸레버')>=0) html += '• KDS 14 20 54 (2021) — 콘크리트구조 설계기준 (철근콘크리트 구조 설계)<br/>';
-  if(r.type && r.type.indexOf('앵커')>=0) html += '• KDS 11 50 15 (2019) — 앵커 설계기준 (인발·전체안정 안전율)<br/>';
-  html += '• 건설기술진흥법 시행규칙 제60조 — H≥5m 옹벽 구조안전 확인서 의무 제출';
-  html += '</div>';
-
-  // ── 비고 ──
   html += '<div style="margin-top:12px;padding:8px 12px;background:#fff3e0;border-left:4px solid #ff9800;border-radius:0 6px 6px 0;font-size:9.5px;color:#795548;line-height:1.8;">';
   html += '<b>※ 주 의 사 항</b><br/>';
-  html += '① 본 검토는 자동 산정 결과로서 현장 지반조사 결과(시추주상도, 평판재하시험 등)를 반드시 반영하시기 바랍니다.<br/>';
-  html += '② 높이 5m 이상 옹벽은 건설기술진흥법 시행규칙 제60조에 따라 책임기술자의 검토·날인이 필요합니다.<br/>';
-  html += '③ 지진하중, 수압, 동결심도 등 특수 조건은 별도 검토가 필요합니다.';
+  html += '① 지반정수(φ · γ · qa · τu)는 지반조사 · 시험 결과를 반영하십시오. 허용지지력 qa는 극한지지력 qu를 안전율 3.0으로 나눈 값입니다.<br/>';
+  html += (anc ? '② 전체 안정성(사면안정해석) · 인장재 신장량 · 지압판 · 전면벽체는 별도 검토 대상입니다.<br/>' : '② 전체안정성 · 침하 · 지진 시 · 수압 · 부재 단면설계(KDS 14 20 00)는 별도 검토 대상입니다. 상재하중 연직력은 뒷굽 위만 고려했습니다(중력식은 벽체 위 제외).<br/>');
+  html += '③ 노출높이 5 m 이상 부분의 합이 100 m 이상인 옹벽은 제2종시설물입니다(시설물의 안전 및 유지관리에 관한 특별법 시행령 별표 1 제8호).';
   html += '</div>';
-
-  // ── 푸터 ──
   html += '<div class="a4-footer">';
-  html += '<span>옹벽 구조물 안전성 검토 시스템 [MANMIN-Ver5.0]</span>';
-  html += '<span>KDS 11 80 10 · KDS 11 10 05 · 구조물기초설계기준</span>';
+  html += '<span>옹벽 구조물 안전성 검토 시스템 [MANMIN-Ver5.1]</span>';
+  html += '<span>KDS 11 80 05 · KDS 11 60 00 (2025. 12. 24.)</span>';
   html += '<span>작성일: '+ymd+'</span>';
   html += '</div>';
-
   el.innerHTML = html;
   markLongTables(el);
 }
@@ -2668,7 +2479,7 @@ window.exportA4Jpg = function(){
     var now = new Date();
     var ts = now.getFullYear()+''+String(now.getMonth()+1).padStart(2,'0')+String(now.getDate()).padStart(2,'0')
       +'_'+String(now.getHours()).padStart(2,'0')+String(now.getMinutes()).padStart(2,'0');
-    var base = '옹벽안전성검토_MANMIN-Ver5.0_'+ts;
+    var base = '옹벽안전성검토_MANMIN-Ver5.1_'+ts;
     if(!segs || !segs.length){
       mmDownload(canvas.toDataURL('image/jpeg',0.95), base+'.jpg');
       showToast('✅ JPG 저장 완료!'); return;
