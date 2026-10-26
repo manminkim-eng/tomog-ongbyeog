@@ -4,10 +4,10 @@
 <title>옹벽 구조물 안전성 검토 시스템 사용자 매뉴얼 Ver-5.1 · MANMIN</title>
 <meta name="description" content="옹벽 구조물 안전성 검토 시스템 MANMIN Ver-5.1 사용자 매뉴얼 — KDS 11 80 05 · 11 60 00 기준 옹벽 안정 · 앵커 검토 해설">
 <meta name="author" content="김만민 건축사 · ㈜대성건축사사무소">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;600&family=Orbitron:wght@700;900&display=swap">
+<meta name="theme-color" content="#b45309"><meta name="color-scheme" content="light dark">
 <link rel="stylesheet" href="./assets/fonts/manmin-fonts.css">
-<style>
+<style>:root{--mh-a:#431407;--mh-b:#b45309;--mh-c:#d97706;--mh-accent:#fcd34d;--mh-shadow:rgba(180,83,9,.35);--mh-btn-ink:#b45309;--mh-veil:0.25;--mh-bp:50%}
+
 :root{
   --navy:#2D3A8C;--navy-d:#1F2A6B;--navy-l:#E9ECF8;--accent:#F4A261;--accent-d:#C97A3A;--accent-l:#FDF1E7;
   --bg:#F8F9FA;--card:#FFFFFF;--text:#1A1A2E;--text2:#4A4F66;--line:#DDE1EA;--ok:#0F766E;--ng:#B42318;
@@ -21,15 +21,25 @@ code,kbd,.mono{font-family:var(--font-mono);font-size:.9em}
 code{background:var(--navy-l);color:var(--navy-d);padding:1px 6px;border-radius:5px}
 kbd{border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:0 6px;background:#fff}
 /* 상단 */
-.top{background:linear-gradient(135deg,var(--navy-d),var(--navy));color:#fff}
-.top-in{max-width:1240px;margin:0 auto;padding:44px 24px 36px}
-.eyebrow{font-family:var(--font-brand);font-weight:700;font-size:12px;letter-spacing:.18em;opacity:.85}
+.top{position:relative;background:linear-gradient(135deg,var(--mh-a),var(--mh-b) var(--mh-bp),var(--mh-c));color:#fff;box-shadow:0 2px 20px var(--mh-shadow)}
+.top::before{content:"";position:absolute;inset:0;background:rgba(0,0,0,var(--mh-veil));pointer-events:none}
+.top-in{position:relative;max-width:1240px;margin:0 auto;display:flex;justify-content:space-between;align-items:flex-end;gap:32px;flex-wrap:wrap;padding:40px 24px 32px}
+.eyebrow{font-family:var(--font-brand);font-weight:700;font-size:12px;letter-spacing:.18em;color:var(--mh-accent)}
 .top h1{font-size:28px;font-weight:900;margin:8px 0 6px;line-height:1.35}
 .top .sub{opacity:.9;margin:0}
-.badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
-.badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:4px 12px;font-size:13px}
-a.badge{color:#fff;text-decoration:none}a.badge:hover{background:rgba(255,255,255,.24);color:#fff}
-.badge.acc{background:var(--accent);border-color:var(--accent);color:#1A1A2E;font-weight:700}
+.mh-main{flex:1 1 640px;min-width:0}
+.mh-eb{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.mh-ver{font:700 11px var(--font-brand);background:var(--mh-accent);color:#1A1A2E;border-radius:999px;padding:1px 10px}
+.mh-meta{margin:12px 0 0;font-size:13px;color:rgba(255,255,255,.9)}
+.mh-act{display:flex;gap:10px;flex-wrap:wrap}
+.mh-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 20px;border-radius:10px;font-size:15px;text-decoration:none}
+.mh-btn.pri{background:#fff;color:var(--mh-btn-ink);font-weight:700}
+.mh-btn.sec{border:1px solid rgba(255,255,255,.45);color:#fff}
+.mh-btn.pri:hover{background:var(--mh-accent);color:#1A1A2E}.mh-btn.sec:hover{background:rgba(255,255,255,.12);color:#fff}
+.mh-btn:focus-visible{outline:3px solid var(--mh-accent);outline-offset:2px}
+.mh-prog{position:fixed;top:0;left:0;right:0;height:3px;z-index:50;pointer-events:none}
+.mh-prog i{display:block;height:100%;width:0;background:var(--mh-accent)}
+.toc-sum{display:none}
 /* 레이아웃 */
 .wrap{max-width:1240px;margin:0 auto;padding:28px 24px 80px;display:grid;grid-template-columns:260px minmax(0,1fr);gap:32px}
 nav.toc{position:sticky;top:16px;align-self:start;max-height:calc(100vh - 32px);overflow:auto;background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:18px 16px;font-size:14px}
@@ -100,6 +110,21 @@ footer.foot{max-width:1240px;margin:0 auto;padding:0 24px 40px;color:var(--text2
 @media (max-width:640px){nav.toc ol{columns:1}body{font-size:15px}}
 @media (max-width:480px){.wrap,.top-in{padding-left:16px;padding-right:16px}.pin{width:22px;height:22px;font-size:11px;line-height:22px}}
 @media (max-width:400px){section.ch>h2{font-size:20px}}
+/* v-mh1 D4 접이식 목차 · D9 터치 44px (≤1024px) */
+@media (max-width:1024px){
+  nav.toc{padding:0 16px}
+  nav.toc .toc-sum{display:flex;align-items:center;justify-content:space-between;min-height:48px;font-weight:700;font-size:14px;color:var(--navy);cursor:pointer;list-style:none}
+  nav.toc .toc-sum::-webkit-details-marker{display:none}
+  nav.toc details:not([open]) ol,nav.toc details:not([open]) h2{display:none}
+  nav.toc details[open]{padding-bottom:12px}
+  nav.toc li a{display:flex;align-items:center;min-height:44px;padding:0 8px}
+}
+/* v-mh1 D5 좁은 화면 헤드 */
+@media (max-width:640px){
+  .top-in{padding:28px 16px 24px;gap:16px}.top h1{font-size:22px}.top .sub{font-size:13px}.mh-meta{font-size:12px}
+  .mh-act{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%}.mh-btn{padding:0 8px;font-size:14px}
+}
+@media (max-width:480px){.eyebrow{letter-spacing:.04em}.mh-eb{gap:8px}}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 /* A4 인쇄 */
 @page{size:A4;margin:14mm 12mm 14mm}
@@ -113,7 +138,9 @@ footer.foot{max-width:1240px;margin:0 auto;padding:0 24px 40px;color:var(--text2
   section.ch:first-of-type{break-before:auto}
   figure.shot,.tbl,.eq,.svgbox,.note,.tip,.warn,.steps>li{break-inside:avoid}
   h3,h4{break-after:avoid}
-  .top{border-radius:0}
+  .top{border-radius:0;box-shadow:none}
+  .mh-prog,.mh-act{display:none!important}
+  .mh-meta{color:#fff}
   .pfoot{position:fixed;bottom:0;left:0;right:0;height:6mm;background:#fff;font-size:8pt;color:#666;border-top:1px solid #ccc;padding-top:1.5mm;display:flex;justify-content:space-between}
 }
 .pfoot{display:none}
@@ -147,15 +174,39 @@ footer.foot{max-width:1240px;margin:0 auto;padding:0 24px 40px;color:var(--text2
 }
 .rev{white-space:nowrap}
 @media print{.rev{display:none}}
+/* v-mh1 D6 다크 모드(화면 전용 · 헤드 색 불변 · 그림과 흐름도는 흰 바탕 유지) */
+@media screen and (prefers-color-scheme:dark){
+  :root{--bg:#0F1420;--card:#171D2C;--text:#E6E8EF;--text2:#A9AFC3;--line:#2A3245;--navy-l:#232B45;--accent-l:#33281D;--shadow:0 4px 20px rgba(0,0,0,.35)}
+  a,section.ch>h2,h3,.steps>li>b.t,.card h5,nav.toc li a.on,nav.toc .toc-sum{color:#AEB8F5}
+  a:hover{color:#F4A261}
+  code{background:var(--navy-l);color:#C9D0FA}
+  kbd{background:var(--card);color:var(--text)}
+  table,.card,nav.toc,section.ch{background:var(--card)}
+  th{background:var(--navy-l);color:#C9D0FA}
+  .note{border-left-color:#7F8CE0}
+  .warn{background:#3A1F22}
+  .ok{color:#5EEAD4}.ng{color:#FDA29B}
+  figure.shot .frame,.svgbox{background:#fff;border-color:var(--line)}
+  .tbl.stack tr{background:var(--card)}
+  .tbl.stack td:first-child{color:#C9D0FA}
+  .tbl:not(.stack){background:var(--card)}
+}
+@media screen and (prefers-color-scheme:dark) and (max-width:640px){
+  .tbl:not(.stack){background:linear-gradient(to right,var(--card) 30%,rgba(23,29,44,0)) left/40px 100% no-repeat local,linear-gradient(to left,var(--card) 30%,rgba(23,29,44,0)) right/40px 100% no-repeat local,radial-gradient(farthest-side at 100% 50%,rgba(0,0,0,.5),transparent) right/12px 100% no-repeat scroll,var(--card)}
+}
 </style>
 </head><body>
+<div class="mh-prog" aria-hidden="true"><i></i></div>
 <header class="top"><div class="top-in">
-<div class="eyebrow">MANMIN ENGINEERING · USER MANUAL</div>
+<div class="mh-main">
+<div class="mh-eb"><span class="eyebrow">MANMIN ENGINEERING · USER MANUAL</span><span class="mh-ver">Ver-5.1</span></div>
 <h1>옹벽 구조물 안전성 검토 시스템 사용자 매뉴얼</h1>
 <p class="sub">형식 → 단면 · 토압 · 기초 → 활동 · 전도 · 지지력 · 근입깊이 · 앵커 → A4 검토 보고서</p>
-<div class="badges"><span class="badge acc">매뉴얼 <span style="font-family:var(--font-brand)">Ver-5.1</span></span><a class="badge" href="../index.html">▶ 검토 시스템 열기</a><a class="badge" href="옹벽구조물안전성검토시스템_사용자매뉴얼_Ver-5.1.pdf" download>⤓ PDF</a><span class="badge">2026-10-17</span><span class="badge">김만민 건축사 · ㈜대성건축사사무소</span></div>
+<p class="mh-meta">2026-10-17 · 김만민 건축사 · ㈜대성건축사사무소 · KDS 11 80 05 · KDS 11 60 00</p>
+</div>
+<div class="mh-act"><a class="mh-btn pri" href="../index.html" aria-label="검토 시스템 열기">▶ 계산서 열기</a><a class="mh-btn sec" href="옹벽구조물안전성검토시스템_사용자매뉴얼_Ver-5.1.pdf" download>⤓ PDF (A4)</a></div>
 </div></header>
-<div class="wrap"><nav class="toc" aria-label="목차"><h2>목차</h2><ol><li><a href="#ch0">0. 이 매뉴얼에 대하여</a></li><li><a href="#ch1">1. 한눈에 보기</a></li><li class="sub"><a href="#s1-1">화면 구성</a></li><li class="sub"><a href="#s1-2">탭 · 검토 항목</a></li><li><a href="#ch2">2. 1분 따라하기</a></li><li><a href="#ch3">3. 화면별 기능</a></li><li class="sub"><a href="#s3-1">머리 · 매뉴얼</a></li><li class="sub"><a href="#s3-2">중력식 — 기본 정보 · 단면</a></li><li class="sub"><a href="#s3-3">중력식 — 토압 · 기초 조건</a></li><li class="sub"><a href="#s3-4">중력식 결과</a></li><li class="sub"><a href="#s3-5">안정 검토 상세</a></li><li class="sub"><a href="#s3-6">사례 — 근입깊이 0.5 m</a></li><li class="sub"><a href="#s3-7">캔틸레버식 입력</a></li><li class="sub"><a href="#s3-8">캔틸레버식 결과 — 활동 부족</a></li><li class="sub"><a href="#s3-9">사례 — 저면폭 3.7 m</a></li><li class="sub"><a href="#s3-10">앵커식 입력</a></li><li class="sub"><a href="#s3-11">앵커식 결과</a></li><li class="sub"><a href="#s3-12">사례 — 인발 · 자유장 부족</a></li><li class="sub"><a href="#s3-13">A4 검토 보고서</a></li><li class="sub"><a href="#s3-14">도움말</a></li><li class="sub"><a href="#s3-15">휴대전화 화면</a></li><li><a href="#ch4">4. 기준 해설</a></li><li class="sub"><a href="#s4-1">근거 체계</a></li><li class="sub"><a href="#s4-2">안정검토 하중 · 기준안전율</a></li><li class="sub"><a href="#s4-3">토압 — Coulomb · Rankine</a></li><li class="sub"><a href="#s4-4">활동 · 전도</a></li><li class="sub"><a href="#s4-5">지지력 · 지반반력 분포</a></li><li class="sub"><a href="#s4-6">근입깊이 · 활동방지벽</a></li><li class="sub"><a href="#s4-7">앵커 — 인발 · 인장 · 길이</a></li><li class="sub"><a href="#s4-8">별도 검토 항목</a></li><li class="sub"><a href="#s4-9">v5.1.0 정정</a></li><li><a href="#ch5">5. 실무 작업 방법</a></li><li class="sub"><a href="#s5-1">검토 절차</a></li><li class="sub"><a href="#s5-2">문제 해결 · FAQ</a></li><li><a href="#ch6">부록</a></li><li class="sub"><a href="#a1">버전 변경 내역</a></li><li class="sub"><a href="#a2">용어</a></li></ol></nav><main><style>
+<div class="wrap"><nav class="toc" aria-label="목차"><details open><summary class="toc-sum">목차 <span aria-hidden="true">▾</span></summary><h2>목차</h2><ol><li><a href="#ch0">0. 이 매뉴얼에 대하여</a></li><li><a href="#ch1">1. 한눈에 보기</a></li><li class="sub"><a href="#s1-1">화면 구성</a></li><li class="sub"><a href="#s1-2">탭 · 검토 항목</a></li><li><a href="#ch2">2. 1분 따라하기</a></li><li><a href="#ch3">3. 화면별 기능</a></li><li class="sub"><a href="#s3-1">머리 · 매뉴얼</a></li><li class="sub"><a href="#s3-2">중력식 — 기본 정보 · 단면</a></li><li class="sub"><a href="#s3-3">중력식 — 토압 · 기초 조건</a></li><li class="sub"><a href="#s3-4">중력식 결과</a></li><li class="sub"><a href="#s3-5">안정 검토 상세</a></li><li class="sub"><a href="#s3-6">사례 — 근입깊이 0.5 m</a></li><li class="sub"><a href="#s3-7">캔틸레버식 입력</a></li><li class="sub"><a href="#s3-8">캔틸레버식 결과 — 활동 부족</a></li><li class="sub"><a href="#s3-9">사례 — 저면폭 3.7 m</a></li><li class="sub"><a href="#s3-10">앵커식 입력</a></li><li class="sub"><a href="#s3-11">앵커식 결과</a></li><li class="sub"><a href="#s3-12">사례 — 인발 · 자유장 부족</a></li><li class="sub"><a href="#s3-13">A4 검토 보고서</a></li><li class="sub"><a href="#s3-14">도움말</a></li><li class="sub"><a href="#s3-15">휴대전화 화면</a></li><li><a href="#ch4">4. 기준 해설</a></li><li class="sub"><a href="#s4-1">근거 체계</a></li><li class="sub"><a href="#s4-2">안정검토 하중 · 기준안전율</a></li><li class="sub"><a href="#s4-3">토압 — Coulomb · Rankine</a></li><li class="sub"><a href="#s4-4">활동 · 전도</a></li><li class="sub"><a href="#s4-5">지지력 · 지반반력 분포</a></li><li class="sub"><a href="#s4-6">근입깊이 · 활동방지벽</a></li><li class="sub"><a href="#s4-7">앵커 — 인발 · 인장 · 길이</a></li><li class="sub"><a href="#s4-8">별도 검토 항목</a></li><li class="sub"><a href="#s4-9">v5.1.0 정정</a></li><li><a href="#ch5">5. 실무 작업 방법</a></li><li class="sub"><a href="#s5-1">검토 절차</a></li><li class="sub"><a href="#s5-2">문제 해결 · FAQ</a></li><li><a href="#ch6">부록</a></li><li class="sub"><a href="#a1">버전 변경 내역</a></li><li class="sub"><a href="#a2">용어</a></li></ol></details></nav><main><style>
 #fig-s22_help_law,#fig-s23_help_formula{max-width:640px}
 #fig-s20_a4page,#fig-s21_a4anchor{max-width:600px}
 #fig-s03_g_basic,#fig-s04_g_section,#fig-s05_g_soil,#fig-s09_c_input,#fig-s10_c_soil,#fig-s14_an_input,#fig-s15_an_cond{max-width:440px}
@@ -293,7 +344,7 @@ Coulomb  Ka = cos²(φ − θ) / [cos²θ · cos(δ + θ) · (1 + √S)²]
 <h3 id="a2">A2. 용어</h3>
 <div class="brk"><div class="k1"><div class="tbl"><table><thead><tr><th class="">용어</th><th class="">뜻</th></tr></thead><tbody><tr><td class="">주동토압</td><td class="">벽체가 흙에서 멀어지는 쪽으로 움직일 때 작용하는 토압</td></tr><tr><td class="">가상배면</td><td class="">캔틸레버 옹벽 뒷굽 끝에서 연직으로 세운 면 — Rankine 토압 작용면</td></tr><tr><td class="">벽면마찰각 δ</td><td class="">배면과 흙 사이 마찰각 — 이 도구는 2/3φ</td></tr><tr><td class="">편심 e</td><td class="">저판 중심에서 연직 합력 작용점까지 거리</td></tr><tr><td class="">자유장 · 정착장</td><td class="">긴장력을 전달만 하는 구간 · 지반에 앵커력을 전달하는 구간(KDS 11 60 00 1.4)</td></tr><tr><td class="">허용앵커력</td><td class="">허용인발력과 허용인장력 중 작은 값 — 설계앵커력의 상한</td></tr></tbody></table></div></div></div>
 </section></main></div>
-<footer class="foot">© 2026 김만민 건축사 · ㈜대성건축사사무소 · 옹벽 구조물 안전성 검토 시스템 사용자 매뉴얼 Ver-5.1 · KDS 11 80 05 · KDS 11 60 00 (2025. 12. 24. 개정) <span class="rev">· 화면 대응 개정 2026-10-17</span></footer>
+<footer class="foot">© 2026 김만민 건축사 · ㈜대성건축사사무소 · 옹벽 구조물 안전성 검토 시스템 사용자 매뉴얼 Ver-5.1 · KDS 11 80 05 · KDS 11 60 00 (2025. 12. 24. 개정) <span class="rev">· 화면 대응 개정 2026-10-17</span> <span class="rev">· 디자인 개정 2026-10-26</span></footer>
 <div class="pfoot"><span>옹벽 구조물 안전성 검토 시스템 사용자 매뉴얼 Ver-5.1</span><span>2026-10-17</span></div>
 <div id="lb" role="dialog" aria-label="그림 확대"><img alt=""></div>
 <button class="totop" aria-label="맨 위로">↑</button>
@@ -314,5 +365,9 @@ Coulomb  Ka = cos²(φ − θ) / [cos²θ · cos(δ + θ) · (1 + √S)²]
 (function(){document.querySelectorAll('.tbl').forEach(function(t){var tb=t.querySelector('table');if(!tb||!tb.tHead)return;
  if(tb.querySelector('td.num,th.num'))return;var hs=[].map.call(tb.tHead.rows[0].cells,function(c){return c.textContent.trim()});
  [].forEach.call(tb.tBodies[0].rows,function(r){[].forEach.call(r.cells,function(c,i){if(hs[i])c.setAttribute('data-th',hs[i])})});t.classList.add('stack');if(hs.length===2)t.classList.add('c2')})})();
+/* v-mh1 D3 읽기 진행 막대 · D4 좁은 화면 목차 접힘 */
+(function(){var b=document.querySelector('.mh-prog i');if(b){var f=function(){var h=document.documentElement,m=h.scrollHeight-h.clientHeight;b.style.width=(m>0?h.scrollTop/m*100:0)+'%';};addEventListener('scroll',f,{passive:true});addEventListener('resize',f);f();}
+ var d=document.querySelector('nav.toc details'),mq=matchMedia('(max-width:1024px)');if(d){var s=function(){d.open=!mq.matches;};s();(mq.addEventListener?mq.addEventListener('change',s):mq.addListener(s));
+ d.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){if(mq.matches)d.open=false;});});}})();
 </script>
 </body></html>
