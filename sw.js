@@ -37,7 +37,7 @@ const mmMatch = (req, opt) => caches.keys()
   .then((ks) => ks.reduce((p, k) => p.then((r) => r || caches.open(k).then((c) => c.match(req, opt))), Promise.resolve(undefined)))
   .then((r) => (r && r.type === 'opaque' && req && req.mode === 'cors') ? undefined : r);
 
-const CACHE  = 'retwall-v5.1.0';   /* v5.1.0 : KDS 원문 대조 안정 검토 엔진 */
+const CACHE  = 'retwall-v5.1.1';   /* v5.1.0 : KDS 원문 대조 안정 검토 엔진 */
 const ORPHAN = ['retwall-v2.0'];
 const ASSETS = [
   './',
