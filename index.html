@@ -2586,5 +2586,95 @@ window.exportA4Jpg = function(){
     <div class="foot-copy">ARCHITECT KIM MANMIN © 2026</div>
   </div>
 </footer>
+<script id="mm-mono-print">/* v5.1.4 (2026-10-31) — A4 단색 인쇄(작업지시서 §25-6-25) */
+/* MANMIN A4 단색 인쇄 v1 (2026-10-31, 작업지시서 §25-6-25) — 인쇄할 때만(beforeprint) 계산서를 검정 · 회색으로, 끝나면(afterprint) 화면 그대로 되돌림.
+   진한 띠 → 바탕 없이 굵은 글자 + 선(표 머리는 연회색), 색 카드 → 회색 테두리, 색 글자 → 검정 · 회색, 색 선 → 회색, 그림 문자 → 회색.
+   색이 남는 곳: ① 판정(적합 · 부적합 등 짧은 글) ② 도구가 지정한 최종 결과(window.MM_MONO_KEEP 선택자) ③ 두께 8px 이하 공종색 선.
+   도구별 설정(선택): window.MM_MONO_ROOT = 인쇄 영역 선택자(기본 body) · window.MM_MONO_KEEP = 색 유지 선택자 · window.MM_MONO_OFF = true 면 끔. */
+(function () {
+  if (window.__mmMono) return; window.__mmMono = 1;
+  var saved = [], accent = new Map(), keeps = [];
+  var VERDICT = /^[\s✓✔✗✘○●◎△×▲▼⚠️✅❌🟢🔴🟠🟡·:()\[\]【】「」]*(기준\s*(미달|충족|만족|초과)|미달|달성|미달성|합격|불합격|적합|부적합|만족|불만족|충족|미충족|OK|O\.K\.?|NG|N\.G\.?|가능|불가|불가능|허용|불허|의무|의무대상|비대상|해당|해당없음|비해당|대상|적정|부족|초과|통과|주의|위험|안전|양호|불량|PASS|FAIL)(\s*[(（\[][^)）\]]{0,24}[)）\]])?[\s.!·:\]】」✓✔✗✘]*$/i;
+  var EMOJI = /\p{Extended_Pictographic}/u;
+  function rgb(s) { var m = /rgba?\(([^)]+)\)/.exec(s || ''); if (!m) return null; var p = m[1].split(/[\s,\/]+/).filter(Boolean).map(parseFloat); return { r: p[0], g: p[1], b: p[2], a: p.length > 3 ? p[3] : 1 }; }
+  function lum(c) { return (0.299 * c.r + 0.587 * c.g + 0.114 * c.b) / 255; }
+  function chroma(c) { return Math.max(c.r, c.g, c.b) - Math.min(c.r, c.g, c.b); }
+  function css(c) { return 'rgb(' + Math.round(c.r) + ',' + Math.round(c.g) + ',' + Math.round(c.b) + ')'; }
+  function mix(c, t) { return { r: c.r + (255 - c.r) * t, g: c.g + (255 - c.g) * t, b: c.b + (255 - c.b) * t }; }
+  function dark(c) { var l = lum(c); if (l < 0.45) return c; var k = 0.45 / l; return { r: c.r * k, g: c.g * k, b: c.b * k }; }
+  function set(el, p, v) {
+    if (!el.__mmS) { el.__mmS = 1; saved.push([el, el.getAttribute('style')]); }
+    el.style.setProperty(p, v, 'important');
+  }
+  /* 덧그린 선은 안쪽 그림자 — 테두리처럼 높이를 바꾸지 않아 쪽 나눔이 그대로 */
+  function line(el, v) { el.__mmL = 1; set(el, 'box-shadow', v); }
+  /* 판정 글(짧은 글 · VERDICT)이 있으면, 그 글을 감싼 색 상자(위로 3단계, 표 칸에서 멈춤)까지 색 유지 */
+  function tinted(cs) { var b = rgb(cs.backgroundColor), t = rgb(cs.borderTopColor), w = parseFloat(cs.borderTopWidth) || parseFloat(cs.borderLeftWidth); return (b && b.a > 0.05 && chroma(b) > 8) || (w > 0 && t && chroma(t) > 40) || /gradient/.test(cs.backgroundImage); }
+  function markKeep(root, sel) {
+    root.querySelectorAll('*').forEach(function (el) {
+      if (el.children.length || el instanceof SVGElement) return; var t = (el.textContent || '').trim(); if (!t || t.length > 30 || !VERDICT.test(t)) return;
+      var k = el, a = el;
+      for (var n = 0; n < 4 && a && a !== root; n++) { if (tinted(getComputedStyle(a)) && a.getBoundingClientRect().height < 160) { k = a; break; } if (a.tagName === 'TD' || a.tagName === 'TH') break; a = a.parentElement; }
+      k.__mmK = 1; keeps.push(k);
+    });
+    if (sel) root.querySelectorAll(sel).forEach(function (el) { el.__mmK = 1; keeps.push(el); });
+  }
+  function keepOf(el) { for (var a = el; a; a = a.parentElement) if (a.__mmK) return a; return null; }
+  function run() {
+    if (window.MM_MONO_OFF) return;
+    var sel = window.MM_MONO_KEEP || '', roots = document.querySelectorAll(window.MM_MONO_ROOT || 'body');
+    roots.forEach(function (root) {
+      markKeep(root, sel);
+      var list = [root].concat(Array.prototype.slice.call(root.querySelectorAll('*')));
+      list.forEach(function (el) {
+        var tag = el.tagName; if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'IMG' || tag === 'VIDEO' || tag === 'CANVAS') return;
+        var cs = getComputedStyle(el); if (cs.display === 'none') return;
+        var keep = keepOf(el), isSvg = el instanceof SVGElement;
+        if (isSvg) {
+          if (keep) return;
+          ['fill', 'stroke'].forEach(function (p) { var c = rgb(cs[p]); if (c && c.a > 0 && chroma(c) > 40) { var l = lum(c); set(el, p, l < 0.55 ? '#555' : (l < 0.8 ? '#999' : '#ddd')); } });
+          return;
+        }
+        var bg = rgb(cs.backgroundColor), img = cs.backgroundImage;
+        if (img && img !== 'none' && /gradient/.test(img)) { var g = rgb((/rgba?\([^)]+\)/.exec(img) || [''])[0]); if (g) bg = g; set(el, 'background-image', 'none'); if (bg) set(el, 'background-color', css(bg)); }
+        var h = el.getBoundingClientRect().height, cell = tag === 'TD' || tag === 'TH' || tag === 'TR', head = tag === 'TH' || !!el.closest('thead');
+        if (bg && bg.a > 0.05) {
+          var bl = lum(bg), bc = chroma(bg);
+          if (h > 0 && h <= 8 && (bc > 40 || bl < 0.5)) { /* 얇은 공종색 선 — 그대로 */ }
+          else if (keep) { if (bc > 40 && bl < 0.75) { var a = dark(bg); accent.set(keep, a); set(el, 'background-color', css(mix(bg, 0.88))); line(el, 'inset 0 0 0 1.5px ' + css(a)); set(el, 'color', css(a)); } }
+          else if (bl < 0.6) {
+            if (head) set(el, 'background-color', '#ececec');
+            else if (cell) { set(el, 'background-color', 'transparent'); line(el, 'inset 0 1.5px 0 #111, inset 0 -1.5px 0 #111'); set(el, 'font-weight', '800'); }
+            else if (h < 64) { set(el, 'background-color', 'transparent'); line(el, 'inset 3px 0 0 ' + (bc > 40 ? css(bg) : '#111') + ', inset 0 -1px 0 #999'); }
+            else { set(el, 'background-color', 'transparent'); line(el, 'inset 0 0 0 1.5px #555'); }
+          }
+          else if (bc > 8) {
+            if (cell || head) set(el, 'background-color', '#f3f3f3');
+            else { set(el, 'background-color', 'transparent'); if (parseFloat(cs.borderTopWidth) === 0 && h > 20) line(el, 'inset 0 0 0 1px #bbb'); }
+          }
+          set(el, '-webkit-print-color-adjust', 'exact'); set(el, 'print-color-adjust', 'exact');
+        }
+        ['Top', 'Right', 'Bottom', 'Left'].forEach(function (s) {
+          if (keep || parseFloat(cs['border' + s + 'Width']) <= 0) return; var c = rgb(cs['border' + s + 'Color']);
+          if (c && c.a > 0 && chroma(c) > 40) set(el, 'border-' + s.toLowerCase() + '-color', lum(c) < 0.6 ? '#555' : '#aaa');
+        });
+        var c = rgb(cs.color);
+        if (c) {
+          if (keep) { if (lum(c) > 0.8) set(el, 'color', css(accent.get(keep) || { r: 17, g: 17, b: 17 })); }
+          else if (chroma(c) > 40) set(el, 'color', lum(c) < 0.6 ? '#111' : '#555');
+          else if (lum(c) > 0.8) set(el, 'color', '#111');
+        }
+        if (cs.textShadow !== 'none') set(el, 'text-shadow', 'none');
+        if (cs.boxShadow !== 'none' && !el.__mmL) set(el, 'box-shadow', 'none');
+        if (!keep && !el.children.length && EMOJI.test(el.textContent || '')) set(el, 'filter', 'grayscale(1)');
+      });
+    });
+  }
+  function undo() { for (var i = saved.length - 1; i >= 0; i--) { var e = saved[i][0], s = saved[i][1]; if (s === null) e.removeAttribute('style'); else e.setAttribute('style', s); e.__mmS = 0; e.__mmL = 0; } saved = []; accent = new Map(); keeps.forEach(function (k) { k.__mmK = 0; }); keeps = []; }
+  function arm() { addEventListener('beforeprint', function () { undo(); run(); }); addEventListener('afterprint', undo); }
+  if (document.readyState === 'complete') arm(); else addEventListener('load', arm);
+  window.__mmMonoRun = run; window.__mmMonoUndo = undo;
+})();
+</script>
 </body>
 </html>
