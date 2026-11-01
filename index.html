@@ -405,7 +405,7 @@ table tr:nth-child(even) td{background:#f8fafd;}
 #dev-stamp{display:none;}
 
 /* ══ FAB · 모달 (v5.0 §18-11 — 09 제연 기준본 규격 · 색만 기계 토큰) ══ */
-#fab-group{position:fixed;bottom:calc(80px + env(safe-area-inset-bottom,0px));right:18px;   /* 하단 계산바 위 (도구 특이) */z-index:1200;display:flex;flex-direction:column;align-items:flex-end;gap:8px;}
+#fab-group{position:fixed;bottom:calc(18px + env(safe-area-inset-bottom,0px));right:18px;   /* v5.1.7 — 하단 계산바 삭제(§25-6-31) → 다른 도구와 같은 높이 */z-index:1200;display:flex;flex-direction:column;align-items:flex-end;gap:8px;}
 .help-fab{
   position:relative;z-index:auto;
   background:linear-gradient(135deg,#042f2e 0%,#0f766e 55%,#1ea596 100%);
@@ -454,7 +454,7 @@ table tr:nth-child(even) td{background:#f8fafd;}
   .master-modal-hd{padding:14px 16px 0;}
   .master-modal-body{padding:16px 16px 36px;}
   .mm-mtab{padding:9px 13px;font-size:11px;}
-  #fab-group{bottom:calc(78px + env(safe-area-inset-bottom,0px));right:12px;}
+  #fab-group{bottom:calc(16px + env(safe-area-inset-bottom,0px));right:12px;}
   .help-fab{padding:10px 8px;}
 }
 /* 51 — 도움말 모달은 .open 토글(JS toggleHelp) · 패널 전이 유지 */
@@ -1001,7 +1001,7 @@ footer.mm-foot{position:relative;z-index:1;border-top:1px solid #e4e9f0;backgrou
     <span class="bar-lbl">📄 A4 출력 :</span>
     <button class="mm-btn mm-btn-print" onclick="printA4()">🖨️ 인쇄 / PDF 저장</button>
     <button class="mm-btn mm-btn-jpg" id="btn-jpg" onclick="exportA4Jpg()">🖼️ JPG 저장</button>
-    <span style="font-size:11px;color:#64748b;margin-left:4px;">※ 검토 실행 후 옹벽 형식을 선택하세요 · 인쇄 대화상자에서 "PDF로 저장" 가능</span>
+    <span style="font-size:11px;color:#64748b;margin-left:4px;">※ 옹벽 형식을 선택하세요 · 인쇄 대화상자에서 "PDF로 저장" 가능</span>
   </div>
   <div class="a4-wrap" id="a4Wrap">
     <div class="a4-scale-wrap" id="a4iso-scale-wrap">
@@ -1022,16 +1022,9 @@ footer.mm-foot{position:relative;z-index:1;border-top:1px solid #e4e9f0;backgrou
 
 </main><!-- /main-wrap -->
 
-<!-- ══════ BOTTOM ACTION BAR ══════ -->
-<div class="bottom-bar no-print">
-  <div class="bottom-bar-inner">
-    <button class="btn-secondary" onclick="resetCurrent()">🔄 <span class="btn-stxt">초기화</span></button>
-    <button class="btn-calc" id="btn-calc" onclick="calcCurrent()">🔍 안전성 검토 실행</button>
-    <button class="btn-secondary" onclick="switchTab('a4preview')">📄 <span class="btn-stxt">A4 보고서</span></button>
-  </div>
-</div>
+<!-- v5.1.7 : 하단 계산바(초기화 · 안전성 검토 실행 · A4 보고서) 삭제 — 입력하면 자동 검토(#mm-autocalc) · A4 보고서는 위 탭 · 전체 초기화는 우측 하단 FAB(§25-6-31) -->
 
-<!-- ══ FAB 버튼 그룹 (v5.0 §18-11 — 초기화 위 · 도움말 아래 · 하단 계산바 위) ══ -->
+<!-- ══ FAB 버튼 그룹 (v5.0 §18-11 — 초기화 위 · 도움말 아래) ══ -->
 <div id="fab-group" class="no-print">
   <button class="help-fab" id="fabReset" onclick="resetAll()" title="전체 초기화">
     <span class="fab-icon">🔄</span>
@@ -1079,13 +1072,13 @@ footer.mm-foot{position:relative;z-index:1;border-top:1px solid #e4e9f0;backgrou
           <div class="help-step"><div class="help-num">4</div><div class="help-txt"><b>토압 조건 입력</b>: 뒷채움 단위중량, 내부마찰각(φ), 점착력(c), 상재하중을 입력합니다.</div></div>
         </div>
         <div class="help-item">
-          <div class="help-step"><div class="help-num">5</div><div class="help-txt"><b>안전성 검토 실행</b>: 하단 <b>안전성 검토 실행</b> 버튼을 클릭하면 활동 · 전도 · 지지력 · 근입깊이(앵커식은 앵커력 · 길이)를 자동 검토합니다.</div></div>
+          <div class="help-step"><div class="help-num">5</div><div class="help-txt"><b>안전성 검토</b>: 조건을 입력하면 곧바로 활동 · 전도 · 지지력 · 근입깊이(앵커식은 앵커력 · 길이)를 자동 검토합니다.</div></div>
         </div>
         <div class="help-item">
           <div class="help-step"><div class="help-num">6</div><div class="help-txt"><b>📄 A4 보고서</b>: A4 보고서 탭에서 옹벽 형식을 선택해 ISO A4 검토보고서를 확인하고 <b>인쇄 / PDF 저장 · JPG 저장</b>합니다. JPG 는 A4 용지 비율로 쪽 단위 분할되어 미리보기 시트에서 저장합니다.</div></div>
         </div>
         <div class="help-item">
-          <div class="help-step"><div class="help-num">7</div><div class="help-txt"><b>🔄 초기화</b>: 하단 초기화는 현재 탭만, 우측 하단 초기화 버튼은 세 형식 전체를 초기화합니다.</div></div>
+          <div class="help-step"><div class="help-num">7</div><div class="help-txt"><b>🔄 초기화</b>: 우측 하단 초기화 버튼은 세 형식 전체를 기본값으로 되돌립니다.</div></div>
         </div>
       </div>
       <!-- 관련 법규 -->
@@ -1333,6 +1326,7 @@ function switchTab(name){
 }
 function updateCalcBtn(){
   var btn = document.getElementById('btn-calc');
+  if(!btn) return;   /* v5.1.7 — 하단 계산바 삭제(§25-6-31) */
   if(currentTab === 'a4preview'){
     btn.textContent = '← 검토 탭으로 이동';
     btn.onclick = function(){ switchTab('gravity'); };
@@ -1947,7 +1941,7 @@ function resetGravity(){
   document.getElementById('g-beta').value='0';
   document.getElementById('g-Df').value='0.5';
   G.result=null;
-  document.getElementById('g-result-panel').innerHTML='<div class="nb blue"><div class="nb-tit">💡 사용 방법</div><div class="nb-txt">좌측 조건을 입력하고 안전성 검토 버튼을 눌러주세요.</div></div>'
+  document.getElementById('g-result-panel').innerHTML='<div class="nb blue"><div class="nb-tit">💡 사용 방법</div><div class="nb-txt">좌측 조건을 입력하면 자동으로 검토됩니다주세요.</div></div>'
     + '<div class="card"><div class="card-head"><div class="card-ico blue">📐</div><span class="card-tit">단면 다이어그램</span></div>'
     + '<div class="card-body" style="padding:10px;"><svg id="g-diagram" viewBox="0 0 320 240" width="100%" style="max-width:320px;display:block;margin:0 auto;border:1px solid #e2e8f0;border-radius:8px;background:#f8fafd;"></svg></div></div>';
   gUpdateSteps(); drawGravityDiagram();
@@ -1964,7 +1958,7 @@ function resetCantilever(){
   });
   C_RES.result=null;
   document.getElementById('c-result-panel').innerHTML=
-    '<div class="nb teal"><div class="nb-tit">💡 캔틸레버식 옹벽</div><div class="nb-txt">조건을 입력하고 검토를 실행해주세요.</div></div>'
+    '<div class="nb teal"><div class="nb-tit">💡 캔틸레버식 옹벽</div><div class="nb-txt">조건을 입력하면 자동으로 검토됩니다.</div></div>'
     +'<div class="card"><div class="card-head"><div class="card-ico teal">📐</div><span class="card-tit">단면 다이어그램 (역T형)</span></div>'
     +'<div class="card-body" style="padding:10px;"><svg id="c-diagram" viewBox="0 0 320 260" width="100%" style="max-width:320px;display:block;margin:0 auto;border:1px solid #e2e8f0;border-radius:8px;background:#f8fafd;"></svg></div></div>';
   drawCantileverDiagram();
@@ -1982,7 +1976,7 @@ function resetAnchored(){
   });
   AN_RES.result=null;
   document.getElementById('an-result-panel').innerHTML=
-    '<div class="nb amber"><div class="nb-tit">💡 앵커식 옹벽</div><div class="nb-txt">조건을 입력하고 검토를 실행해주세요.</div></div>'
+    '<div class="nb amber"><div class="nb-tit">💡 앵커식 옹벽</div><div class="nb-txt">조건을 입력하면 자동으로 검토됩니다.</div></div>'
     +'<div class="card"><div class="card-head"><div class="card-ico amber">📐</div><span class="card-tit">단면 다이어그램 (앵커식)</span></div>'
     +'<div class="card-body" style="padding:10px;"><svg id="an-diagram" viewBox="0 0 320 260" width="100%" style="max-width:320px;display:block;margin:0 auto;border:1px solid #e2e8f0;border-radius:8px;background:#f8fafd;"></svg></div></div>';
   drawAnchoredDiagram();
@@ -2731,6 +2725,46 @@ window.exportA4Jpg = function(){
     stamp = document.title = [n, proj(), ymd()].filter(Boolean).map(function (s) { return s.replace(/[\\\/:*?"<>|]/g, '').replace(/\s+/g, ''); }).join('_');
   });
   addEventListener('afterprint', function () { if (old !== null && document.title === stamp) document.title = old; old = stamp = null; });
+})();
+</script>
+<script id="mm-autocalc">/* v5.1.7 (2026-11-01) — 자동 계산(작업지시서 §25-6-31)
+   하단 계산바(「초기화」 · 「안전성 검토 실행」 · 「A4 보고서」)를 없앴다. A4 보고서는 위 탭에, 초기화는 우측 하단 FAB 에 그대로 있다.
+   대신 중력식 · 캔틸레버식 · 앵커식 탭의 입력이 바뀌면 0.35초 뒤 그 형식을 다시 검토한다.
+   처음 열 때와 「전체 초기화」 뒤에도 세 형식을 기본값으로 검토해 A4 보고서가 늘 채워져 있다(처음 선택은 중력식).
+   자동 검토 중에는 「검토 완료」 알림을 띄우지 않는다. 계산 · 출력 함수는 그대로 쓴다. */
+(function(){
+  var T={}, ONE={
+    gravity:function(){renderGravityResult(calcGravity());},
+    cantilever:function(){renderCantileverResult(calcCantilever());},
+    anchored:function(){renderAnchoredResult(calcAnchored());}
+  };
+  function quiet(fn){
+    var t=window.showToast, last='';
+    window.showToast=function(m){last=String(m||'');};
+    try{fn();}catch(e){console.error(e);}finally{window.showToast=t;}
+    if(last&&last.indexOf('완료')<0&&last.indexOf('검토할 옹벽')<0&&typeof t==='function')t(last);
+  }
+  function run(k,ms){clearTimeout(T[k]);T[k]=setTimeout(function(){quiet(ONE[k]);},ms==null?350:ms);}
+  function which(el){
+    if(!el||!el.closest)return null;
+    if(el.closest('[id$="-result-panel"]'))return null;
+    var p=el.closest('#panel-gravity,#panel-cantilever,#panel-anchored');
+    return p?p.id.slice(6):null;
+  }
+  function on(e){var k=which(e.target);if(k)run(k);}
+  document.addEventListener('input',on,true);
+  document.addEventListener('change',on,true);
+  document.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('button,[onclick]'))on(e);},true);
+  /* 세 형식을 모두 검토하되 보고서 · 요약 선택은 지금 보는 형식(없으면 중력식)이 되도록 그것을 맨 나중에 */
+  function all(){
+    var c=(typeof currentTab!=='undefined'&&ONE[currentTab])?currentTab:'gravity';
+    ['gravity','cantilever','anchored'].filter(function(k){return k!==c;}).concat([c]).forEach(function(k){quiet(ONE[k]);});
+    if(typeof refreshPreviewSelBadges==='function')refreshPreviewSelBadges();
+  }
+  var ra=window.resetAll;
+  if(typeof ra==='function')window.resetAll=function(){var r=ra.apply(this,arguments);all();return r;};
+  function go(){all();}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(go,0);});else setTimeout(go,0);
 })();
 </script>
 <script id="mm-foot-stick">/* v5.1.6 (2026-11-01) — 하단 버전 카드 바닥 고정(작업지시서 §25-6-30) */

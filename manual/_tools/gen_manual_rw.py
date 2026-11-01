@@ -84,7 +84,7 @@ S_.append(f"""<section class="ch" id="ch2"><h2><span class="n">02</span>1분 따
 <li><b class="t">② 단면</b>H = 4.0 m · 저면폭 B = 2.8 m · 상단폭 a = 0.5 m → 배면 경사 θ = {GA['theta']:.1f}° 자동 표시 · 콘크리트 γc = 23 kN/m³.</li>
 <li><b class="t">③ 토압</b>뒤채움 γs = 18 kN/m³ · φ = 30° · β = 0° · 상재하중 10 kN/m²(KDS 11 80 05 1.7.4(2)).</li>
 <li><b class="t">④ 기초</b>μ = 0.5 · 허용지지력 qa = 200 kPa(qu/3) · 근입깊이 Df = 1.0 m.</li>
-<li><b class="t">⑤ 검토</b>「안전성 검토 실행」 → 활동 {f3(GA['Fs_s'])}(≥ 1.5) · 전도 {f3(GA['Fs_o'])}(≥ 2.0) · qmax {GA['qmax']:.1f} kPa(≤ 200) · Df 1.0 m → <b>적합</b>.</li>
+<li><b class="t">⑤ 검토</b>입력하면 자동 검토 → 활동 {f3(GA['Fs_s'])}(≥ 1.5) · 전도 {f3(GA['Fs_o'])}(≥ 2.0) · qmax {GA['qmax']:.1f} kPa(≤ 200) · Df 1.0 m → <b>적합</b>.</li>
 <li><b class="t">⑥ A4 보고서</b>「📄 A4 보고서」 탭 → 「인쇄 / PDF 저장」 또는 「JPG 저장」.</li>
 </ol>
 </section>""")
