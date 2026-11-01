@@ -2733,5 +2733,49 @@ window.exportA4Jpg = function(){
   addEventListener('afterprint', function () { if (old !== null && document.title === stamp) document.title = old; old = stamp = null; });
 })();
 </script>
+<script id="mm-foot-stick">/* v5.1.6 (2026-11-01) — 하단 버전 카드 바닥 고정(작업지시서 §25-6-30) */
+/* MANMIN 하단 버전 카드 바닥 고정 v1 (2026-11-01, 작업지시서 §25-6-30)
+   내용이 짧은 탭(기준표 · 법조문 · 결과 전 등)이나 세로로 긴 화면에서 하단 버전 카드(footer)가 내용 바로 뒤 — 화면 중간 — 에 떠 있던 것을
+   화면 맨 아래로 내린다. 내용이 화면보다 길면 아무것도 바꾸지 않는다(원래대로 내용 끝에 붙음).
+   방법: footer 위 여백(margin-top)에 「화면 높이 − 문서 끝」 만큼만 더한다. 도구마다 body 배치(flex · grid · block)가 달라 CSS 만으로는 일률 적용이 안 됨.
+   다시 맞추는 때: 처음 · 글꼴 로드 · 창 크기 · 화면 회전 · 탭 전환 등 내용 크기 변화(ResizeObserver) · 클릭 직후. 인쇄 중에는 원래 여백. */
+(function () {
+  if (window.__mmFootStick) return; window.__mmFootStick = 1;
+  var f = null, ex = 0, base = 0, raf = 0, printing = false;
+  function foot() { var a = document.querySelectorAll('footer'); return a.length ? a[a.length - 1] : null; }
+  function trail(el) {   /* footer 아래 조상들의 아래 안쪽 여백 · 테두리 */
+    var t = 0;
+    for (var x = el.parentElement; x && x !== document.documentElement; x = x.parentElement) {
+      var cs = getComputedStyle(x); t += (parseFloat(cs.paddingBottom) || 0) + (parseFloat(cs.borderBottomWidth) || 0) + (parseFloat(cs.marginBottom) || 0);
+    }
+    return t + (parseFloat(getComputedStyle(el).marginBottom) || 0);
+  }
+  function fit() {
+    raf = 0; if (printing) return;
+    f = f && f.isConnected ? f : foot(); if (!f) return;
+    if (ex) { f.style.marginTop = ''; ex = 0; }
+    if (getComputedStyle(f).display === 'none') return;
+    base = parseFloat(getComputedStyle(f).marginTop) || 0;
+    var vh = document.documentElement.clientHeight || window.innerHeight;
+    var end = f.getBoundingClientRect().bottom + (window.pageYOffset || 0) + trail(f);
+    var need = Math.floor(vh - end);
+    if (need > 0) { ex = need; f.style.marginTop = (base + need) + 'px'; }
+  }
+  function req() { if (!raf) raf = requestAnimationFrame(fit); }
+  function start() {
+    fit();
+    if (window.ResizeObserver) {
+      var ro = new ResizeObserver(req); ro.observe(document.body);
+      for (var c = document.body.firstElementChild; c; c = c.nextElementSibling) if (c.tagName !== 'SCRIPT' && c.tagName !== 'STYLE') ro.observe(c);
+    }
+    window.addEventListener('resize', req); window.addEventListener('orientationchange', req); window.addEventListener('load', req);
+    document.addEventListener('click', function () { setTimeout(req, 60); setTimeout(req, 400); }, true);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(req);
+    window.addEventListener('beforeprint', function () { printing = true; if (f && ex) { f.style.marginTop = ''; ex = 0; } });
+    window.addEventListener('afterprint', function () { printing = false; req(); });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
+})();
+</script>
 </body>
 </html>
