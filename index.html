@@ -2563,13 +2563,6 @@ window.exportA4Jpg = function(){
 })();
 </script>
 
-<script>/* R26 (2026-09-04 · 지시서 §20-15 ③ · S10 소급) — 인쇄 중 문서 제목을 비워 PDF 머리글의 페이지 제목을 지운다. 쪽번호·URL 은 브라우저 옵션 */
-(function(){var t=null;window.addEventListener('beforeprint',function(){if(t===null){t=document.title;}document.title=' ';});window.addEventListener('afterprint',function(){if(t!==null){document.title=t;t=null;}});})();</script>
-<script id="mm-r27">/* R27 (2026-09-04 · S10) — ① html2canvas 는 문서를 복제할 때 브라우저 확장 프로그램이 shadow DOM 에 심은 style 시트(Tailwind .c{transform:rotate(30deg)} · antd 등)까지 본문으로 펼친다.
-   화면에서는 격리돼 보이지 않던 규칙이 클론에서 td.c / .r / .k 같은 짧은 클래스에 맞아 JPG 셀이 기울고 행이 부푼다(38 실측 2026-09-04 · 확장 31시트 누출).
-   처방: 캡처 직전 우리 문서의 light-DOM style/link 에 data-mm-own 을 찍고, 클론에서 표식 없는 style/link 를 제거한다.
-   ② 라이브러리가 없으면(구 SW opaque 캐시 · CDN 차단) exportA4Jpg 가 ReferenceError 로 조용히 멈춘다(40 미리보기 미표시) → 지연 로더가 CDN 에서 받아 이어서 실행한다. 계산·출력 함수 무접촉(전역 html2canvas 래핑). */
-(function(){var CDN='https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';var raw=window.html2canvas;var cur;function wrap(h){if(!h||h.__mm)return h;function p(el,opt){document.querySelectorAll('style,link[rel=stylesheet]').forEach(function(n){n.setAttribute('data-mm-own','1');});opt=Object.assign({},opt||{});var prev=opt.onclone;opt.onclone=function(doc,x){doc.querySelectorAll('style,link[rel=stylesheet]').forEach(function(n){if(!n.hasAttribute('data-mm-own')&&(n.textContent||'').indexOf('___html2canvas___')<0)n.remove();});return prev?prev(doc,x):undefined;};return h(el,opt);}p.__mm=1;try{Object.keys(h).forEach(function(k){p[k]=h[k];});}catch(e){}return p;}function lazy(el,opt){return new Promise(function(res,rej){var s=document.createElement('script');s.src=CDN;s.onload=function(){if(cur&&cur!==lazy)res(cur(el,opt));else rej(new Error('html2canvas 초기화 실패'));};s.onerror=function(){rej(new Error('html2canvas 로드 실패 — 네트워크·차단 확인'));};document.head.appendChild(s);});}cur=raw?wrap(raw):lazy;try{Object.defineProperty(window,'html2canvas',{configurable:true,get:function(){return cur;},set:function(v){cur=wrap(v);}});}catch(e){window.html2canvas=cur;}})();</script>
 <!-- ══ FOOTER (하단 버전 표시) ══ -->
 <footer class="mm-foot no-print">
   <div class="foot-inner">
@@ -2673,60 +2666,6 @@ window.exportA4Jpg = function(){
   window.__mmMonoRun = run; window.__mmMonoUndo = undo;
 })();
 </script>
-<script id="mm-print-meta" data-name="옹벽안전성검토보고서" data-pageno="1">/* v5.1.5 (2026-10-31) — 쪽 번호 · PDF 저장 이름(작업지시서 §25-6-26) */
-/* MANMIN 인쇄 정보 v1 (2026-10-31, 작업지시서 §25-6-26) — ① 쪽 번호 「n / N」(A4 아래 여백 가운데, data-pageno="1" 일 때)
-   ② PDF 저장 이름 = 계산서명_공사명_YYYYMMDD — 크롬이 문서 제목을 파일 이름으로 쓰므로 인쇄 직전(beforeprint)에만 제목을 바꾸고 끝나면(afterprint) 되돌림.
-   이름 붙이기는 「제목 비우기(§20-15 ③ R26)」보다 뒤에 돌아 그것을 대신함(MIN 승인 R2, 2026-10-31).
-   설정은 script 태그 속성: data-name = 계산서명 · data-alt = "선택자=이름;…"(그 선택자가 있으면 다른 이름) · data-proj = 공사명 입력칸 선택자(없으면 자동 찾기). */
-(function () {
-  var me = document.currentScript; if (!me || window.__mmMeta) return; window.__mmMeta = 1;
-  var NAME = me.getAttribute('data-name') || '', ALT = me.getAttribute('data-alt') || '', PROJ = me.getAttribute('data-proj') || '';
-  if (me.getAttribute('data-pageno') === '1') {
-    var st = document.createElement('style'); st.id = 'mm-pageno';
-    st.textContent = '@page{@bottom-center{content:counter(page) " / " counter(pages);font-family:"Pretendard Variable",Pretendard,"Malgun Gothic",sans-serif;font-size:8pt;color:#555;vertical-align:top;padding-top:5mm}}';
-    document.head.appendChild(st);
-  }
-  var KEY = /공사\s*\(?현장\)?\s*명|공사명|현장명|용역명|프로젝트명|사업명|건물명|건축물명/;
-  function label(e) {
-    var t = (e.placeholder || '') + ' ' + (e.getAttribute('aria-label') || '') + ' ' + (e.labels && e.labels[0] ? e.labels[0].innerText : '');
-    var p = e.parentElement;
-    for (var k = 0; k < 3 && p; k++, p = p.parentElement) {
-      var x = Array.prototype.filter.call(p.childNodes, function (n) { return n !== e && (n.nodeType === 3 || !n.querySelector || !n.querySelector('input,select,textarea')); })
-        .map(function (n) { return n.textContent; }).join(' ').trim();
-      if (x) { t += ' ' + x.slice(0, 40); break; }
-    }
-    return t;
-  }
-  function proj() {
-    var list = PROJ ? document.querySelectorAll(PROJ) : Array.prototype.filter.call(document.querySelectorAll('input[type=text],input:not([type])'), function (e) { return KEY.test(label(e)); });
-    var vis = null, any = null;
-    Array.prototype.forEach.call(list, function (e) { var v = (e.value || '').trim(); if (!v) return; if (!any) any = v; if (!vis && e.getClientRects().length) vis = v; });
-    return vis || any || fromText();
-  }
-  /* 입력 탭이 인쇄 때 화면에서 빠지는 도구(소방 펌프 등) — 계산서 본문의 「공사명 : 값」 또는 「공사명」 칸 다음 칸에서 읽음 */
-  var LBL = /^(공사\s*\(?현장\)?\s*명|공\s*사\s*명|현장명|용역명|프로젝트명|사업명)\s*[:：]?\s*/;
-  function fromText() {
-    var els = document.querySelectorAll('td,th,dt,dd,div,span,b,strong,p,li,label'), v = '';
-    for (var i = 0; i < els.length && !v; i++) {
-      var e = els[i], t = (e.textContent || '').replace(/\s+/g, ' ').trim(); if (!t || t.length > 70 || !LBL.test(t) || e.children.length > 3) continue;
-      var rest = t.replace(LBL, '').split(/\s*(설계자|작성자|작성일|발주처|대지위치|위치|날짜|일자|용도)\s*[:：]/)[0].trim();
-      if (!rest && e.nextElementSibling) rest = (e.nextElementSibling.textContent || '').replace(/\s+/g, ' ').trim();
-      if (rest && rest.length <= 60 && !/^(\(미입력\)|미입력|[-—–·]+)$/.test(rest) && !/^[·\/|(]/.test(rest) && !/작성자|설계자|입력|카드|선택|예\)|예:/.test(rest)) v = rest;
-    }
-    return v;
-  }
-  function ymd() { var d = new Date(), z = function (n) { return (n < 10 ? '0' : '') + n; }; return d.getFullYear() + z(d.getMonth() + 1) + z(d.getDate()); }
-  var old = null, stamp = null; /* 도구의 기존 제목 비우기(§20-15 ③ R26)가 먼저 돌고 되돌리므로, 끝날 때는 제목이 아직 이 모듈이 붙인 이름일 때만 되돌림 */
-  addEventListener('beforeprint', function () {
-    var n = NAME;
-    ALT.split(';').forEach(function (kv) { var i = kv.lastIndexOf('='); if (i > 0) { try { if (document.querySelector(kv.slice(0, i))) n = kv.slice(i + 1); } catch (e) {} } });
-    if (!n) return;
-    if (old === null) old = document.title;
-    stamp = document.title = [n, proj(), ymd()].filter(Boolean).map(function (s) { return s.replace(/[\\\/:*?"<>|]/g, '').replace(/\s+/g, ''); }).join('_');
-  });
-  addEventListener('afterprint', function () { if (old !== null && document.title === stamp) document.title = old; old = stamp = null; });
-})();
-</script>
 <script id="mm-autocalc">/* v5.1.7 (2026-11-01) — 자동 계산(작업지시서 §25-6-31)
    하단 계산바(「초기화」 · 「안전성 검토 실행」 · 「A4 보고서」)를 없앴다. A4 보고서는 위 탭에, 초기화는 우측 하단 FAB 에 그대로 있다.
    대신 중력식 · 캔틸레버식 · 앵커식 탭의 입력이 바뀌면 0.35초 뒤 그 형식을 다시 검토한다.
@@ -2811,18 +2750,88 @@ window.exportA4Jpg = function(){
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
 })();
 </script>
-<script id="mm-print-crisp">/* v5.1.8 (2026-11-02) — 인쇄 선명화: 맑은 고딕 · 연한 글자 · 연하고 가는 선(작업지시서 §25-6-36) */
-/* MANMIN A4 인쇄 선명화 v1 (2026-11-03, 작업지시서 §25-6-36) — 인쇄할 때만(beforeprint) 글꼴 · 연한 글자 · 연하고 가는 선을 또렷하게, 끝나면(afterprint) 화면 그대로.
-   ① 글꼴: 웹글꼴 이름만 PC 글꼴로 바꿔 끼움 — Pretendard · Noto Sans KR → 맑은 고딕, JetBrains Mono · DM Mono 등 → Consolas.
-      웹글꼴은 크롬 PDF 에 Type3(힌팅 없음)로 들어가 흐림 → TrueType 으로. 도구가 정한 굵기 · 고정폭 · 글꼴 배치는 그대로이고,
-      줄 높이도 원래 글꼴 값(Pretendard 위 0.952 · 아래 0.241 em)을 입혀 쪽 나눔이 바뀌지 않음.
-   ② 밝은 바탕 위 연회색 글자(밝기 > 0.52) → #4B5563, 연한 색 글자(밝기 > 0.60) → 같은 색상으로 진하게(진한 바탕 위 흰 글씨는 그대로).
-   ③ 선: 0.5pt 미만 → 0.5pt, 너무 연한 선(밝기 > 0.85) → 같은 색상으로 진하게. 바탕색 · 카드 · 배지 · 쪽 나눔은 건드리지 않음.
-   beforeprint 에서 단색 모듈(mm-mono-print) 다음에 실행되고, afterprint 에서 단색 모듈보다 먼저 되돌림. window.MM_CRISP_OFF = true 면 끔. */
+<!-- MM-PRINT:BEGIN v1.0 -->
+<style id="mm-print-css">
+/* MANMIN 공통 인쇄 원본 manmin-print.css v1.0 (2026-11-08, 작업지시서 §25-6-42) — 인쇄 때만 적용. 도구 색 · 카드 · 배지는 건드리지 않음.
+   이 블록은 </body> 바로 앞에 들어가 같은 선택자 · 같은 우선순위면 도구 규칙보다 뒤에 와서 이김 → 모든 도구에 맞는 것만 넣음. 행 높이 등 도구 고유 규칙은 도구에 남김. */
+@media print{
+  @page{size:A4 portrait;margin:14mm 12mm 22mm 14mm}
+  html,body{background:#fff!important}            /* 여백 바탕 흰색(위생 v5.0.18 공통화) */
+  .mm-deco{display:none!important}                 /* 장식 아이콘 숨김(펌프 v5.0.10 공통화) */
+  thead{display:table-header-group}                /* 쪽마다 머리행 반복 */
+  tfoot{display:table-footer-group}
+  tr{break-inside:avoid;page-break-inside:avoid}   /* 행이 쪽 중간에서 갈리지 않게 */
+}
+</style>
+<script id="mm-print-js" data-name="옹벽안전성검토보고서" data-pageno="1">
+/* MANMIN 공통 인쇄 원본 manmin-print.js v1.0 (2026-11-08, 작업지시서 §25-6-42)
+   정본: Z:\MIN-A\01.만민자료\02.설계자료\11.개발자료\64.개발자료[인쇄공통]\버전s-1.0\manmin-print-v1.0\
+   도구에는 inject.py 가 MM-PRINT:BEGIN · MM-PRINT:END 표식 사이에 그대로 끼워 넣음(외부 링크 없음 · 오프라인 동작). 도구에서 직접 고치지 말 것.
+   묶음: ① R27 html2canvas 보호 ② 인쇄 정보(쪽 번호 · PDF 이름 · 이름 없으면 제목 비우기 = R26) ③ 인쇄 선명화(맑은 고딕 · 연한 글자 · 0.5pt 선 · 고정폭 600→400)
+   도구별 설정은 script 태그 속성: data-name · data-alt · data-proj · data-pageno("1" 이면 쪽 번호). */
+
+/* ① R27 */
+/* R27 (2026-09-04 · S10) — ① html2canvas 는 문서를 복제할 때 브라우저 확장 프로그램이 shadow DOM 에 심은 style 시트(Tailwind .c{transform:rotate(30deg)} · antd 등)까지 본문으로 펼친다.
+   화면에서는 격리돼 보이지 않던 규칙이 클론에서 td.c / .r / .k 같은 짧은 클래스에 맞아 JPG 셀이 기울고 행이 부푼다(38 실측 2026-09-04 · 확장 31시트 누출).
+   처방: 캡처 직전 우리 문서의 light-DOM style/link 에 data-mm-own 을 찍고, 클론에서 표식 없는 style/link 를 제거한다.
+   ② 라이브러리가 없으면(구 SW opaque 캐시 · CDN 차단) exportA4Jpg 가 ReferenceError 로 조용히 멈춘다(40 미리보기 미표시) → 지연 로더가 CDN 에서 받아 이어서 실행한다. 계산·출력 함수 무접촉(전역 html2canvas 래핑). */
+(function(){var CDN='https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';var raw=window.html2canvas;var cur;function wrap(h){if(!h||h.__mm)return h;function p(el,opt){document.querySelectorAll('style,link[rel=stylesheet]').forEach(function(n){n.setAttribute('data-mm-own','1');});opt=Object.assign({},opt||{});var prev=opt.onclone;opt.onclone=function(doc,x){doc.querySelectorAll('style,link[rel=stylesheet]').forEach(function(n){if(!n.hasAttribute('data-mm-own')&&(n.textContent||'').indexOf('___html2canvas___')<0)n.remove();});return prev?prev(doc,x):undefined;};return h(el,opt);}p.__mm=1;try{Object.keys(h).forEach(function(k){p[k]=h[k];});}catch(e){}return p;}function lazy(el,opt){return new Promise(function(res,rej){var s=document.createElement('script');s.src=CDN;s.onload=function(){if(cur&&cur!==lazy)res(cur(el,opt));else rej(new Error('html2canvas 초기화 실패'));};s.onerror=function(){rej(new Error('html2canvas 로드 실패 — 네트워크·차단 확인'));};document.head.appendChild(s);});}cur=raw?wrap(raw):lazy;try{Object.defineProperty(window,'html2canvas',{configurable:true,get:function(){return cur;},set:function(v){cur=wrap(v);}});}catch(e){window.html2canvas=cur;}})();
+
+/* ② 인쇄 정보 v1 + R26 */
+(function () {
+  var me = document.currentScript; if (!me || window.__mmMeta) return; window.__mmMeta = 1;
+  var NAME = me.getAttribute('data-name') || '', ALT = me.getAttribute('data-alt') || '', PROJ = me.getAttribute('data-proj') || '';
+  if (me.getAttribute('data-pageno') === '1') {
+    var st = document.createElement('style'); st.id = 'mm-pageno';
+    st.textContent = '@page{@bottom-center{content:counter(page) " / " counter(pages);font-family:"Pretendard Variable",Pretendard,"Malgun Gothic",sans-serif;font-size:8pt;color:#555;vertical-align:top;padding-top:5mm}}';
+    document.head.appendChild(st);
+  }
+  var KEY = /공사\s*\(?현장\)?\s*명|공사명|현장명|용역명|프로젝트명|사업명|건물명|건축물명/;
+  function label(e) {
+    var t = (e.placeholder || '') + ' ' + (e.getAttribute('aria-label') || '') + ' ' + (e.labels && e.labels[0] ? e.labels[0].innerText : '');
+    var p = e.parentElement;
+    for (var k = 0; k < 3 && p; k++, p = p.parentElement) {
+      var x = Array.prototype.filter.call(p.childNodes, function (n) { return n !== e && (n.nodeType === 3 || !n.querySelector || !n.querySelector('input,select,textarea')); })
+        .map(function (n) { return n.textContent; }).join(' ').trim();
+      if (x) { t += ' ' + x.slice(0, 40); break; }
+    }
+    return t;
+  }
+  function proj() {
+    var list = PROJ ? document.querySelectorAll(PROJ) : Array.prototype.filter.call(document.querySelectorAll('input[type=text],input:not([type])'), function (e) { return KEY.test(label(e)); });
+    var vis = null, any = null;
+    Array.prototype.forEach.call(list, function (e) { var v = (e.value || '').trim(); if (!v) return; if (!any) any = v; if (!vis && e.getClientRects().length) vis = v; });
+    return vis || any || fromText();
+  }
+  /* 입력 탭이 인쇄 때 화면에서 빠지는 도구(소방 펌프 등) — 계산서 본문의 「공사명 : 값」 또는 「공사명」 칸 다음 칸에서 읽음 */
+  var LBL = /^(공사\s*\(?현장\)?\s*명|공\s*사\s*명|현장명|용역명|프로젝트명|사업명)\s*[:：]?\s*/;
+  function fromText() {
+    var els = document.querySelectorAll('td,th,dt,dd,div,span,b,strong,p,li,label'), v = '';
+    for (var i = 0; i < els.length && !v; i++) {
+      var e = els[i], t = (e.textContent || '').replace(/\s+/g, ' ').trim(); if (!t || t.length > 70 || !LBL.test(t) || e.children.length > 3) continue;
+      var rest = t.replace(LBL, '').split(/\s*(설계자|작성자|작성일|발주처|대지위치|위치|날짜|일자|용도)\s*[:：]/)[0].trim();
+      if (!rest && e.nextElementSibling) rest = (e.nextElementSibling.textContent || '').replace(/\s+/g, ' ').trim();
+      if (rest && rest.length <= 60 && !/^(\(미입력\)|미입력|[-—–·]+)$/.test(rest) && !/^[·\/|(]/.test(rest) && !/작성자|설계자|입력|카드|선택|예\)|예:/.test(rest)) v = rest;
+    }
+    return v;
+  }
+  function ymd() { var d = new Date(), z = function (n) { return (n < 10 ? '0' : '') + n; }; return d.getFullYear() + z(d.getMonth() + 1) + z(d.getDate()); }
+  var old = null, stamp = null; /* 이름이 없으면 제목 비우기(§20-15 ③ R26 통합). 끝날 때는 제목이 아직 이 모듈이 붙인 값일 때만 되돌림 */
+  addEventListener('beforeprint', function () {
+    var n = NAME;
+    ALT.split(';').forEach(function (kv) { var i = kv.lastIndexOf('='); if (i > 0) { try { if (document.querySelector(kv.slice(0, i))) n = kv.slice(i + 1); } catch (e) {} } });
+    if (old === null) old = document.title;
+    stamp = document.title = !n ? ' ' : [n, proj(), ymd()].filter(Boolean).map(function (s) { return s.replace(/[\\\/:*?"<>|]/g, '').replace(/\s+/g, ''); }).join('_');
+  });
+  addEventListener('afterprint', function () { if (old !== null && document.title === stamp) document.title = old; old = stamp = null; });
+})();
+
+/* ③ 인쇄 선명화 v1 */
 (function () {
   if (window.__mmCrisp) return; window.__mmCrisp = 1;
   var SANS = ['Pretendard Variable', 'Pretendard', 'Noto Sans KR', 'Noto Sans KR Local'],
       MONO = ['JetBrains Mono', 'DM Mono', 'Noto Sans Mono', 'Source Code Pro', 'D2Coding'];
+  var MONO_RE = /^["']?(JetBrains Mono|DM Mono|Noto Sans Mono|Source Code Pro|D2Coding|Consolas|monospace)["']?$/i;
   function face(fam, src, w, met) { return "@font-face{font-family:'" + fam + "';src:" + src + ";font-weight:" + w + ";" + met + "}"; }
   var css = '', MS = "ascent-override:95.2%;descent-override:24.1%;line-gap-override:0%", MM = "ascent-override:102%;descent-override:30%;line-gap-override:0%";
   /* 굵기마다 따로 정의 — 웹글꼴도 굵기별 @font-face 라서, 설명이 같으면 뒤에 정의된 쪽이 쓰임(500 이하 보통체 · 600 이상 굵은체) */
@@ -2854,6 +2863,7 @@ window.exportA4Jpg = function(){
     document.body.querySelectorAll('*').forEach(function (el) {
       var tag = el.tagName; if (tag === 'SCRIPT' || tag === 'STYLE' || el instanceof SVGElement) return;
       var cs = getComputedStyle(el); if (cs.display === 'none') return;
+      if (cs.fontWeight === '600' && MONO_RE.test(cs.fontFamily.split(',')[0])) set(el, 'font-weight', '400');   /* 고정폭 숫자 굵기 600 → 400(공통원본 v1.0) */
       var light = bgL(el) > 0.75, c = rgb(cs.color);
       if (c && c.a > 0.3 && light && el.firstChild) {
         var l = lum(c), s = sat(c);
@@ -2884,5 +2894,6 @@ window.exportA4Jpg = function(){
   window.__mmCrispRun = run; window.__mmCrispUndo = undo;
 })();
 </script>
+<!-- MM-PRINT:END -->
 </body>
 </html>
