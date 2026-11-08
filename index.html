@@ -2750,6 +2750,229 @@ window.exportA4Jpg = function(){
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
 })();
 </script>
+<!-- MM-PROJECT:BEGIN v1.2 -->
+<script id="mm-project-js" data-tool="토목옹벽" data-pos="bottom:188px;right:18px" data-map="{&quot;사업명&quot;:&quot;#g-projname,#c-projname,#an-projname&quot;,&quot;위치&quot;:&quot;-&quot;,&quot;발주처&quot;:&quot;-&quot;,&quot;작성자&quot;:&quot;#g-author,#c-author,#an-author&quot;,&quot;연면적&quot;:&quot;-&quot;,&quot;지상층&quot;:&quot;-&quot;,&quot;지하층&quot;:&quot;-&quot;,&quot;높이&quot;:&quot;-&quot;,&quot;구조&quot;:&quot;-&quot;}">
+/* MANMIN 공통 건물개요 원본 manmin-project.js v1.2 (2026-11-09, 작업지시서 §25-6-52 · v1.1 §25-6-51 · v1.0 §25-6-50)
+   정본: Z:\MIN-A\01.만민자료\02.설계자료\11.개발자료\65.개발자료[건물개요]\버전s-1.2\manmin-project-v1.2\
+   도구에는 inject.py 가 MM-PROJECT:BEGIN · MM-PROJECT:END 표식 사이에 그대로 끼워 넣음(외부 링크 없음 · 오프라인 · Z: 사본 단독 동작). 도구에서 직접 고치지 말 것.
+   하는 일: 같은 현장의 표지 정보 · 건물 수치를 localStorage「MANMIN_PROJECT_V1」에 담고 다른 도구에서 불러옴(같은 주소 manminkim-eng.github.io 아래 공유).
+     저장 = 지금 도구 값을 담음(이 도구에 없는 항목은 저장값 그대로) · 불러오기 = 채울 값을 목록으로 먼저 보여 주고 확인하면 채움(이미 입력된 칸은 직접 체크해야 덮어씀)
+     파일 내보내기 · 가져오기(.json) = PC · 태블릿 · Z: 사본(file://) 사이 옮기기. 단추와 창은 인쇄에 나오지 않음.
+   칸 찾기: 이름표 정규식(공통 인쇄 원본의 label() 방식) → 못 찾는 칸은 script 태그 data-map 으로 지정.
+     data-map='{"작성자":"#a4Author","높이":"-"}'  값: CSS 선택자 · "re:정규식"(이름표로 찾기) · "-"(이 도구에서 쓰지 않음)
+   React 입력칸은 native value setter + input · change 이벤트로 채움. 계산 함수는 건드리지 않음.
+   기타 설정: data-tool(저장한 도구 이름) · data-pos(단추 위치 CSS, 기본 "top:10px;right:12px" — 도구의 머리 글자 · 떠 있는 단추와 겹치지 않는 자리로 지정) */
+(function () {
+  var me = document.currentScript; if (!me || window.MMProject) return;
+  var KEYNAME = 'MANMIN_PROJECT_V1', VER = 'v1.2';
+  var KEYS = ['사업명', '위치', '발주처', '작성자', '연면적', '지상층', '지하층', '높이', '구조'];
+  var NUM = { 연면적: 1, 지상층: 1, 지하층: 1, 높이: 1 };
+  /* 이름표 정규식 — 사업명은 공통 인쇄 원본 KEY 와 같음 */
+  var RX = {
+    사업명: [/공사\s*\(?현장\)?\s*명|공사명|현장명|용역명|프로젝트명|사업명|건물명|건축물명/],
+    위치: [/대지\s*위치|건축\s*위치|공사\s*위치|현장\s*위치|건설\s*위치|소재지|현장\s*주소|대지\s*주소/],
+    발주처: [/발주처|발주자|발주기관|건축주/],
+    작성자: [/작성자/],
+    연면적: [/연면적/],
+    지상층: [/지상\s*층/],
+    지하층: [/지하\s*층/],
+    높이: [/(건물|건축물)?\s*높이/, /처마|층고|천장|반자|난간|담장|옹벽|파라펫|기준|판독/],
+    구조: [/구조\s*형식|구조\s*종류|주\s*구조|구조\s*방식/]
+  };
+  var MAP = {}; try { MAP = JSON.parse(me.getAttribute('data-map') || '{}'); } catch (e) { MAP = {}; }
+  var TOOL = me.getAttribute('data-tool') || (document.title || '').split(/[·|—-]/)[0].trim();
+  var POS = me.getAttribute('data-pos') || 'top:10px;right:12px';
+
+  function label(e) {   /* 공통 인쇄 원본 manmin-print.js ② label() 과 같은 방식 */
+    var t = (e.placeholder || '') + ' ' + (e.getAttribute('aria-label') || '') + ' ' + (e.labels && e.labels[0] ? e.labels[0].innerText : '');
+    var p = e.parentElement;
+    for (var k = 0; k < 3 && p; k++, p = p.parentElement) {
+      var x = Array.prototype.filter.call(p.childNodes, function (n) { return n !== e && (n.nodeType === 3 || !n.querySelector || !n.querySelector('input,select,textarea')); })
+        .map(function (n) { return n.textContent; }).join(' ').trim();
+      if (x) { t += ' ' + x.slice(0, 40); break; }
+    }
+    return t;
+  }
+  function mine(e) { return e.closest && e.closest('.mm-proj-ui'); }
+  function kindOk(k, e) {
+    var tg = e.tagName, ty = (e.type || 'text').toLowerCase();
+    if (tg === 'TEXTAREA') return !NUM[k];
+    if (tg === 'SELECT') return k === '구조';
+    if (tg !== 'INPUT') return false;
+    if (NUM[k]) return ty === 'number' || ty === 'text';
+    return ty === 'text' || ty === 'search';
+  }
+  function byRe(k, re, ex) {
+    return Array.prototype.filter.call(document.querySelectorAll('input,select,textarea'), function (e) {
+      if (mine(e) || !kindOk(k, e)) return false; var t = label(e); return re.test(t) && !(ex && ex.test(t));
+    });
+  }
+  function fields(k) {
+    var m = MAP[k];
+    if (m === '-') return [];
+    if (m && m.indexOf('re:') === 0) return byRe(k, new RegExp(m.slice(3)));
+    if (m) { try { return Array.prototype.slice.call(document.querySelectorAll(m)); } catch (e) { return []; } }
+    var others = KEYS.filter(function (x) { return x !== k && MAP[x] && MAP[x] !== '-' && MAP[x].indexOf('re:') !== 0; });
+    return byRe(k, RX[k][0], RX[k][1]).filter(function (e) {   /* 다른 항목에 data-map 으로 지정된 칸은 빼기 */
+      return !others.some(function (x) { try { return e.matches(MAP[x]); } catch (er) { return false; } });
+    });
+  }
+  function shown(e) { return !!e.getClientRects().length; }
+  function val(e) { if (e.tagName === 'SELECT') { var o = e.options[e.selectedIndex]; return o && e.value !== '' ? (o.text || '').trim() : ''; } return (e.value || '').trim(); }
+  function current(k) {   /* 보이는 칸 우선, 없으면 숨은 칸 */
+    var fs = fields(k), v = '';
+    fs.forEach(function (e) { var x = val(e); if (x && !v && shown(e)) v = x; });
+    if (!v) fs.forEach(function (e) { var x = val(e); if (x && !v) v = x; });
+    return v;
+  }
+  function setNative(e, v) {
+    var proto = e.tagName === 'SELECT' ? HTMLSelectElement.prototype : e.tagName === 'TEXTAREA' ? HTMLTextAreaElement.prototype : HTMLInputElement.prototype;
+    var d = Object.getOwnPropertyDescriptor(proto, 'value');
+    if (d && d.set) d.set.call(e, v); else e.value = v;
+    e.dispatchEvent(new Event('input', { bubbles: true }));
+    e.dispatchEvent(new Event('change', { bubbles: true }));
+  }
+  function optFor(sel, v) {   /* 선택칸은 글자가 같은 선택지가 있을 때만 */
+    var n = String(v).replace(/\s+/g, ''), hit = null;
+    Array.prototype.forEach.call(sel.options, function (o) { if (!hit && o.value !== '' && ((o.text || '').replace(/\s+/g, '') === n || o.value === v)) hit = o; });
+    return hit;
+  }
+  function canFill(e, v) { return e.tagName !== 'SELECT' || !!optFor(e, v); }
+  function fillOne(e, v) {
+    if (e.tagName === 'SELECT') { var o = optFor(e, v); if (!o) return false; setNative(e, o.value); return true; }
+    if (NUM_ok(e, v)) { setNative(e, String(v)); return true; } return false;
+  }
+  function NUM_ok(e, v) { return (e.type || '').toLowerCase() !== 'number' || /^-?\d+(\.\d+)?$/.test(String(v)); }
+
+  function read() { try { var s = localStorage.getItem(KEYNAME); return s ? JSON.parse(s) : null; } catch (e) { return null; } }
+  function write(o) { try { localStorage.setItem(KEYNAME, JSON.stringify(o)); return true; } catch (e) { return false; } }
+  function clean(o) {   /* 가져온 파일 · 저장값 점검: 정해진 항목만, 글자로 */
+    var r = {}; if (!o || typeof o !== 'object') return null;
+    KEYS.forEach(function (k) { if (o[k] != null && String(o[k]).trim() !== '') r[k] = String(o[k]).trim().slice(0, 200); });
+    r.updated = typeof o.updated === 'string' ? o.updated.slice(0, 40) : ''; r.from = typeof o.from === 'string' ? o.from.slice(0, 60) : '';
+    return r;
+  }
+  function now() { var d = new Date(), z = function (n) { return (n < 10 ? '0' : '') + n; }; return d.getFullYear() + '-' + z(d.getMonth() + 1) + '-' + z(d.getDate()) + ' ' + z(d.getHours()) + ':' + z(d.getMinutes()); }
+  function collect() { var o = {}; KEYS.forEach(function (k) { var v = current(k); if (v) o[k] = v; }); return o; }
+
+  /* ── 화면 ── */
+  /* 메뉴는 단추가 위쪽에 있으면 아래로, 아래쪽에 있으면 위로 연다 */
+  var MPOS = POS.replace(/(top|bottom)\s*:\s*(\d+)px/, function (x, d, n) { return d + ':' + (+n + 34) + 'px'; });
+  var theme = (document.querySelector('meta[name=theme-color]') || {}).content || '#334155';
+  var css = '.mm-proj-ui{font-family:"Pretendard Variable",Pretendard,"Malgun Gothic",sans-serif;color:#1f2937;line-height:1.45;letter-spacing:0}'
+    + '.mm-proj-btn{position:fixed;' + POS + ';z-index:2147483000;display:inline-flex;align-items:center;gap:4px;padding:4px 10px;font-size:12px;font-weight:600;border-radius:999px;border:1px solid ' + theme + ';color:' + theme + ';background:rgba(255,255,255,.94);box-shadow:0 1px 4px rgba(0,0,0,.12);cursor:pointer;white-space:nowrap}'
+    + '.mm-proj-btn:hover{background:#fff}'
+    + '.mm-proj-menu{position:fixed;' + MPOS + ';z-index:2147483001;background:#fff;border:1px solid #d1d5db;border-radius:10px;box-shadow:0 6px 24px rgba(0,0,0,.16);padding:6px;min-width:190px}'
+    + '.mm-proj-menu button{display:block;width:100%;text-align:left;padding:8px 10px;font-size:13px;border:0;background:none;border-radius:6px;cursor:pointer;color:#1f2937}'
+    + '.mm-proj-menu button:hover{background:#f3f4f6}.mm-proj-menu .mm-proj-sub{font-size:11px;color:#6b7280;padding:4px 10px 6px;border-bottom:1px solid #eee;margin-bottom:4px}'
+    + '.mm-proj-back{position:fixed;inset:0;z-index:2147483002;background:rgba(15,23,42,.45);display:flex;align-items:center;justify-content:center;padding:12px}'
+    + '.mm-proj-dlg{background:#fff;border-radius:12px;max-width:560px;width:100%;max-height:calc(100vh - 24px);overflow:auto;box-shadow:0 12px 40px rgba(0,0,0,.25)}'
+    + '.mm-proj-dlg h3{margin:0;padding:14px 16px 4px;font-size:16px;color:' + theme + '}.mm-proj-dlg .mm-proj-note{padding:0 16px 8px;font-size:12px;color:#6b7280}'
+    + '.mm-proj-dlg table{width:100%;min-width:0;max-width:100%;table-layout:auto;border-collapse:collapse;font-size:13px}.mm-proj-dlg th,.mm-proj-dlg td{padding:6px 8px;border-top:1px solid #eef0f3;text-align:left;vertical-align:top;white-space:normal;word-break:break-all}'
+    + '.mm-proj-dlg th{font-weight:600;color:#374151;white-space:nowrap;background:#f9fafb}.mm-proj-dlg td.mm-proj-old{color:#9ca3af}.mm-proj-dlg .mm-proj-warn{color:#b45309;font-size:11px}'
+    + '.mm-proj-foot{display:flex;gap:8px;justify-content:flex-end;padding:12px 16px}.mm-proj-foot button{padding:7px 14px;font-size:13px;border-radius:8px;border:1px solid #d1d5db;background:#fff;cursor:pointer}'
+    + '.mm-proj-foot button.mm-proj-ok{background:' + theme + ';border-color:' + theme + ';color:#fff;font-weight:600}'
+    + '.mm-proj-toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:2147483003;background:#111827;color:#fff;padding:8px 14px;border-radius:8px;font-size:13px;max-width:calc(100vw - 32px)}'
+    + '@media (max-width:480px){.mm-proj-dlg th,.mm-proj-dlg td{padding:5px 6px;font-size:12px}}'
+    + '@media print{.mm-proj-ui{display:none!important}}';
+  function h(tag, attrs, html) { var e = document.createElement(tag); for (var k in attrs || {}) e.setAttribute(k, attrs[k]); if (html != null) e.innerHTML = html; return e; }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function toast(t) { var e = h('div', { 'class': 'mm-proj-ui mm-proj-toast no-print', role: 'status' }); e.textContent = t; document.body.appendChild(e); setTimeout(function () { e.remove(); }, 2600); }
+  function dialog(title, note, rows, okText, onOk) {
+    var back = h('div', { 'class': 'mm-proj-ui mm-proj-back no-print' }), dlg = h('div', { 'class': 'mm-proj-dlg', role: 'dialog', 'aria-modal': 'true', 'aria-label': title });
+    dlg.innerHTML = '<h3>' + esc(title) + '</h3><div class="mm-proj-note">' + note + '</div>' + rows + '<div class="mm-proj-foot"><button type="button" class="mm-proj-no">닫기</button>' + (okText ? '<button type="button" class="mm-proj-ok">' + esc(okText) + '</button>' : '') + '</div>';
+    back.appendChild(dlg); document.body.appendChild(back);
+    function close() { back.remove(); document.removeEventListener('keydown', key); }
+    function key(ev) { if (ev.key === 'Escape') close(); }
+    document.addEventListener('keydown', key);
+    back.addEventListener('click', function (ev) { if (ev.target === back) close(); });
+    dlg.querySelector('.mm-proj-no').onclick = close;
+    if (okText) dlg.querySelector('.mm-proj-ok').onclick = function () { if (onOk(dlg) !== false) close(); };
+    return dlg;
+  }
+
+  function save() {
+    var got = collect(), old = clean(read()) || {}, keys = Object.keys(got);
+    if (!keys.length) { toast('이 화면에서 담을 건물개요 값이 없습니다 — 입력 칸(프로젝트 · 공사 정보)이 있는 탭을 연 뒤 다시 저장하세요'); return; }
+    var rows = '<table><tr><th>항목</th><th>담을 값</th><th>저장돼 있던 값</th></tr>' + KEYS.map(function (k) {
+      var nv = got[k], ov = old[k] || '';
+      if (!nv && !ov) return '';
+      return '<tr><th>' + k + '</th><td>' + (nv ? esc(nv) : '<span class="mm-proj-old">(이 도구에 없음 — 그대로 둠)</span>') + '</td><td class="mm-proj-old">' + esc(ov || '—') + '</td></tr>';
+    }).join('') + '</table>';
+    dialog('건물개요 저장', '지금 도구의 값을 이 기기 브라우저에 담습니다. 다른 MANMIN 도구에서 「불러오기」로 씁니다. 작성일 · 용도는 담지 않습니다.', rows, '저장', function () {
+      var o = {}; KEYS.forEach(function (k) { var v = got[k] || old[k]; if (v) o[k] = v; }); o.updated = now(); o.from = TOOL;
+      if (!write(o)) { toast('저장하지 못했습니다(브라우저 저장소 막힘) — 「파일로 내보내기」를 쓰세요'); return; }
+      toast('건물개요를 저장했습니다 · ' + keys.length + '개 항목');
+    });
+  }
+  function plan(data) {   /* 항목별: 칸 목록 · 지금 값 · 채울 수 있는지 · 기본 체크 */
+    return KEYS.map(function (k) {
+      var v = data[k]; if (!v) return null;
+      var fs = fields(k).filter(function (e) { return canFill(e, v) && NUM_ok(e, v); }); if (!fs.length) return null;
+      var cur = '', same = true;
+      fs.forEach(function (e) { var x = val(e); if (x && !cur) cur = x; if (x !== String(v) && !(e.tagName === 'SELECT' && x.replace(/\s+/g, '') === String(v).replace(/\s+/g, ''))) same = false; });
+      return { k: k, v: v, fs: fs, cur: cur, same: same, on: !cur };
+    }).filter(Boolean);
+  }
+  function load(data) {
+    data = clean(data || read());
+    if (!data || !KEYS.some(function (k) { return data[k]; })) { toast('저장된 건물개요가 없습니다 — 다른 도구에서 먼저 「저장」하거나 파일을 가져오세요'); return; }
+    var P = plan(data), todo = P.filter(function (p) { return !p.same; });
+    var info = (data.updated ? '저장 ' + esc(data.updated) : '저장값') + (data.from ? ' · ' + esc(data.from) : '');
+    if (!todo.length) { dialog('건물개요 불러오기', info + '<br>' + (P.length ? '이미 같은 값입니다.' : '이 화면에서 채울 칸을 찾지 못했습니다. 입력 칸(프로젝트 · 공사 정보)이 있는 탭을 연 뒤 다시 불러오세요.'), '', '', null); return; }
+    var rows = '<table><tr><th></th><th>항목</th><th>불러올 값</th><th>지금 값</th></tr>' + todo.map(function (p, i) {
+      return '<tr><td><input type="checkbox" data-i="' + i + '"' + (p.on ? ' checked' : '') + ' aria-label="' + p.k + ' 채우기"></td><th>' + p.k + '</th><td>' + esc(p.v) + (p.fs.length > 1 ? ' <span class="mm-proj-warn">(칸 ' + p.fs.length + '곳)</span>' : '') + '</td><td class="mm-proj-old">' + (p.cur ? esc(p.cur) + '<br><span class="mm-proj-warn">입력돼 있음 — 체크해야 덮어씀</span>' : '(비어 있음)') + '</td></tr>';
+    }).join('') + '</table>';
+    dialog('건물개요 불러오기', info + '<br>체크한 항목만 채웁니다. 이미 입력된 칸은 체크가 꺼져 있습니다.', rows, '채우기', function (dlg) {
+      var n = 0;
+      Array.prototype.forEach.call(dlg.querySelectorAll('input[type=checkbox]'), function (c) {
+        if (!c.checked) return; var p = todo[+c.getAttribute('data-i')];
+        p.fs.forEach(function (e) { if (fillOne(e, p.v)) n++; });
+      });
+      toast(n ? '건물개요 ' + n + '칸을 채웠습니다' : '채운 칸이 없습니다');
+    });
+  }
+  function ymd() { var d = new Date(), z = function (n) { return (n < 10 ? '0' : '') + n; }; return d.getFullYear() + z(d.getMonth() + 1) + z(d.getDate()); }
+  function exportFile() {
+    var o = clean(read());
+    if (!o || !KEYS.some(function (k) { return o[k]; })) { var g = collect(); if (!Object.keys(g).length) { toast('내보낼 건물개요가 없습니다'); return; } o = g; o.updated = now(); o.from = TOOL; }
+    o.format = KEYNAME;
+    var name = ['건물개요', (o.사업명 || '').replace(/[\\\/:*?"<>|]/g, '').replace(/\s+/g, ''), ymd()].filter(Boolean).join('_') + '.json';
+    var blob = new Blob([JSON.stringify(o, null, 2)], { type: 'application/json' }), a = h('a', { href: URL.createObjectURL(blob), download: name });
+    document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+    toast('파일로 내보냈습니다 · ' + name);
+  }
+  function importText(txt) {
+    var o; try { o = clean(JSON.parse(txt)); } catch (e) { o = null; }
+    if (!o || !KEYS.some(function (k) { return o[k]; })) { toast('건물개요 파일이 아닙니다'); return null; }
+    write(o); load(o); return o;
+  }
+  function importFile() {
+    var f = h('input', { type: 'file', accept: '.json,application/json', 'class': 'mm-proj-ui', style: 'display:none' });
+    f.onchange = function () { var x = f.files && f.files[0]; if (!x) return; var r = new FileReader(); r.onload = function () { importText(String(r.result)); f.remove(); }; r.readAsText(x, 'utf-8'); };
+    document.body.appendChild(f); f.click();
+  }
+  function menu(btn) {
+    var old = document.querySelector('.mm-proj-menu'); if (old) { old.remove(); return; }
+    var d = clean(read()), m = h('div', { 'class': 'mm-proj-ui mm-proj-menu no-print', role: 'menu' });
+    m.innerHTML = '<div class="mm-proj-sub">' + (d && d.사업명 ? '저장됨: ' + esc(d.사업명) + '<br>' + esc(d.updated || '') : '저장된 건물개요 없음') + '</div>'
+      + '<button type="button" data-a="save" role="menuitem">💾 저장 — 지금 값 담기</button><button type="button" data-a="load" role="menuitem">📥 불러오기</button>'
+      + '<button type="button" data-a="exp" role="menuitem">⬇ 파일로 내보내기(.json)</button><button type="button" data-a="imp" role="menuitem">⬆ 파일 가져오기</button>';
+    document.body.appendChild(m);
+    m.onclick = function (ev) { var a = ev.target.closest('button'); if (!a) return; m.remove(); ({ save: save, load: function () { load(); }, exp: exportFile, imp: importFile })[a.getAttribute('data-a')](); };
+    setTimeout(function () { document.addEventListener('click', function off(ev) { if (!m.contains(ev.target) && ev.target !== btn) { m.remove(); } document.removeEventListener('click', off); }); }, 0);
+  }
+  function mount() {
+    if (document.querySelector('.mm-proj-btn')) return;
+    var st = h('style', { id: 'mm-project-style' }); st.textContent = css; document.head.appendChild(st);
+    var b = h('button', { type: 'button', 'class': 'mm-proj-ui mm-proj-btn no-print', title: '같은 현장의 표지 정보 · 건물 수치를 저장하고 다른 MANMIN 도구에서 불러옵니다', 'aria-haspopup': 'menu' }, '🏢 건물개요');
+    b.onclick = function () { menu(b); }; document.body.appendChild(b);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount); else mount();
+  window.MMProject = { version: VER, key: KEYNAME, keys: KEYS, fields: fields, collect: collect, read: read, save: save, load: load, plan: plan, exportFile: exportFile, importText: importText };
+})();
+</script>
+<!-- MM-PROJECT:END -->
 <!-- MM-PRINT:BEGIN v1.0 -->
 <style id="mm-print-css">
 /* MANMIN 공통 인쇄 원본 manmin-print.css v1.0 (2026-11-08, 작업지시서 §25-6-42) — 인쇄 때만 적용. 도구 색 · 카드 · 배지는 건드리지 않음.
