@@ -1,4 +1,5 @@
 /* ═══════════════════════════════════════════════════
+   v6.1.2 (2026-11-12) — Pretendard CSS SRI(integrity · crossorigin)(정밀검토 C2) — 화면 · 계산 · 인쇄 불변 · 작업지시서 §25-6-82 · 캐시명 v6.1.2 (종전 v6.1.1)
    v6.1.1 (2026-11-12) — 건물개요 공통 원본 MM-PROJECT v1.2 → v1.3(불러오기 창 표 칸 모양 고정 — 도구 CSS 가 새지 않음 · 저장값 같음, 정밀검토 C10) · 작업지시서 §25-6-80 · 판 6.1 · 캐시명 v6.1.1 (종전 v6.1.0)
    v6.1.0 (2026-11-12) — 입력값 경고 표시: 중력식 · 캔틸레버 · 앵커 40칸 빈 값 → 기본값(상재하중 10 kPa 등) · 음수(배면경사 제외) — 계산 값 불변 · 계산서 끝 「입력 확인」 줄(정밀검토 B10 · 작업지시서 §25-6-79) · 판 6.1 · 캐시명 v6.1.0 (종전 retwall-v5.1.10)
    v5.1.0 회차 2026-10-17 — KDS 11 80 05 · 11 60 00 (2025. 12. 24.) 원문 대조 엔진 RWENG · 매뉴얼(/manual/ 캐시 제외) · 캐시명 v5.1.0
@@ -39,7 +40,7 @@ const mmMatch = (req, opt) => caches.keys()
   .then((ks) => ks.reduce((p, k) => p.then((r) => r || caches.open(k).then((c) => c.match(req, opt))), Promise.resolve(undefined)))
   .then((r) => (r && r.type === 'opaque' && req && req.mode === 'cors') ? undefined : r);
 
-const CACHE  = 'retwall-v6.1.1';   /* v5.1.0 : KDS 원문 대조 안정 검토 엔진 */
+const CACHE  = 'retwall-v6.1.2';   /* v5.1.0 : KDS 원문 대조 안정 검토 엔진 */
 const ORPHAN = ['retwall-v2.0'];
 const ASSETS = [
   './',
