@@ -1,11 +1,12 @@
 /* ═══════════════════════════════════════════════════
+   v6.1.0 (2026-11-12) — 입력값 경고 표시: 중력식 · 캔틸레버 · 앵커 40칸 빈 값 → 기본값(상재하중 10 kPa 등) · 음수(배면경사 제외) — 계산 값 불변 · 계산서 끝 「입력 확인」 줄(정밀검토 B10 · 작업지시서 §25-6-79) · 판 6.1 · 캐시명 v6.1.0 (종전 retwall-v5.1.10)
    v5.1.0 회차 2026-10-17 — KDS 11 80 05 · 11 60 00 (2025. 12. 24.) 원문 대조 엔진 RWENG · 매뉴얼(/manual/ 캐시 제외) · 캐시명 v5.1.0
    S6 회차 2026-09-05 — R24①② 표 선 separate·mono 한글 폴백 소급 동반 캐시명 v5.0.5
    S5 회차 2026-09-04 — R23② JPG 엔진 행 나눔 소급 동반 캐시명 v5.0.4
    S3-0 회차 2026-09-04 — R27 html2canvas 클론 정화 동반 캐시명 v5.0.3
    S2 회차 2026-09-04 — index 소급(R1·R21·R26 등) 동반 캐시명 v5.0.2
    R25 회차 2026-09-04 — 자기 접두어 캐시 조회 · cors 프리캐시 · opaque 가드 · 캐시명 v5.0.1 (S10)
-   토목옹벽 — 옹벽 구조물 안전성 검토 시스템  MANMIN Ver-5.1
+   토목옹벽 — 옹벽 구조물 안전성 검토 시스템  MANMIN Ver-6.1
    Service Worker — 오프라인 캐시 + 버전 업데이트
    ENGINEER KIM MANMIN
 
@@ -37,7 +38,7 @@ const mmMatch = (req, opt) => caches.keys()
   .then((ks) => ks.reduce((p, k) => p.then((r) => r || caches.open(k).then((c) => c.match(req, opt))), Promise.resolve(undefined)))
   .then((r) => (r && r.type === 'opaque' && req && req.mode === 'cors') ? undefined : r);
 
-const CACHE  = 'retwall-v5.1.10';   /* v5.1.0 : KDS 원문 대조 안정 검토 엔진 */
+const CACHE  = 'retwall-v6.1.0';   /* v5.1.0 : KDS 원문 대조 안정 검토 엔진 */
 const ORPHAN = ['retwall-v2.0'];
 const ASSETS = [
   './',
