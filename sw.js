@@ -1,4 +1,5 @@
 /* ═══════════════════════════════════════════════════
+   v6.1.4 (2026-11-23) — 교차검증(Claude × Gemini) 반영: ① 앵커 연직 · 수평간격 0 이하 · 높이 0 이하 · β ≥ φ 판정 보류(간격 0 이면 필요앵커력 0 · 적합으로 나오던 오류) ② 중력식 상단폭 ≥ 저면폭 · 캔틸레버 앞굽 + 벽체 ≥ 저면폭 등 성립하지 않는 단면 판정 보류 ③ 캔틸레버 뒷굽 위 상재하중을 활동 · 전도 저항에서 빼고 지지력에만 넣음(안전측) ④ KDS 11 60 00 조항 표기 4.1(5)~(8) → 1.8(5)~(8)(2025판 원문) · 캐시명 v6.1.4 (종전 v6.1.3)
    v6.1.3 (2026-11-12) — html2canvas 1.4.1 머리 태그 SRI(integrity sha384 · crossorigin) · 공통 인쇄 원본 MM-PRINT v1.0 → v1.1(지연 로더도 SRI)(정밀검토 B8 · html2canvas SRI) — 화면 · 계산 · 인쇄 불변 · 작업지시서 §25-6-87 · 캐시명 v6.1.3 (종전 v6.1.2)
    v6.1.2 (2026-11-12) — Pretendard CSS SRI(integrity · crossorigin)(정밀검토 C2) — 화면 · 계산 · 인쇄 불변 · 작업지시서 §25-6-82 · 캐시명 v6.1.2 (종전 v6.1.1)
    v6.1.1 (2026-11-12) — 건물개요 공통 원본 MM-PROJECT v1.2 → v1.3(불러오기 창 표 칸 모양 고정 — 도구 CSS 가 새지 않음 · 저장값 같음, 정밀검토 C10) · 작업지시서 §25-6-80 · 판 6.1 · 캐시명 v6.1.1 (종전 v6.1.0)
@@ -41,7 +42,7 @@ const mmMatch = (req, opt) => caches.keys()
   .then((ks) => ks.reduce((p, k) => p.then((r) => r || caches.open(k).then((c) => c.match(req, opt))), Promise.resolve(undefined)))
   .then((r) => (r && r.type === 'opaque' && req && req.mode === 'cors') ? undefined : r);
 
-const CACHE  = 'retwall-v6.1.3';   /* v5.1.0 : KDS 원문 대조 안정 검토 엔진 */
+const CACHE  = 'retwall-v6.1.4';   /* v5.1.0 : KDS 원문 대조 안정 검토 엔진 */
 const ORPHAN = ['retwall-v2.0'];
 const ASSETS = [
   './',
