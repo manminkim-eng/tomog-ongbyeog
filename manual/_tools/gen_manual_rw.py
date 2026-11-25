@@ -7,8 +7,13 @@ import os, sys, json
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from manual_engine import fig, T, render, B, MARKS
 
-VER, REL, DATE = 'Ver-5.1', 'v5.1.0', '2026-10-17'
-PDF = '옹벽구조물안전성검토시스템_사용자매뉴얼_Ver-5.1.pdf'
+import re as _re
+VER = 'Ver-6.1'   # 매뉴얼 판 = 도구 판 6.1.x 의 이름(2026-11-25 표기 통일, 종전 Ver-5.1)
+_SW = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'sw.js')   # 대상 프로그램 판은 저장소 sw.js 캐시명에서 읽음
+REL = 'v' + _re.search(r"CACHE\s*=\s*'retwall-v(\d+\.\d+\.\d+)'", open(_SW, encoding='utf-8').read()).group(1)
+DATE = '2026-11-25'   # 매뉴얼 작성(개정)일
+SRC = '2026-10-17'    # 원문 대조일 · 초판(Ver-5.1) · v5.1.0
+PDF = '옹벽구조물안전성검토시스템_사용자매뉴얼_Ver-6.1.pdf'
 APP_URL = 'https://manminkim-eng.github.io/tomog-ongbyeog/'
 APP = '옹벽 구조물 안전성 검토 시스템'
 EX = json.load(open(os.environ.get('MM_EX', os.path.join(os.path.dirname(os.path.abspath(__file__)), '_example.json')), encoding='utf-8'))
@@ -56,7 +61,7 @@ S_.append(f"""{EXTRA_CSS}<section class="ch" id="ch0"><h2><span class="n">00</sp
 {K(T([
  ['대상 프로그램', f'{APP} <b>MANMIN {VER}</b>({REL})'],
  ['접속 주소', f'<a href="{APP_URL}" target="_blank" rel="noopener">manminkim-eng.github.io/tomog-ongbyeog</a>'],
- ['매뉴얼 판', f'<b>{VER}</b> (화면 표기와 같은 판 번호, 초판) · {DATE} · 작성 김만민 건축사(㈜대성건축사사무소)'],
+ ['매뉴얼 판', f'<b>{VER}</b> (화면 표기와 같은 판 번호) · 초판 Ver-5.1 {SRC} · Ver-6.1 표기 통일 {DATE} · 작성 김만민 건축사(㈜대성건축사사무소)'],
  ['내려받기', f'<a href="{PDF}" download>PDF(A4)</a> · <a href="../index.html">검토 시스템 열기</a>'],
  ['근거', LAW + ' — 국가건설기준센터(kcsc.re.kr) 원문 대조(2026-10-17)'],
  ['범위', '평상시 외적 안정(활동 · 전도 · 지지력)과 근입깊이 · 앵커 내적 검토 — 전체안정성 · 침하 · 지진 시 · 수압 · 부재 단면설계는 따로 검토합니다'],
@@ -224,7 +229,7 @@ Coulomb  Ka = cos²(φ − θ) / [cos²θ · cos(δ + θ) · (1 + √S)²]
  ['부재 단면', '벽체 · 앞굽 · 뒷굽 강도설계(4.6.1 · KDS 14 20 00)'],
  ['제2종시설물', '노출높이 5 m 이상인 부분의 합이 100 m 이상인 옹벽(시설물의 안전 및 유지관리에 관한 특별법 시행령 별표 1 제8호)'],
 ], ['항목', '내용']))}
-<h3 id="s4-9">4-9. v5.1.0 정정 ({DATE})</h3>
+<h3 id="s4-9">4-9. v5.1.0 정정 ({SRC})</h3>
 {BR(K(T([
  ['옹벽 기준', 'KDS 11 80 10 (2016) 「옹벽 설계기준」', 'KDS 11 80 05 콘크리트옹벽 (2025. 12. 24.) — 11 80 10은 보강토옹벽'],
  ['앵커 기준', 'KDS 11 50 15 (2019)', 'KDS 11 60 00 (2025. 12. 24.) — 11 50 15는 깊은기초'],
@@ -255,14 +260,16 @@ S_.append(f"""<section class="ch" id="ch5"><h2><span class="n">05</span>실무 �
  ['배면 경사 θ를 못 바꿔요', 'B · a · H로 정해지는 값이라 자동 표시입니다'],
  ['편심이 B/6을 넘었는데 판정은 OK예요', '편심은 기준 조항이 아니라 분포 형태 참고값 — 지반반력은 삼각형 분포로 계산합니다'],
  ['앵커 전체안정 판정이 없어졌어요', '출처 없는 간이식이라 삭제 — 사면안정해석 프로그램으로 따로 검토하십시오'],
- ['화면이 예전 판이에요', '새로 고침(Ctrl+F5) — v5.1.0부터 캐시 이름이 retwall-v5.1.0입니다'],
+ ['화면이 예전 판이에요', f'새로 고침(Ctrl+F5) — 현재 캐시 이름은 retwall-{REL}입니다'],
 ], ['증상', '해결']))}
 </section>""")
 S_.append(f"""<section class="ch" id="ch6"><h2><span class="n">부록</span></h2>
 <h3 id="a1">A1. 버전 변경 내역</h3>
 {K(T([
+ [f'Ver-6.1 매뉴얼 ({DATE})', f'Ver-6.1 표기 통일(2026-11-25) — 매뉴얼 제목 · 표지 · 머리 · 꼬리말 · PDF 이름 Ver-5.1 → Ver-6.1, 대상 프로그램 {REL}, 판 표기가 찍힌 그림 9장 다시 캡처(본문 · 예제 값 변경 없음)'],
+ ['Ver-6.1 · v6.1.0 ~ v6.1.4 (2026-11-12 ~ 11-23)', '입력값 경고 표시 · 계산서 「입력 확인」 줄(v6.1.0, 계산 불변), 건물개요 MM-PROJECT v1.3(v6.1.1), CDN SRI · 인쇄 공통 원본 MM-PRINT v1.1(v6.1.2 · v6.1.3), 교차검증 반영 — 성립하지 않는 입력 · 단면 판정 보류 · 캔틸레버 뒷굽 위 상재하중을 활동 · 전도 저항에서 빼고 지지력에만 넣음(안전측) · KDS 11 60 00 조항 표기 1.8(5)~(8)(v6.1.4) — v6.1.4로 캔틸레버 예제의 활동 · 전도 안전율이 바뀌었으며 본문 해설 · 예제 값은 다음 매뉴얼 개정에서 갱신'],
  ['Ver-5.1 · v5.1.10 (2026-11-09)', '「🏢 건물개요」 저장 · 불러오기 — 현장명 · 작성자을(를) 다른 MANMIN 도구와 공유, 파일 내보내기 · 가져오기(공통 원본 MM-PROJECT v1.2, 계산 변경 없음)'],
- [f'Ver-5.1 · v5.1.0 ({DATE})', 'KDS 11 80 05 · 11 60 00 원문 대조 엔진 RWENG · Coulomb 토압 · 지반반력 분포 · 근입깊이 · 앵커 가설 / 영구 · 「📘 매뉴얼」 · sw v5.1.0'],
+ [f'Ver-5.1 · v5.1.0 ({SRC})', 'KDS 11 80 05 · 11 60 00 원문 대조 엔진 RWENG · Coulomb 토압 · 지반반력 분포 · 근입깊이 · 앵커 가설 / 영구 · 「📘 매뉴얼」 · sw v5.1.0'],
  ['Ver-5.0 (2026-09-03 ~ 09-05)', 'MANMIN 디자인 통일 · A4 규격 · JPG 저장 · sw 정비'],
  ['Ver-2.0', '초판 PWA'],
 ], ['버전', '내용']))}
@@ -281,6 +288,6 @@ html = render(title=f'{APP} 사용자 매뉴얼 {VER} · MANMIN',
               eyebrow='MANMIN ENGINEERING · USER MANUAL', h1=f'{APP} 사용자 매뉴얼',
               sub='형식 → 단면 · 토압 · 기초 → 활동 · 전도 · 지지력 · 근입깊이 · 앵커 → A4 검토 보고서', ver=VER, date=DATE, app_name='검토 시스템',
               pdf=PDF, toc=TOC, sections=S_, foot_note='KDS 11 80 05 · KDS 11 60 00 (2025. 12. 24. 개정)')
-html = html.replace('화면 대응 개정 2026-10-12', '화면 대응 개정 ' + DATE)
+html = html.replace('화면 대응 개정 2026-10-12', '화면 대응 개정 ' + SRC + ' · 판 표기 개정 ' + DATE)
 open(os.path.join(B, 'index.html'), 'w', encoding='utf-8').write(html)
 print('manual ok', len(html))

@@ -24,7 +24,7 @@ window.__help=t=>{if(!_helpOpen)toggleHelp();switchHelpTab(t);};`;
 const GA="__gA();window.scrollTo(0,0)";
 const SHOTS=[
  {id:'s01_overview',pre:GA,clip:'viewport',m:[['nth:.tb|0','형식 탭 3개 + A4'],['#mm-manual-btn','📘 매뉴얼'],['.sum-bar','요약 바'],['nth:#panel-gravity .card|0','입력'],['#g-result-panel .result-hero','결과']]},
- {id:'s02_header',clip:'.hdr-shell',m:[['.hdr-h1','도구 이름 · Ver-5.1'],['#mm-manual-btn','📘 매뉴얼 — 탭 막대 끝'],['.hdr-right','KDS 11 80 05 · 11 60 00 (2025. 12. 24.)'],['.tab-bar-inner','형식 탭']]},
+ {id:'s02_header',clip:'.hdr-shell',m:[['.hdr-h1','도구 이름 · Ver-6.1'],['#mm-manual-btn','📘 매뉴얼 — 탭 막대 끝'],['.hdr-right','KDS 11 80 05 · 11 60 00 (2025. 12. 24.)'],['.tab-bar-inner','형식 탭']]},
  {id:'s03_g_basic',clip:'nth:#panel-gravity .card|0',m:[['fg:현장명','현장명'],['fg:작성자','작성자'],['fg:작성일','작성일']]},
  {id:'s04_g_section',clip:'card:단면 제원',m:[['fg:옹벽 높이 H','높이 H'],['fg:저면폭 B','저면폭 B'],['fg:상단폭 a','상단폭 a'],['fg:배면 경사 θ','배면 경사 θ — 자동'],['fg:단위중량 γc','콘크리트 γc'],['fg:fck','fck — 단면설계 별도']]},
  {id:'s05_g_soil',clip:'nth:#panel-gravity .card|2',m:[['fg:단위중량 γs','뒤채움 γs'],['fg:내부마찰각','φ'],['fg:점착력','c — 특수설계'],['fg:배면경사각','배면 경사 β'],['fg:기초 마찰계수','μ'],['fg:허용지지력','qa = qu/3'],['fg:상재하중','상재하중 10 kN/m²'],['fg:근입깊이','근입깊이 ≥ 1.0 m']]},
